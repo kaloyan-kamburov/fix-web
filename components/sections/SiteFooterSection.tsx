@@ -39,7 +39,7 @@ const legalLinks = [
 
 export const SiteFooterSection = () => {
   return (
-    <footer className="flex flex-col w-full items-center gap-20 py-20 relative bg-gray-100 px-[16px]">
+    <footer className="flex flex-col w-full items-center gap-20 py-20 relative bg-gray-100 px-[16px] overflow-hidden">
       <div
         className="absolute w-full h-[339px] top-6 left-0 bg-gray-100 opacity-20 bg-gray-100"
         style={{

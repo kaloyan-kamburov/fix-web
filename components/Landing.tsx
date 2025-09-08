@@ -8,12 +8,12 @@ import { SiteFooterSection } from "./sections/SiteFooterSection";
 
 export const Landing = () => {
   return (
-    <div className="flex flex-col w-full items-center justify-center relative bg-white">
+    <>
       <HeroBannerSection />
       <FeaturedServicesSection />
       <CallToActionSection />
       <ServiceCategoriesSection />
       <MainContentSection />
-    </div>
+    </>
   );
 };

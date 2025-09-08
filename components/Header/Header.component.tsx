@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 flex w-full px-16 py-[16px] md:py-5 flex-col justify-center items-center md:px-8 px-[16px] sm:h-auto transition-all duration-300 lg:transparent bg-[#1C1C1D]/95`}
+      className={`fixed top-0 left-0 right-0 z-50 flex w-full px-16 py-[16px] md:py-5 flex-col justify-center items-center md:px-8 px-[16px] sm:h-auto transition-all duration-300 lg:transparent bg-[#1C1C1D]/95 will-change-transform transform-gpu`}
     >
       <div className="flex justify-between items-center w-full relative sm:justify-between">
         <div>
