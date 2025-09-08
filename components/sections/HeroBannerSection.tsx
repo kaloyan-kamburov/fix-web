@@ -39,12 +39,12 @@ export const HeroBannerSection = () => {
         className="flex h-auto md:h-[720px] items-center justify-center gap-16 pt-5 md:pt-20 md:pb-20 pb-2 md:pb-10 md:px-16 relative w-full max-w-[1440px] mx-auto"
       >
         <main className="flex flex-col items-start justify-center gap-5 flex-1 md:max-w-[55%] lg:mt-[-200px] mt-auto md:px-0 px-4">
-          <h1 className="relative self-stretch mt-[-1.00px] font-normal text-transparent text-[48px] lg:text-[56px] tracking-[0] leading-[110%] md:leading-[56px] leading-[52.8px]">
+          <h1 className="relative self-stretch mt-[-1.00px] font-normal text-transparent text-[48px] leading-[110%] md:text-[56px] md:leading-[56px] tracking-[0]">
             <span className="font-semibold text-white leading-[0.1px]">
               Намери майстор за минути -{" "}
             </span>
 
-            <span className="font-semibold text-accentaccent leading-[61.6px] md:leading-[61.6px] text-[48px] leading-[110%]">
+            <span className="font-semibold text-accentaccent leading-[61.6px] md:leading-[61.6px] leading-[52.8px]">
               без обаждания, без излишни усилия
             </span>
           </h1>
@@ -55,7 +55,7 @@ export const HeroBannerSection = () => {
             телефона ти.
           </p>
 
-          <div className="inline-flex items-center gap-4 md:gap-4 gap-4 px-0 py-4 relative flex-[0_0_auto]">
+          <div className="inline-flex items-center gap-4 md:gap-4 gap-4 px-0 py-4 relative flex-[0_0_auto] mx-auto md:mx-0">
             <Link
               href="https://apps.apple.com"
               target="_blank"
