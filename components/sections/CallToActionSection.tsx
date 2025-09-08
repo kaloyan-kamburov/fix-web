@@ -70,7 +70,7 @@ export const CallToActionSection = () => {
                   href="#contact"
                   className="h-auto inline-flex items-center justify-center gap-2 px-6 py-3 relative flex-[0_0_auto] rounded-lg border border-solid border-gray-40 shadow-[0px_0px_12px_#00000040] bg-transparent hover:border-accentaccent hover:text-accentaccent transition-all duration-300"
                 >
-                  <span className="relative w-fit mt-[-1.00px] font-button font-[number:var(--button-font-weight)] text-gray-00 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
+                  <span className="relative w-fit mt-[-1.00px] font-button font-[number:var(--button-font-weight)]  text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)] whitespace-nowrap">
                     Направи&nbsp;&nbsp;заявка тук
                   </span>
                 </Link>
