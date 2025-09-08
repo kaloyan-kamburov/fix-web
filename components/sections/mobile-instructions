@@ -1,0 +1,9 @@
+ok, here are some instructions for mobile layout:
+1. HeroBannerSection
+1.1. padding top 80px, pb: 40px
+1.2. remove phone
+1.3. title font 48px/110% line height
+1.4. description - font 16px/normal
+1.5. buttons - the same as desktop, with gap betwen them 16px (1)
+1.5. как работи - font 28px/normal
+1.6. padding 16px everywhere, and margin between the outer viewport 16px

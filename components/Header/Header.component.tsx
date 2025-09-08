@@ -1,0 +1,85 @@
+"use client";
+import * as React from "react";
+import Link from "next/link";
+import { Logo } from "../Logo/Logo.component";
+
+export default function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <div
+      className={`fixed top-0 left-0 right-0 z-50 flex w-full px-16 py-[16px] md:py-5 flex-col justify-center items-center md:px-8 px-[16px] sm:h-auto transition-all duration-300 lg:transparent bg-[#1C1C1D]/95`}
+    >
+      <div className="flex justify-between items-center w-full relative sm:justify-between">
+        <div>
+          <Link href="/">
+            <Logo />
+          </Link>
+        </div>
+
+        {/* Desktop Navigation - Hidden on screens < 1024px */}
+        <div className="hidden lg:flex justify-center items-center gap-6 relative">
+          <div className="flex justify-center items-center gap-1 relative">
+            <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
+              Начало
+            </div>
+          </div>
+          <div className="flex justify-center items-center gap-1 relative">
+            <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
+              Търсене на услуга
+            </div>
+          </div>
+          <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
+            Спешни ситуации
+          </div>
+          <button className="flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity">
+            <div className="text-button-primary-text text-center relative text-base font-bold">
+              Вход
+            </div>
+          </button>
+        </div>
+
+        {/* Mobile Hamburger Menu - Visible on screens < 1024px */}
+        <div className="block lg:hidden text-[#F9F9F9] text-2xl cursor-pointer" onClick={toggleMobileMenu}>
+          {isMobileMenuOpen ? '✕' : <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28.3333 24C28.7581 24.0005 29.1667 24.1631 29.4756 24.4547C29.7845 24.7464 29.9704 25.1449 29.9953 25.569C30.0202 25.9931 29.8822 26.4106 29.6096 26.7364C29.3369 27.0621 28.9502 27.2715 28.5283 27.3217L28.3333 27.3333H1.66667C1.24187 27.3329 0.83328 27.1702 0.524386 26.8786C0.215493 26.587 0.0296083 26.1884 0.00471314 25.7643C-0.0201821 25.3403 0.117791 24.9227 0.390441 24.5969C0.663092 24.2712 1.04984 24.0618 1.47167 24.0117L1.66667 24H28.3333ZM28.3333 12.3333C28.7754 12.3333 29.1993 12.5089 29.5118 12.8215C29.8244 13.134 30 13.558 30 14C30 14.442 29.8244 14.8659 29.5118 15.1785C29.1993 15.4911 28.7754 15.6667 28.3333 15.6667H1.66667C1.22464 15.6667 0.800716 15.4911 0.488155 15.1785C0.175595 14.8659 0 14.442 0 14C0 13.558 0.175595 13.134 0.488155 12.8215C0.800716 12.5089 1.22464 12.3333 1.66667 12.3333H28.3333ZM28.3333 0.666664C28.7754 0.666664 29.1993 0.842259 29.5118 1.15482C29.8244 1.46738 30 1.8913 30 2.33333C30 2.77536 29.8244 3.19928 29.5118 3.51184C29.1993 3.8244 28.7754 4 28.3333 4H1.66667C1.22464 4 0.800716 3.8244 0.488155 3.51184C0.175595 3.19928 0 2.77536 0 2.33333C0 1.8913 0.175595 1.46738 0.488155 1.15482C0.800716 0.842259 1.22464 0.666664 1.66667 0.666664H28.3333Z" fill="#FFF5AC" />
+          </svg>
+          }
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div id="mobile-menu" className={`absolute top-full left-0 w-full bg-[#1C1C1D]/95 border-t border-[#333] shadow-lg z-50 lg:hidden`}>
+          <div className={`px-5 py-4 space-y-4`}>
+            <div className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2" onClick={closeMobileMenu}>
+              Начало
+            </div>
+            <div className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2" onClick={closeMobileMenu}>
+              Търсене на услуга
+            </div>
+            <div className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2" onClick={closeMobileMenu}>
+              Спешни ситуации
+            </div>
+            <div className="pt-4 space-y-3">
+
+              <button className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity" onClick={closeMobileMenu}>
+                <div className="text-button-primary-text text-center relative text-base font-bold">
+                  Вход
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
