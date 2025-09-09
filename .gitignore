@@ -1,6 +1,7 @@
 # Ignore large archives in public
 public/Postman for macOS (arm64).zip
 public/*.zip
+public/Postman.app/
 
 # Node and Next.js typical ignores
 node_modules/
