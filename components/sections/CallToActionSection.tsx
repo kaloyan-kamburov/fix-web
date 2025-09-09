@@ -8,7 +8,7 @@ export const CallToActionSection = () => {
     <section className=" pb-0 px-0 flex flex-col w-full items-center gap-20 relative bg-gray-100 shadow-[0px_4px_4px_#00000040] pt-[16px]  lg:pt-[100px]">
       <div className="flex h-auto lg:h-[342px] items-end justify-center gap-0 lg:gap-[38px] pl-[16px] lg:pl-0 pr-[16px] lg:pr-0 lg:pr-5 py-0 relative w-full bg-[linear-gradient(90deg,rgba(28,28,29,0)_0%,rgba(14,13,13,1)_100%)] flex-col lg:flex-row">
         <div className="w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row justify-between">
-          <div className="flex flex-col w-full lg:w-1/2 max-w-[617px] px-[16px] items-start lg:gap-6 px-0 py-[16px] lg:pt-16 relative flex-1 grow mt-0 lg:mt-[-13.00px]">
+          <div className="flex flex-col w-full lg:w-1/2 max-w-[617px] px-[16px] items-start lg:gap-6 px-0 py-[16px] lg:pt-16 relative flex-1 grow mt-0 lg:mt-[-13.00px] mx-auto lg:mx-0">
             <div className="flex flex-col items-start gap-4 relative flex-[0_0_auto]">
               <h1 className="relative self-stretch mt-[-1.00px] font-bold text-gray-00 tracking-[0]  text-[32px] lg:text-[40px] leading-[normal] lg:leading-[50px]">
                 Готов ли си да решиш проблема?
@@ -26,7 +26,7 @@ export const CallToActionSection = () => {
                   Свали приложението
                 </div>
 
-                <div className="flex w-[330px] items-center gap-3 relative flex-[0_0_auto] hidden md:flex">
+                <div className="flex w-[330px] items-center gap-3 relative flex-[0_0_auto] hidden lg:flex">
                   <Link
                     href="https://apps.apple.com"
                     target="_blank"
@@ -80,7 +80,7 @@ export const CallToActionSection = () => {
 
           <div className="relative w-1/2 max-w-[581px] h-[382px] mt-[-40.00px] rounded-lg hidden lg:block">
             <Image
-              src="/phones.png"
+              src="/phones.webp"
               alt="Phones"
               width={581}
               height={382}
@@ -97,7 +97,7 @@ export const CallToActionSection = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col items-center flex md:hidden py-[16px] gap-[16px] mx-auto">
+        <div className="flex flex-col items-center flex py-[16px] gap-[16px] mx-auto lg:hidden">
           <div className="flex items-center gap-[16px]">
             <Link
               href="https://apps.apple.com"

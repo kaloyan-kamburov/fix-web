@@ -11,23 +11,23 @@ export const FeaturedServicesSection = () => {
       title: "Проверени професионалисти",
       description:
         "Всеки майстор в платформата е с проверени документи и рейтинг от клиенти",
-      image: "/service-1.jpg",
+      image: "/service-1.webp",
     },
     {
       title: "Прозрачни оферти",
       description: "Получаваш няколко предложения и избираш най-доброто",
-      image: "/service-2.jpg",
+      image: "/service-2.webp",
     },
     {
       title: "Гъвкаво планиране",
       description: "Ремонтите се случват, когато на теб ти е удобно",
-      image: "/service-3.jpg",
+      image: "/service-3.webp",
     },
     {
       title: "Сигурно плащане",
       description:
         "Парите са защитени и се освобождават само след приключване на услугата",
-      image: "/service-4.jpg",
+      image: "/service-4.webp",
     },
   ];
 

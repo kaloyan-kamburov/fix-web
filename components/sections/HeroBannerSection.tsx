@@ -28,13 +28,7 @@ const howItWorksSteps = [
 
 export const HeroBannerSection = () => {
   return (
-    <section className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] pt-[112px] md:pt-[112px] pt-[80px] px-[16px]" style={{
-      background: `
-            linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(28,28,29,1) 100%),
-            linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 100%),
-            url('/layer-bg.jpg') center center / cover no-repeat
-          `,
-    }}>
+    <section className="hero-banner-bg flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] pt-[112px] md:pt-[112px] pt-[80px] px-[16px]">
       <div
         className="flex h-auto md:h-[720px] items-center justify-center gap-16 pt-5 md:pt-20 md:pb-20 pb-2 md:pb-10 md:px-16 relative w-full max-w-[1440px] mx-auto"
       >
@@ -92,7 +86,7 @@ export const HeroBannerSection = () => {
           <Image
             className="object-contain"
             alt="Phone mockup"
-            src="/phone.png"
+            src="/phone.webp"
             width={369}
             height={596}
             priority

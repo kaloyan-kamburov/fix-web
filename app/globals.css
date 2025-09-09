@@ -92,3 +92,20 @@ html {
 * {
   box-sizing: border-box;
 }
+
+/* Hero Banner responsive background */
+.hero-banner-bg {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(28, 28, 29, 1) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%),
+    url('/layer-bg-mobile.webp') center top / cover no-repeat;
+}
+
+@media (min-width: 768px) {
+  .hero-banner-bg {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(28, 28, 29, 1) 100%),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%),
+      url('/layer-bg.webp') center center / cover no-repeat;
+  }
+}

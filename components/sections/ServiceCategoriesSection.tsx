@@ -11,7 +11,7 @@ const serviceCategories = [
   {
     id: 1,
     title: "ВиК Услуги",
-    image: "/slider-1.jpg",
+    image: "/slider-1.webp",
     height: "h-[226px]",
   },
   {
@@ -31,13 +31,6 @@ const serviceCategories = [
     title: "Техническа поддръжка на сгради и съоръжения",
     image: "/slider-4.jpg",
     height: "h-[248px]",
-  },
-  {
-    id: 5,
-    title: "Изграждане и поддръжка на ел. инсталации",
-    image: "/slider-5.jpg",
-    height: "h-[248px]",
-    hasIcon: true,
   },
 ];
 
@@ -109,11 +102,6 @@ export const ServiceCategoriesSection = () => {
                           height={192}
                           className="w-full h-full object-cover"
                         />
-                        {category.hasIcon && (
-                          <div className="absolute w-10 h-10 top-[75px] left-[140px] bg-accentaccent rounded-full flex items-center justify-center">
-                            <span className="text-gray-100 text-xs">+</span>
-                          </div>
-                        )}
                       </div>
 
                       <div className="flex flex-col items-center justify-center gap-2 pt-0 pb-1 px-0 w-full">
@@ -132,14 +120,19 @@ export const ServiceCategoriesSection = () => {
         <div className="md:hidden">
           <div className="grid grid-cols-2 gap-4 align-center">
             {serviceCategories.map((category) => (
-              <div key={category.id} className="relative w-full aspect-[4/3] rounded-md overflow-hidden">
-                <Image
-                  src={category.image}
-                  alt={category.title}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 50vw"
-                  className="object-cover"
-                />
+              <div key={category.id} className="flex flex-col gap-2">
+                <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden">
+                  <Image
+                    src={category.image}
+                    alt={category.title}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="mt-[-1.00px] font-h3 font-[number:var(--h3-font-weight)] text-gray-00 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)]">
+                  {category.title}
+                </h3>
               </div>
             ))}
           </div>
