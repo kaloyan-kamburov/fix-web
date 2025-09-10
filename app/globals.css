@@ -27,6 +27,7 @@
   --button-font-weight: 600;
   --button-letter-spacing: 0px;
   --button-line-height: normal;
+  --gray-10: #F1F1F2;
   --gray-00: rgba(249, 249, 249, 1);
   --gray-100: rgba(28, 28, 29, 1);
   --gray-20: rgba(228, 228, 231, 1);
@@ -59,6 +60,7 @@
 
   /* Landing page color variables */
   --color-accentaccent: var(--accentaccent);
+  --color-gray-10: var(--gray-10);
   --color-gray-00: var(--gray-00);
   --color-gray-100: var(--gray-100);
   --color-gray-20: var(--gray-20);

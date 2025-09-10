@@ -40,11 +40,11 @@ export default function Header() {
           <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
             Спешни ситуации
           </div>
-          <button className="flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity">
+          <Link href="/login" className="flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity">
             <div className="text-button-primary-text text-center relative text-base font-bold">
               Вход
             </div>
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Hamburger Menu  */}
@@ -73,11 +73,11 @@ export default function Header() {
             </div>
             <div className="pt-4 space-y-3">
 
-              <button className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity" onClick={closeMobileMenu}>
+              <Link href="/login" onClick={closeMobileMenu} className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity">
                 <div className="text-button-primary-text text-center relative text-base font-bold">
                   Вход
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
