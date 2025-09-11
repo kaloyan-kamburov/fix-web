@@ -14,31 +14,46 @@ import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 
-const loginSchema = z.object({
-  email: z.string().email("Невалиден имейл"),
-  password: z.string().min(1, "Паролата е задължителна"),
-  rememberMe: z.boolean().default(false),
-});
+const emailRegex = /^[\w.+\-]+@([\w\-]+\.)+[A-Za-z]{2,}$/;
 
-type LoginFormData = z.input<typeof loginSchema>;
+const registerSchema = z
+  .object({
+    first_name: z.string().min(1, "Задължително поле"),
+    last_name: z.string().min(1, "Задължително поле"),
+    email: z.string().regex(emailRegex, "Невалиден имейл"),
+    password: z.string().min(1, "Задължително поле"),
+    confirm_password: z.string().min(1, "Задължително поле"),
+    phone: z.string().min(1, "Задължително поле"),
+    rememberMe: z.boolean().default(false),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Паролите не съвпадат",
+    path: ["confirm_password"],
+  });
 
-export default function Login() {
+type RegisterFormData = z.input<typeof registerSchema>;
+
+export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
+      confirm_password: "",
+      phone: "",
       rememberMe: false,
     },
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (_data) => {
+  const onSubmit: SubmitHandler<RegisterFormData> = async (_data) => {
     // intentionally left empty for now
   };
 
@@ -53,7 +68,7 @@ export default function Login() {
         <CardContent className="flex flex-col items-center gap-8 p-0 md:p-10">
           <header className="flex items-center w-full">
             <Link
-              href="/"
+              href="/login"
               aria-label="Назад към вход"
               className="w-6 h-6 inline-flex items-center justify-center"
             >
@@ -61,23 +76,59 @@ export default function Login() {
             </Link>
             <div className="flex items-center justify-center gap-2 flex-1">
               <h1 className="font-h1 font-bold font-[number:var(--h1-font-weight)] text-gray-100 text-[length:var(--h1-font-size)] text-center tracking-[var(--h1-letter-spacing)] leading-[var(--h1-line-height)] [font-style:var(--h1-font-style)]">
-                Вход
+                Регистрация
               </h1>
             </div>
-
-            <div className="w-6 h-6" />
           </header>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col items-end gap-6 w-full"
           >
+            {/* First name */}
+            <div className="flex flex-col items-start gap-0.5 w-full">
+              <div className="flex items-center gap-2 w-full">
+                <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
+                  Име*
+                </Label>
+              </div>
+              <Input
+                className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
+                type="text"
+                {...register("first_name")}
+              />
+              {errors.first_name && (
+                <span className="text-red-500 text-xs mt-1">
+                  {errors.first_name.message}
+                </span>
+              )}
+            </div>
+
+            {/* Last name */}
+            <div className="flex flex-col items-start gap-0.5 w-full">
+              <div className="flex items-center gap-2 w-full">
+                <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
+                  Фамилия*
+                </Label>
+              </div>
+              <Input
+                className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
+                type="text"
+                {...register("last_name")}
+              />
+              {errors.last_name && (
+                <span className="text-red-500 text-xs mt-1">
+                  {errors.last_name.message}
+                </span>
+              )}
+            </div>
+
+            {/* Email */}
             <div className="flex flex-col items-start gap-0.5 w-full">
               <div className="flex items-center gap-2 w-full">
                 <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
                   Имейл*
                 </Label>
               </div>
-
               <Input
                 className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
                 type="email"
@@ -90,6 +141,7 @@ export default function Login() {
               )}
             </div>
 
+            {/* Password */}
             <div className="flex flex-col items-start gap-4 w-full">
               <div className="flex flex-col items-start gap-0.5 w-full">
                 <div className="flex items-center gap-2 w-full">
@@ -97,14 +149,12 @@ export default function Login() {
                     Парола*
                   </Label>
                 </div>
-
                 <div className="relative w-full">
                   <Input
                     className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 pr-12 h-auto"
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
                   />
-
                   <div className="absolute right-0 top-0 h-full flex items-center">
                     <div className="flex w-10 items-center justify-center bg-transparent">
                       <button
@@ -124,13 +174,47 @@ export default function Login() {
                     </div>
                   </div>
                 </div>
-                {errors.password && (
+              </div>
+
+              {/* Confirm Password */}
+              <div className="flex flex-col items-start gap-0.5 w-full">
+                <div className="flex items-center gap-2 w-full">
+                  <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
+                    Потвърди парола*
+                  </Label>
+                </div>
+                <Input
+                  className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
+                  type={showPassword ? "text" : "password"}
+                  {...register("confirm_password")}
+                />
+                {errors.confirm_password && (
                   <span className="text-red-500 text-xs mt-1">
-                    {errors.password.message}
+                    {errors.confirm_password.message}
                   </span>
                 )}
               </div>
 
+              {/* Phone */}
+              <div className="flex flex-col items-start gap-0.5 w-full">
+                <div className="flex items-center gap-2 w-full">
+                  <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
+                    Телефон*
+                  </Label>
+                </div>
+                <Input
+                  className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
+                  type="text"
+                  {...register("phone")}
+                />
+                {errors.phone && (
+                  <span className="text-red-500 text-xs mt-1">
+                    {errors.phone.message}
+                  </span>
+                )}
+              </div>
+
+              {/* Remember me and CTA */}
               <div className="flex items-center justify-between w-full">
                 <div className="inline-flex items-center gap-1">
                   <Controller
@@ -152,40 +236,21 @@ export default function Login() {
                     Запомни ме
                   </Label>
                 </div>
-
-                <button
-                  type="button"
-                  className="font-h3 font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] bg-transparent border-none cursor-pointer hover:underline"
-                >
-                  Забравена парола?
-                </button>
               </div>
             </div>
+
             <Button
               type="submit"
               disabled={isSubmitting}
               className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90"
             >
               <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-                {isSubmitting ? "Моля, изчакайте..." : "Вход"}
+                {isSubmitting ? "Моля, изчакайте..." : "Регистрация"}
               </span>
             </Button>
           </form>
         </CardContent>
       </Card>
-
-      <div className="[font-family:'Open_Sans',Helvetica] font-normal text-base text-center leading-4">
-        <span className="text-[#626366] tracking-[0]">Нямате акаунт?</span>
-        <span className="text-[#626366] tracking-[0] leading-[0.1px]">
-          &nbsp;
-        </span>
-        <Link
-          href="/register"
-          className="font-[number:var(--h3-font-weight)] text-[#1b1b1c] tracking-[var(--h3-letter-spacing)] font-h3 [font-style:var(--h3-font-style)] leading-[var(--h3-line-height)] text-[length:var(--h3-font-size)] bg-transparent border-none cursor-pointer hover:underline"
-        >
-          Регистрация
-        </Link>
-      </div>
     </div>
   );
 }
