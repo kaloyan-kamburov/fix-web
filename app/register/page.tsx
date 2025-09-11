@@ -13,6 +13,7 @@ import { Input } from "@/components/Form/Input";
 import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
+import { api } from "@/lib/api";
 
 const emailRegex = /^[\w.+\-]+@([\w\-]+\.)+[A-Za-z]{2,}$/;
 
@@ -53,8 +54,18 @@ export default function Register() {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterFormData> = async (_data) => {
-    // intentionally left empty for now
+  const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+    try {
+      await api.post("register", {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+      });
+    } catch (err: unknown) {
+      console.error(err);
+    }
   };
 
   return (

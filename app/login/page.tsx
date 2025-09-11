@@ -13,9 +13,10 @@ import { Input } from "@/components/Form/Input";
 import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
+import { api } from "@/lib/api";
 
 const loginSchema = z.object({
-  email: z.string().email("Невалиден имейл"),
+  email: z.string().min(1, "Задължително поле").email("Невалиден имейл"),
   password: z.string().min(1, "Паролата е задължителна"),
   rememberMe: z.boolean().default(false),
 });
@@ -38,8 +39,15 @@ export default function Login() {
     },
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (_data) => {
-    // intentionally left empty for now
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    try {
+      await api.post("login", {
+        email: data.email,
+        password: data.password,
+      });
+    } catch (err: unknown) {
+      //   console.error(err);
+    }
   };
 
   return (
