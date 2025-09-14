@@ -1,10 +1,11 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { getAuth } from "@/lib/auth";
+import { clearAuth } from "@/lib/auth";
+// No longer rely on localStorage for auth; attach token from cookie
 
 const baseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://kmp-admin.perspectiveunity.com/api/client/";
+  "https://kmp-admin.perspectiveunity.com/api/";
 
 export const api = axios.create({
   baseURL,
@@ -15,12 +16,22 @@ export const api = axios.create({
 });
 // Attach bearer token
 api.interceptors.request.use((config) => {
-  const auth = getAuth();
-  if (auth?.accessToken) {
-    config.headers = config.headers || {};
-    (config.headers as Record<string, string>)[
-      "Authorization"
-    ] = `Bearer ${auth.accessToken}`;
+  console.log("dsasadsa");
+  if (typeof document !== "undefined") {
+    const raw = document.cookie
+      .split(";")
+      .map((c) => c.trim())
+      .find((c) => c.startsWith("auth_token="));
+    if (raw) {
+      const token = decodeURIComponent(raw.split("=")[1] || "");
+      console.log(token);
+      if (token) {
+        config.headers = config.headers || {};
+        (config.headers as Record<string, string>)[
+          "Authorization"
+        ] = `Bearer ${token}`;
+      }
+    }
   }
   return config;
 });
@@ -57,7 +68,17 @@ api.interceptors.response.use(
           }
         }
       }
-      toast.error(candidate || fallback);
+      if (status === 401) {
+        if (typeof window !== "undefined") {
+          try {
+            clearAuth();
+          } catch {}
+          toast.error("Сесията е изтекла. Моля, влезте отново.");
+          window.location.href = "/login";
+        }
+      } else {
+        toast.error(candidate || fallback);
+      }
     } catch {
       toast.error("Възникна грешка. Опитайте отново.");
     }

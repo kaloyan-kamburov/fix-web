@@ -36,7 +36,7 @@ export default function ForgotPassword() {
 
   const onSubmit: SubmitHandler<ForgotFormData> = async (data) => {
     try {
-      await api.post("request-password-reset", { email: data.email });
+      await api.post("client/request-password-reset", { email: data.email });
       setSent(true);
       setEmail(data.email);
     } catch (err) {

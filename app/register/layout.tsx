@@ -12,7 +12,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-00 md:bg-gray-10">
+    <div className="min-h-screen flex flex-col bg-gray-00 md:bg-gray-10 text-gray-100">
       <main className="flex-1 flex items-center justify-center px-4 py-8">
         {children}
       </main>

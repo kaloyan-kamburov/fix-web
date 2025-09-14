@@ -32,7 +32,7 @@ export default function HeaderActions() {
   const onLogout = async () => {
     setIsLoadingLogout(true);
     try {
-      await api.post("logout");
+      await api.post("client/logout");
     } catch (e) {
       // ignore, interceptor will handle toast; we'll still clear locally
     } finally {
@@ -79,7 +79,7 @@ export default function HeaderActions() {
       </div>
 
       <Link
-        href="/login"
+        href="/orders"
         className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
       >
         <div className="text-button-primary-text text-center relative text-base font-bold">

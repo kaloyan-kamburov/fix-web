@@ -12,17 +12,15 @@ export interface AuthState {
   accessToken: string;
 }
 
-const STORAGE_KEY = "auth";
 const AUTH_CHANGED_EVENT = "auth-changed";
 
 export function getAuth(): AuthState | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as AuthState;
-    if (!parsed?.accessToken) return null;
-    return parsed;
+    const Cookies = require("js-cookie");
+    const token: string | undefined = Cookies.get("auth_token");
+    if (!token) return null;
+    return { user: {} as AuthUser, accessToken: token };
   } catch {
     return null;
   }
@@ -30,13 +28,31 @@ export function getAuth(): AuthState | null {
 
 export function setAuth(state: AuthState): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    const Cookies = require("js-cookie");
+    Cookies.set("auth_token", state.accessToken, {
+      path: "/",
+      sameSite: "lax",
+      expires: 30,
+    });
+  } catch {
+    const maxAgeDays = 30;
+    const maxAge = maxAgeDays * 24 * 60 * 60;
+    document.cookie = `auth_token=${encodeURIComponent(
+      state.accessToken
+    )}; Path=/; Max-Age=${maxAge}; SameSite=Lax`;
+  }
   window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
 }
 
 export function clearAuth(): void {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(STORAGE_KEY);
+  try {
+    const Cookies = require("js-cookie");
+    Cookies.remove("auth_token", { path: "/" });
+  } catch {
+    document.cookie = `auth_token=; Path=/; Max-Age=0; SameSite=Lax`;
+  }
   window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
 }
 

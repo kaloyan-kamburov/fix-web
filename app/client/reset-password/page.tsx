@@ -45,7 +45,7 @@ export default function ResetPassword() {
 
   const onSubmit: SubmitHandler<ResetFormData> = async (data) => {
     try {
-      await api.post("reset-password", {
+      await api.post("client/reset-password", {
         email,
         password: data.password,
         token,

@@ -65,7 +65,7 @@ export default function Register() {
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
-      const { data: res } = await api.post("register", {
+      const { data: res } = await api.post("client/register", {
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,

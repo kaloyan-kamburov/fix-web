@@ -50,7 +50,7 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
     try {
-      const res = await api.post("login", {
+      const res = await api.post("client/login", {
         email: formData.email,
         password: formData.password,
       });
