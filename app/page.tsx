@@ -1,9 +1,6 @@
-import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
-import Header from "../components/Header/Header.component";
-import { Landing } from "../components/Landing";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <Landing />
-  );
+  // Redirect root to default locale to ensure pages render under i18n provider
+  redirect("/bg");
 }
