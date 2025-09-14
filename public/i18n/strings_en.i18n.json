@@ -1,4 +1,7 @@
 {
+  "start": "Start",
+  "serviceSearch": "Service search",
+  "myRequests": "My requests",
   "somethingWentWrong": "Something went wrong. Please try again.",
   "searchForAService": "Search for a service",
   "search": "Search",

@@ -4,15 +4,19 @@ import Link from "next/link";
 import { BellIcon } from "lucide-react";
 import { Logo } from "../Logo/Logo.component";
 import HeaderActions from "./HeaderActions/HeaderActions.component";
+import { LanguageSelector } from "./LanguageSelector";
 import { getAuth, onAuthChanged } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { clearAuth } from "@/lib/auth";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const router = useRouter();
+  const t = useTranslations();
+  const locale = useLocale();
 
   React.useEffect(() => {
     // Initialize from client storage to avoid SSR/client mismatch
@@ -45,11 +49,12 @@ export default function Header() {
 
   return (
     <div
+      key={locale}
       className={`fixed top-0 left-0 right-0 z-50 flex w-full px-16 py-[16px] md:py-5 flex-col justify-center items-center md:px-8 px-[16px] sm:h-auto transition-all duration-300 lg:transparent bg-[#1C1C1D]/95 will-change-transform transform-gpu`}
     >
       <div className="flex justify-between items-center w-full relative sm:justify-between">
         <div>
-          <Link href="/">
+          <Link href={`/${locale}`}>
             <Logo />
           </Link>
         </div>
@@ -58,26 +63,27 @@ export default function Header() {
         <div className="hidden lg:flex justify-center items-center gap-6 relative">
           <div className="flex justify-center items-center gap-1 relative">
             <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
-              Начало
+              {t("start")}
             </div>
           </div>
           <div className="flex justify-center items-center gap-1 relative">
             <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
-              Търсене на услуга
+              {t("serviceSearch")}
             </div>
           </div>
           <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
-            Спешни ситуации
+            {t("emergencySituations")}
           </div>
+          <LanguageSelector />
           {isLoggedIn ? (
             <HeaderActions />
           ) : (
             <Link
-              href="/login"
+              href={`/${locale}/login`}
               className="flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity"
             >
               <div className="text-button-primary-text text-center relative text-base font-bold">
-                Вход
+                {t("logIn")}
               </div>
             </Link>
           )}
@@ -87,9 +93,9 @@ export default function Header() {
         <div className="flex items-center gap-3 lg:hidden">
           <button
             className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-[#F9F9F9]"
-            aria-label="Нотификации"
+            aria-label={t("notifications")}
           >
-            <BellIcon />
+            <BellIcon className="text-white" />
           </button>
           <div
             className="text-[#F9F9F9] text-2xl cursor-pointer w-[35px] h-[35px] flex items-center justify-center"
@@ -141,31 +147,31 @@ export default function Header() {
               className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
               onClick={closeMobileMenu}
             >
-              Начало
+              {t("start")}
             </div>
             <div
               className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
               onClick={closeMobileMenu}
             >
-              Търсене на услуга
+              {t("serviceSearch")}
             </div>
             <div
               className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
               onClick={closeMobileMenu}
             >
-              Спешни ситуации
+              {t("emergencySituations")}
             </div>
             <div className="pt-4 space-y-3">
               {isLoggedIn ? (
                 <>
                   {/* Моите заявки */}
                   <Link
-                    href="/orders"
+                    href={`/${locale}/orders`}
                     onClick={closeMobileMenu}
                     className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
                   >
                     <div className="text-button-primary-text text-center relative text-base font-bold">
-                      Моите заявки
+                      {t("myRequests")}
                     </div>
                   </Link>
 
@@ -174,17 +180,17 @@ export default function Header() {
                     onClick={handleLogout}
                     className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg border border-solid border-neutral-400 text-[#F9F9F9]"
                   >
-                    Изход
+                    {t("logOut")}
                   </button>
                 </>
               ) : (
                 <Link
-                  href="/login"
+                  href={`/${locale}/login`}
                   onClick={closeMobileMenu}
                   className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity"
                 >
                   <div className="text-button-primary-text text-center relative text-base font-bold">
-                    Вход
+                    {t("logIn")}
                   </div>
                 </Link>
               )}

@@ -3,11 +3,12 @@
 import * as React from "react";
 import { BellIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { clearAuth } from "@/lib/auth";
 import { api } from "@/lib/api";
 export default function HeaderActions() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
   const [isLoadingLogout, setIsLoadingLogout] = React.useState(false);
@@ -38,7 +39,31 @@ export default function HeaderActions() {
     } finally {
       clearAuth();
       setIsMenuOpen(false);
-      router.push("/");
+      // Preserve locale in URL if present
+      const parts = pathname.split("/").filter(Boolean);
+      const maybeLocale = parts[0];
+      const locales = new Set([
+        "bg",
+        "en",
+        "fr",
+        "tr",
+        "gr",
+        "nl",
+        "swe",
+        "por",
+        "cr",
+        "est",
+        "fin",
+        "irl",
+        "lat",
+        "lit",
+        "lux",
+        "mal",
+        "slovakian",
+        "slovenian",
+      ]);
+      const target = locales.has(maybeLocale) ? `/${maybeLocale}` : "/";
+      router.push(target as any);
       setIsLoadingLogout(false);
     }
   };
@@ -49,7 +74,7 @@ export default function HeaderActions() {
         className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid border-neutral-400 cursor-pointer`}
         aria-label="Нотификации"
       >
-        <BellIcon />
+        <BellIcon className="text-white" />
       </button>
 
       <div className="relative" ref={menuRef}>
@@ -79,7 +104,10 @@ export default function HeaderActions() {
       </div>
 
       <Link
-        href="/orders"
+        href={
+          pathname.replace(/^(\/[^/]+)?/, "$1") +
+          (pathname.includes("/orders") ? "" : "/orders")
+        }
         className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
       >
         <div className="text-button-primary-text text-center relative text-base font-bold">

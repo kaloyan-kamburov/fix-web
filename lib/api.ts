@@ -11,13 +11,38 @@ export const api = axios.create({
   baseURL,
   headers: {
     "Content-Type": "application/json",
-    "Accept-Language": "bg-BG",
   },
 });
 // Attach bearer token
 api.interceptors.request.use((config) => {
-  console.log("dsasadsa");
   if (typeof document !== "undefined") {
+    try {
+      const preferred = localStorage.getItem("preferred_locale") || "bg";
+      const localeHeader = new Map<string, string>([
+        ["bg", "bg-BG"],
+        ["en", "en-US"],
+        ["tr", "tr-TR"],
+        ["gr", "el-GR"],
+        ["nl", "nl-NL"],
+        ["swe", "sv-SE"],
+        ["por", "pt-PT"],
+        ["cr", "hr-HR"],
+        ["est", "et-EE"],
+        ["fin", "fi-FI"],
+        ["irl", "en-IE"],
+        ["lat", "lv-LV"],
+        ["lit", "lt-LT"],
+        ["lux", "lb-LU"],
+        ["mal", "mt-MT"],
+        ["slovakian", "sk-SK"],
+        ["slovenian", "sl-SI"],
+      ]).get(preferred);
+      if (localeHeader) {
+        config.headers = config.headers || {};
+        (config.headers as Record<string, string>)["Accept-Language"] =
+          localeHeader;
+      }
+    } catch {}
     const raw = document.cookie
       .split(";")
       .map((c) => c.trim())

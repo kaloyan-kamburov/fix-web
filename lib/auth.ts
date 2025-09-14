@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 export interface AuthUser {
   id: number;
   first_name: string;
@@ -17,7 +18,6 @@ const AUTH_CHANGED_EVENT = "auth-changed";
 export function getAuth(): AuthState | null {
   if (typeof window === "undefined") return null;
   try {
-    const Cookies = require("js-cookie");
     const token: string | undefined = Cookies.get("auth_token");
     if (!token) return null;
     return { user: {} as AuthUser, accessToken: token };
@@ -29,7 +29,6 @@ export function getAuth(): AuthState | null {
 export function setAuth(state: AuthState): void {
   if (typeof window === "undefined") return;
   try {
-    const Cookies = require("js-cookie");
     Cookies.set("auth_token", state.accessToken, {
       path: "/",
       sameSite: "lax",
@@ -48,7 +47,6 @@ export function setAuth(state: AuthState): void {
 export function clearAuth(): void {
   if (typeof window === "undefined") return;
   try {
-    const Cookies = require("js-cookie");
     Cookies.remove("auth_token", { path: "/" });
   } catch {
     document.cookie = `auth_token=; Path=/; Max-Age=0; SameSite=Lax`;

@@ -1,0 +1,11 @@
+I want to change the website to have i18n. I want the url of the site to be url/{lang} in the folder public/i18n there are json files that contains key-values for the different languages.
+rename them only to be like "bg.json". So use next-intl and the build-in functionality for languages. 
+Perform a request "countries" to get all the languages' flags. The response will be array of objects like {
+      "id": 81,
+      "name": "Italy",
+      "code": "IT",
+      "flag": "https://kmp-admin.perspectiveunity.com/flags/it.png",
+}. 
+Use those flags in the select dropdown, which will be placed top right.
+When choosing an item from the dropdown, change the url to the corresponding language.
+Make the bg language default and preserve user's choice in localStorage.
