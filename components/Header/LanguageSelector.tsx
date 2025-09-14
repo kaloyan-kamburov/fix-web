@@ -298,7 +298,7 @@ export function LanguageSelector() {
       parts.unshift(nextLocale);
     }
     const nextPath = "/" + parts.join("/") + search + hash;
-    router.push(nextPath as any);
+    router.push(nextPath);
     setIsOpen(false);
   };
 

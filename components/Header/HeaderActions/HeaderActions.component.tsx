@@ -66,7 +66,7 @@ export default function HeaderActions() {
         "slovenian",
       ]);
       const target = locales.has(maybeLocale) ? `/${maybeLocale}` : "/";
-      router.push(target as any);
+      router.push(target);
       setIsLoadingLogout(false);
     }
   };
