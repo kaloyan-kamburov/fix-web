@@ -31,11 +31,12 @@ const legacyMap: Record<string, string> = {
 export default async function LocaleLayout({
   children,
   params,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-  params: { locale: string };
-}>) {
-  const locale = params?.locale || "bg";
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: incomingLocale } = await params;
+  const locale = incomingLocale || "bg";
   const baseDir = path.join(process.cwd(), "public", "i18n");
   let messages: Record<string, unknown> = {};
   try {
