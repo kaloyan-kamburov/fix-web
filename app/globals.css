@@ -79,6 +79,16 @@
   }
 }
 
+/* Responsive height for success image based on viewport height */
+.success-img {
+  max-height: 360px;
+}
+@media (min-height: 1200px) {
+  .success-img {
+    max-height: 560px;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

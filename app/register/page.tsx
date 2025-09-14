@@ -14,6 +14,8 @@ import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { getAuth, setAuth } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 const emailRegex = /^[\w.+\-]+@([\w\-]+\.)+[A-Za-z]{2,}$/;
 
@@ -36,6 +38,7 @@ type RegisterFormData = z.input<typeof registerSchema>;
 
 export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -54,15 +57,25 @@ export default function Register() {
     },
   });
 
+  React.useEffect(() => {
+    if (getAuth()) {
+      router.push("/");
+    }
+  }, [router]);
+
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
-      await api.post("register", {
+      const { data: res } = await api.post("register", {
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
         password: data.password,
         phone: data.phone,
       });
+      if (res?.user && res?.access_token) {
+        setAuth({ user: res.user, accessToken: res.access_token });
+        router.push("/");
+      }
     } catch (err: unknown) {
       console.error(err);
     }
@@ -253,7 +266,7 @@ export default function Register() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90"
+              className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
             >
               <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
                 {isSubmitting ? "Моля, изчакайте..." : "Регистрация"}

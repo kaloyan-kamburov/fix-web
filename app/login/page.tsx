@@ -14,10 +14,12 @@ import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { getAuth, setAuth } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Задължително поле").email("Невалиден имейл"),
-  password: z.string().min(1, "Паролата е задължителна"),
+  password: z.string().min(1, "Задължително поле"),
   rememberMe: z.boolean().default(false),
 });
 
@@ -25,6 +27,7 @@ type LoginFormData = z.input<typeof loginSchema>;
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -39,12 +42,22 @@ export default function Login() {
     },
   });
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+  React.useEffect(() => {
+    if (getAuth()) {
+      router.push("/");
+    }
+  }, [router]);
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
     try {
-      await api.post("login", {
-        email: data.email,
-        password: data.password,
+      const res = await api.post("login", {
+        email: formData.email,
+        password: formData.password,
       });
+      if (res.data?.user && res.data?.access_token) {
+        setAuth({ user: res.data.user, accessToken: res.data.access_token });
+        router.push("/");
+      }
     } catch (err: unknown) {
       //   console.error(err);
     }
@@ -161,18 +174,18 @@ export default function Login() {
                   </Label>
                 </div>
 
-                <button
-                  type="button"
+                <Link
+                  href="/forgot-password"
                   className="font-h3 font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] bg-transparent border-none cursor-pointer hover:underline"
                 >
                   Забравена парола?
-                </button>
+                </Link>
               </div>
             </div>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90"
+              className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
             >
               <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
                 {isSubmitting ? "Моля, изчакайте..." : "Вход"}
