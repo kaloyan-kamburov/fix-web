@@ -12,33 +12,45 @@ import { Input } from "@/components/Form/Input";
 import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
-import Image from "next/image";
 import { api } from "@/lib/api";
+import { useSearchParams } from "next/navigation";
 
-const emailSchema = z.object({
-  email: z.string().min(1, "Задължително поле").email("Невалиден имейл"),
-});
+const schema = z
+  .object({
+    password: z.string().min(6, "Минимум 6 символа"),
+    confirm_password: z.string().min(6, "Минимум 6 символа"),
+  })
+  .refine((d) => d.password === d.confirm_password, {
+    message: "Паролите не съвпадат",
+    path: ["confirm_password"],
+  });
 
-type ForgotFormData = z.input<typeof emailSchema>;
+type ResetFormData = z.input<typeof schema>;
 
-export default function ForgotPassword() {
-  const [email, setEmail] = React.useState("");
+export default function ResetPassword() {
+  const params = useSearchParams();
+  const token = params.get("token") || "";
+  const email = params.get("email") || "";
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ForgotFormData>({
-    resolver: zodResolver(emailSchema),
-    defaultValues: { email: "" },
+  } = useForm<ResetFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { password: "", confirm_password: "" },
   });
 
   const [sent, setSent] = React.useState(false);
 
-  const onSubmit: SubmitHandler<ForgotFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ResetFormData> = async (data) => {
     try {
-      await api.post("client/request-password-reset", { email: data.email });
+      await api.post("client/reset-password", {
+        email,
+        password: data.password,
+        token,
+      });
       setSent(true);
-      setEmail(data.email);
     } catch (err) {
       // handled globally
     }
@@ -63,26 +75,19 @@ export default function ForgotPassword() {
             </Link>
             <div className="flex items-center justify-center gap-2 flex-1">
               <h1 className="font-h1 font-bold font-[number:var(--h1-font-weight)] text-gray-100 text-[length:var(--h1-font-size)] text-center tracking-[var(--h1-letter-spacing)] leading-[var(--h1-line-height)] [font-style:var(--h1-font-style)]">
-                Забравена парола
+                Нова парола
               </h1>
             </div>
           </header>
 
           {sent ? (
             <div className="flex flex-col items-center gap-4 w-full py-8">
-              <Image
-                src="/success.webp"
-                alt="Успешно"
-                width={560}
-                height={560}
-                className="object-contain success-img w-full max-w-[560px]"
-              />
-              <section className="relative self-stretch text-lg text-center text-zinc-600">
-                <p className="text-lg text-zinc-600">
-                  Изпратихме линк за верификация на{" "}
-                  <span className="font-bold">{email}</span>
-                </p>
-              </section>
+              <p className="text-center text-gray-100 text-base">
+                Паролата ви беше променена успешно. Вече може да влезете.
+              </p>
+              <Link href="/login" className="underline text-gray-100">
+                Към вход
+              </Link>
             </div>
           ) : (
             <form
@@ -92,17 +97,35 @@ export default function ForgotPassword() {
               <div className="flex flex-col items-start gap-0.5 w-full">
                 <div className="flex items-center gap-2 w-full">
                   <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
-                    Имейл*
+                    Парола*
                   </Label>
                 </div>
                 <Input
                   className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
-                  type="email"
-                  {...register("email")}
+                  type="password"
+                  {...register("password")}
                 />
-                {errors.email && (
+                {errors.password && (
                   <span className="text-red-500 text-xs mt-1">
-                    {errors.email.message}
+                    {errors.password.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-col items-start gap-0.5 w-full">
+                <div className="flex items-center gap-2 w-full">
+                  <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
+                    Потвърди парола*
+                  </Label>
+                </div>
+                <Input
+                  className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
+                  type="password"
+                  {...register("confirm_password")}
+                />
+                {errors.confirm_password && (
+                  <span className="text-red-500 text-xs mt-1">
+                    {errors.confirm_password.message}
                   </span>
                 )}
               </div>
@@ -113,7 +136,7 @@ export default function ForgotPassword() {
                 className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
               >
                 <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-                  {isSubmitting ? "Моля, изчакайте..." : "Изпрати линк"}
+                  {isSubmitting ? "Моля, изчакайте..." : "Смени паролата"}
                 </span>
               </Button>
             </form>
