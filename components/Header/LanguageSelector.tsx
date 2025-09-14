@@ -12,6 +12,25 @@ type Country = {
   flag: string; // image url
 };
 
+// API response shapes
+type ApiLanguage = {
+  name?: unknown;
+  code?: unknown;
+  flag?: unknown;
+};
+
+type ApiCountry = {
+  id?: unknown;
+  name?: unknown;
+  code?: unknown;
+  flag?: unknown;
+  tenant?:
+    | {
+        languages?: ApiLanguage[] | unknown;
+      }
+    | unknown;
+};
+
 // Cache flags to avoid refetching on every mount/navigation
 const COUNTRIES_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 const COUNTRIES_LS_KEY = "COUNTRIES_CACHE_V1";
@@ -91,6 +110,8 @@ export function LanguageSelector() {
     string
   > | null>(null);
 
+  type LanguageItem = { locale: string; flag: string };
+
   const countryByCode = React.useMemo(() => {
     const map = new Map<string, Country>();
     for (const c of countries) map.set((c.code || "").toUpperCase(), c);
@@ -117,7 +138,7 @@ export function LanguageSelector() {
     return loc;
   };
 
-  const items = React.useMemo(() => {
+  const items = React.useMemo<LanguageItem[]>(() => {
     return (supportedLocales as unknown as string[]).map((loc) => ({
       locale: loc,
       flag: (langFlags && langFlags[loc]) || fallbackFlagFor(loc),
@@ -181,44 +202,56 @@ export function LanguageSelector() {
       .then((r) => r.json())
       .then((raw: unknown) => {
         if (!active) return;
-        const arr = Array.isArray(raw)
-          ? raw
-          : Array.isArray((raw as any)?.data)
-          ? (raw as any).data
-          : [];
-        const normalized: Country[] = (arr as any[]).map((item) => ({
-          id: Number((item as any)?.id ?? 0),
-          name: String((item as any)?.name ?? ""),
-          code: String(
-            (item as any)?.code ??
-              (item as any)?.iso2 ??
-              (item as any)?.countryCode ??
-              ""
-          ).toUpperCase(),
-          flag: String(
-            (item as any)?.flag ??
-              (item as any)?.flagUrl ??
-              (item as any)?.image ??
-              ""
-          ),
-        }));
+        const root = ((): ApiCountry[] => {
+          if (Array.isArray(raw)) return raw as ApiCountry[];
+          if (
+            raw &&
+            typeof raw === "object" &&
+            Array.isArray((raw as { data?: unknown }).data)
+          ) {
+            return (raw as { data: unknown }).data as ApiCountry[];
+          }
+          return [];
+        })();
+
+        const toStringSafe = (v: unknown): string =>
+          typeof v === "string" ? v : String(v ?? "");
+        const toNumberSafe = (v: unknown): number => {
+          if (typeof v === "number") return v;
+          const n = Number(v);
+          return Number.isFinite(n) ? n : 0;
+        };
+
+        const normalized: Country[] = root.map((item: ApiCountry) => {
+          const id = toNumberSafe(item?.id);
+          const name = toStringSafe(item?.name);
+          const codeRaw = toStringSafe((item as ApiCountry)?.code);
+          const code = codeRaw.toUpperCase();
+          const flag = toStringSafe((item as ApiCountry)?.flag);
+          return { id, name, code, flag };
+        });
 
         // Build language flags from nested tenant.languages
-        try {
-          const langMap: Record<string, string> = {};
-          for (const it of arr as any[]) {
-            const langs = (it as any)?.tenant?.languages;
-            if (Array.isArray(langs)) {
-              for (const l of langs) {
-                const code = String((l as any)?.code || "").toLowerCase();
-                const flag = String((l as any)?.flag || "");
-                if (code && flag && !langMap[code]) langMap[code] = flag;
-              }
+        const langMap: Record<string, string> = {};
+        for (const it of root) {
+          const tenant =
+            it && typeof it === "object"
+              ? (it as ApiCountry).tenant
+              : undefined;
+          const languages =
+            tenant && typeof tenant === "object"
+              ? (tenant as { languages?: unknown }).languages
+              : undefined;
+          if (Array.isArray(languages)) {
+            for (const l of languages as ApiLanguage[]) {
+              const lc = toStringSafe(l?.code).toLowerCase();
+              const lf = toStringSafe(l?.flag);
+              if (lc && lf && !langMap[lc]) langMap[lc] = lf;
             }
           }
-          languageFlagsCache = langMap;
-          setLangFlags(langMap);
-        } catch {}
+        }
+        languageFlagsCache = langMap;
+        setLangFlags(langMap);
 
         countriesCache = normalized;
         countriesCacheAt = Date.now();
@@ -269,11 +302,11 @@ export function LanguageSelector() {
     setIsOpen(false);
   };
 
-  const selected = React.useMemo(() => {
+  const selected = React.useMemo<LanguageItem | null>(() => {
     const entry = items.find((i) => i.locale === currentLocale);
     if (entry) return entry;
     const fallback = fallbackFlagFor(currentLocale);
-    if (fallback) return { locale: currentLocale, flag: fallback } as any;
+    if (fallback) return { locale: currentLocale, flag: fallback };
     return null;
   }, [items, currentLocale, countryByCode]);
 

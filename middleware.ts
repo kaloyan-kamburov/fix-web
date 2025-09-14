@@ -4,6 +4,9 @@ const locales = [
   "bg",
   "en",
   "fr",
+  "de",
+  "it",
+  "es",
   "tr",
   "gr",
   "nl",
@@ -31,7 +34,7 @@ export default createMiddleware({
 export const config = {
   matcher: [
     "/",
-    "/(bg|en|fr|tr|gr|nl|swe|por|cr|est|fin|irl|lat|lit|lux|mal|slovakian|slovenian)/:path*",
+    "/(bg|en|fr|de|it|es|tr|gr|nl|swe|por|cr|est|fin|irl|lat|lit|lux|mal|slovakian|slovenian)/:path*",
     "/((?!api|_next|.*\\..*).*)",
   ],
 };
