@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { getAuth } from "@/lib/auth";
-import { RequestStatusBadges } from "../../orders/RequestStatusBadges.component";
+// import { RequestStatusBadges } from "../../orders/RequestStatusBadges.component";
 
 const tabs = [
   { id: "sent", label: "Изпратени" },
