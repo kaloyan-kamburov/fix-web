@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { z } from "zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,7 @@ const schema = z
 
 type ResetFormData = z.input<typeof schema>;
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const params = useSearchParams();
   const token = params.get("token") || "";
   const email = params.get("email") || "";
@@ -144,5 +144,13 @@ export default function ResetPassword() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={null}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
