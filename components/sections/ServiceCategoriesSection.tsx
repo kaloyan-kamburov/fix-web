@@ -6,42 +6,47 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
-
-const serviceCategories = [
-  {
-    id: 1,
-    title: "ВиК Услуги",
-    image: "/slider-1.webp",
-    height: "h-[226px]",
-  },
-  {
-    id: 2,
-    title: "Ремонтни дейности",
-    image: "/slider-2.jpg",
-    height: "h-[226px]",
-  },
-  {
-    id: 3,
-    title: "Изграждане и поддръжка на ел. инсталации",
-    image: "/slider-3.jpg",
-    height: "h-[248px]",
-  },
-  {
-    id: 4,
-    title: "Техническа поддръжка на сгради и съоръжения",
-    image: "/slider-4.jpg",
-    height: "h-[248px]",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export const ServiceCategoriesSection = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "start",
-    containScroll: false,
-    dragFree: true,
-    skipSnaps: false
-  }, [Autoplay({ delay: 2000, stopOnInteraction: false })]);
+  const t = useTranslations();
+
+  const serviceCategories = [
+    {
+      id: 1,
+      title: t("serviceCategoriesTitle1"),
+      image: "/slider-1.webp",
+      height: "h-[226px]",
+    },
+    {
+      id: 2,
+      title: t("serviceCategoriesTitle2"),
+      image: "/slider-2.jpg",
+      height: "h-[226px]",
+    },
+    {
+      id: 3,
+      title: t("serviceCategoriesTitle3"),
+      image: "/slider-3.jpg",
+      height: "h-[248px]",
+    },
+    {
+      id: 4,
+      title: t("serviceCategoriesTitle4"),
+      image: "/slider-4.jpg",
+      height: "h-[248px]",
+    },
+  ];
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: "start",
+      containScroll: false,
+      dragFree: true,
+      skipSnaps: false,
+    },
+    [Autoplay({ delay: 2000, stopOnInteraction: false })]
+  );
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -55,7 +60,7 @@ export const ServiceCategoriesSection = () => {
     <section className="flex flex-col items-center justify-center gap-8 pt-[60px] lg:pt-28 pb-20 px-0 w-full bg-gray-100">
       <header className="flex items-center justify-center gap-2 w-full">
         <h2 className="w-fit mt-[-1.00px] font-bold text-gray-00 text-[28px] lg:text-[40px] text-center leading-[normal] tracking-[0] px-[16px]">
-          Какви услуги можеш да намериш
+          {t("serviceCategoriesTitle")}
         </h2>
       </header>
 
@@ -67,9 +72,25 @@ export const ServiceCategoriesSection = () => {
             className="cursor-pointer absolute left-20 top-1/2 transform -translate-y-1/2 mt-[-20px] z-10 hover:opacity-80 transition-opacity"
             aria-label="Previous slide"
           >
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: 'scaleX(-1)' }}>
-              <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)" fill="#F9F9F9" />
-              <path d="M13.8248 12.35L16.1748 10L26.1748 20L16.1748 30L13.8248 27.65L21.4581 20L13.8248 12.35Z" fill="#1C1C1D" />
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ transform: "scaleX(-1)" }}
+            >
+              <rect
+                width="40"
+                height="40"
+                rx="20"
+                transform="matrix(-1 0 0 1 40 0)"
+                fill="#F9F9F9"
+              />
+              <path
+                d="M13.8248 12.35L16.1748 10L26.1748 20L16.1748 30L13.8248 27.65L21.4581 20L13.8248 12.35Z"
+                fill="#1C1C1D"
+              />
             </svg>
           </button>
 
@@ -79,15 +100,34 @@ export const ServiceCategoriesSection = () => {
             className="cursor-pointer absolute right-20 top-1/2 transform mt-[-20px] -translate-y-1/2 z-10 hover:opacity-80 transition-opacity"
             aria-label="Next slide"
           >
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="40" height="40" rx="20" transform="matrix(-1 0 0 1 40 0)" fill="#F9F9F9" />
-              <path d="M13.8248 12.35L16.1748 10L26.1748 20L16.1748 30L13.8248 27.65L21.4581 20L13.8248 12.35Z" fill="#1C1C1D" />
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                width="40"
+                height="40"
+                rx="20"
+                transform="matrix(-1 0 0 1 40 0)"
+                fill="#F9F9F9"
+              />
+              <path
+                d="M13.8248 12.35L16.1748 10L26.1748 20L16.1748 30L13.8248 27.65L21.4581 20L13.8248 12.35Z"
+                fill="#1C1C1D"
+              />
             </svg>
           </button>
 
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-10 pl-10 pr-10">
-              {[...serviceCategories, ...serviceCategories, ...serviceCategories].map((category, index) => (
+              {[
+                ...serviceCategories,
+                ...serviceCategories,
+                ...serviceCategories,
+              ].map((category, index) => (
                 <div
                   key={`${category.id}-${index}`}
                   className={`flex-shrink-0 w-[254px] ${category.height}`}
@@ -139,9 +179,12 @@ export const ServiceCategoriesSection = () => {
         </div>
       </div>
 
-      <Link href="/services" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90">
+      <Link
+        href="/services"
+        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90"
+      >
         <span className="w-fit mt-[-1.00px] font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-          Виж всички
+          {t("serviceCategoriesButton")}
         </span>
       </Link>
     </section>

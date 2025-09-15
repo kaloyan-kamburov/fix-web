@@ -2,31 +2,31 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export const FeaturedServicesSection = () => {
+  const t = useTranslations();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const features = [
     {
-      title: "Проверени професионалисти",
-      description:
-        "Всеки майстор в платформата е с проверени документи и рейтинг от клиенти",
+      title: t("verifiedProfessionals"),
+      description: t("verifiedProfessionalsDescription"),
       image: "/service-1.webp",
     },
     {
-      title: "Прозрачни оферти",
-      description: "Получаваш няколко предложения и избираш най-доброто",
+      title: t("transparentOffers"),
+      description: t("transparentOffersDescription"),
       image: "/service-2.webp",
     },
     {
-      title: "Гъвкаво планиране",
-      description: "Ремонтите се случват, когато на теб ти е удобно",
+      title: t("flexiblePlanning"),
+      description: t("flexiblePlanningDescription"),
       image: "/service-3.webp",
     },
     {
-      title: "Сигурно плащане",
-      description:
-        "Парите са защитени и се освобождават само след приключване на услугата",
+      title: t("securePayment"),
+      description: t("securePaymentDescription"),
       image: "/service-4.webp",
     },
   ];
@@ -68,8 +68,9 @@ export const FeaturedServicesSection = () => {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className={`w-full rounded-2xl border-0 cursor-pointer transition-all duration-300 ${activeIndex === index ? 'bg-gray-90' : 'bg-gray-95'
-                } hover:bg-gray-90`}
+              className={`w-full rounded-2xl border-0 cursor-pointer transition-all duration-300 ${
+                activeIndex === index ? "bg-gray-90" : "bg-gray-95"
+              } hover:bg-gray-90`}
               onClick={() => setActiveIndex(index)}
             >
               <CardContent className="flex flex-col items-start justify-center gap-4 p-5">
@@ -90,8 +91,9 @@ export const FeaturedServicesSection = () => {
         {features.map((feature, index) => (
           <Card
             key={index}
-            className={`w-full rounded-2xl border-0 cursor-pointer transition-all duration-300 ${activeIndex === index ? 'bg-gray-90' : 'bg-gray-95'
-              } hover:bg-gray-90`}
+            className={`w-full rounded-2xl border-0 cursor-pointer transition-all duration-300 ${
+              activeIndex === index ? "bg-gray-90" : "bg-gray-95"
+            } hover:bg-gray-90`}
             onClick={() => setActiveIndex(index)}
           >
             <CardContent className="flex flex-col items-start justify-center gap-3 p-4">

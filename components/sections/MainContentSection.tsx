@@ -1,7 +1,10 @@
+"use client";
 import React from "react";
 import { Card, CardContent } from "../ui/card";
+import { useTranslations } from "next-intl";
 
 export const MainContentSection = () => {
+  const t = useTranslations();
   const testimonialData = {
     name: "Дарина Пеева",
     service: "Смяна на тръба",
@@ -15,7 +18,7 @@ export const MainContentSection = () => {
     <section className="flex items-center gap-20 px-[16px] lg:px-28 lg:py-[104px] relative w-full bg-gray-100">
       <div className=" w-full max-w-[1390px] mx-auto flex  gap-10 flex-col lg:flex-row">
         <header className="w-[440px] font-semibold text-gray-00 text-[28px] lg:text-[64px] leading-[normal] lg:leading-[80px] tracking-[0] mx-auto lg:mx-0">
-          Какво казват нашите клиенти
+          {t("whatOurClientsSay")}
         </header>
 
         <Card className="flex-1 bg-[#2a2a2c80] border-none rounded-[20px] relative">
