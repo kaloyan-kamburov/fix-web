@@ -6,12 +6,48 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { clearAuth } from "@/lib/auth";
 import { api } from "@/lib/api";
+import { useTranslations } from "next-intl";
 export default function HeaderActions() {
   const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
   const [isLoadingLogout, setIsLoadingLogout] = React.useState(false);
+  const t = useTranslations();
+
+  const LOCALES = React.useMemo(
+    () =>
+      new Set([
+        "bg",
+        "en",
+        "fr",
+        "de",
+        "it",
+        "es",
+        "tr",
+        "gr",
+        "nl",
+        "swe",
+        "por",
+        "cr",
+        "est",
+        "fin",
+        "irl",
+        "lat",
+        "lit",
+        "lux",
+        "mal",
+        "slovakian",
+        "slovenian",
+      ]),
+    []
+  );
+
+  const localePrefix = React.useMemo(() => {
+    const parts = pathname.split("/").filter(Boolean);
+    const maybeLocale = parts[0];
+    return LOCALES.has(maybeLocale) ? `/${maybeLocale}` : "";
+  }, [pathname, LOCALES]);
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -95,26 +131,30 @@ export default function HeaderActions() {
 
         {isMenuOpen && (
           <div className="absolute right-0 mt-2 w-40 rounded-md border border-[#dadade] bg-white text-background shadow-lg z-50">
+            <Link
+              href={`${localePrefix}/profile`}
+              className="block w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {t("profile")}
+            </Link>
             <button
               onClick={onLogout}
               className="w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
               disabled={isLoadingLogout}
             >
-              {isLoadingLogout ? "Изчакайте..." : "Изход"}
+              {isLoadingLogout ? "Изчакайте..." : t("logout")}
             </button>
           </div>
         )}
       </div>
 
       <Link
-        href={
-          pathname.replace(/^(\/[^/]+)?/, "$1") +
-          (pathname.includes("/orders") ? "" : "/orders")
-        }
+        href={`${localePrefix}/orders`}
         className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
       >
         <div className="text-button-primary-text text-center relative text-base font-bold">
-          Моите заявки
+          {t("myRequests")}
         </div>
       </Link>
     </nav>

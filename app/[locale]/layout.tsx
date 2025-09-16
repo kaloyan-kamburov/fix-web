@@ -28,6 +28,8 @@ const legacyMap: Record<string, string> = {
   es: "strings_es.i18n.json",
 };
 
+const supportedLocales = new Set<string>(Object.keys(legacyMap));
+
 export default async function LocaleLayout({
   children,
   params,
@@ -36,7 +38,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale: incomingLocale } = await params;
-  const locale = incomingLocale || "bg";
+  const locale = supportedLocales.has(incomingLocale) ? incomingLocale : "bg";
   const baseDir = path.join(process.cwd(), "public", "i18n");
   let messages: Record<string, unknown> = {};
   try {

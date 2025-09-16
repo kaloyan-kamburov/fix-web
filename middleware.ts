@@ -1,4 +1,3 @@
-import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -26,36 +25,35 @@ const locales = [
   "slovenian",
 ];
 
-const intlMiddleware = createMiddleware({
-  locales,
-  defaultLocale: "bg",
-  localePrefix: "always",
-  localeDetection: true,
-});
+const protectedRoutes = ["orders", "profile"];
 
-export default function middleware(req: NextRequest) {
-  const res = intlMiddleware(req);
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
 
-  const pathname = req.nextUrl.pathname;
-  const ordersRegex = new RegExp(
-    `^/(bg|en|fr|de|it|es|tr|gr|nl|swe|por|cr|est|fin|irl|lat|lit|lux|mal|slovakian|slovenian)/orders(?:/|$)`
-  );
+  // Redirect root to default locale
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/bg", req.url));
+  }
 
-  if (ordersRegex.test(pathname)) {
+  // Protect only localized orders pages
+  const segments = pathname.split("/").filter(Boolean);
+  const locale = segments[0];
+  const section = segments[1];
+  const isLocalized = locales.includes(locale ?? "");
+
+  if (isLocalized && protectedRoutes.includes(section ?? "")) {
     const token = req.cookies.get("auth_token")?.value;
     if (!token) {
-      const locale = pathname.split("/")[1] || "bg";
       return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
     }
   }
 
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    "/",
-    "/(bg|en|fr|de|it|es|tr|gr|nl|swe|por|cr|est|fin|irl|lat|lit|lux|mal|slovakian|slovenian)/:path*",
-    "/((?!api|_next|.*\\..*).*)",
+    "/", // redirect root
+    `/(${locales.join("|")})/(${protectedRoutes.join("|")})/:path*`, // protect orders
   ],
 };

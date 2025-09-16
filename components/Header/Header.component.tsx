@@ -164,7 +164,6 @@ export default function Header() {
             <div className="pt-4 space-y-3">
               {isLoggedIn ? (
                 <>
-                  {/* Моите заявки */}
                   <Link
                     href={`/${locale}/orders`}
                     onClick={closeMobileMenu}
@@ -175,7 +174,6 @@ export default function Header() {
                     </div>
                   </Link>
 
-                  {/* Изход */}
                   <button
                     onClick={handleLogout}
                     className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg border border-solid border-neutral-400 text-[#F9F9F9]"

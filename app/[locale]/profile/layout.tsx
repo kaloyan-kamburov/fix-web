@@ -3,8 +3,8 @@ import Header from "@/components/Header/Header.component";
 import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
 
 export const metadata: Metadata = {
-  title: "Моите поръчки",
-  description: "Моите поръчки",
+  title: "Профил",
+  description: "Профил",
 };
 
 export default function Layout({
@@ -14,9 +14,11 @@ export default function Layout({
 }>) {
   return (
     <div className="min-h-screen flex flex-col bg-gray-10 text-gray-100 pt-[90px]">
+      <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-8 flex-col w-full max-w-[720px] mx-auto">
         {children}
       </main>
+      <SiteFooterSection />
     </div>
   );
 }
