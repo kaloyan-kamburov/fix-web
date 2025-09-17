@@ -16,6 +16,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import { getAuth, setAuth } from "@/lib/auth";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Задължително поле").email("Невалиден имейл"),
@@ -28,6 +29,7 @@ type LoginFormData = z.input<typeof loginSchema>;
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
   const router = useRouter();
+  const locale = useLocale();
   const {
     register,
     handleSubmit,
@@ -201,7 +203,7 @@ export default function Login() {
           &nbsp;
         </span>
         <Link
-          href="/register"
+          href={`/${locale}/register`}
           className="font-[number:var(--h3-font-weight)] text-[#1b1b1c] tracking-[var(--h3-letter-spacing)] font-h3 [font-style:var(--h3-font-style)] leading-[var(--h3-line-height)] text-[length:var(--h3-font-size)] bg-transparent border-none cursor-pointer hover:underline"
         >
           Регистрация

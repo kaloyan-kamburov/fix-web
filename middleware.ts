@@ -54,6 +54,6 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/", // redirect root
-    `/(${locales.join("|")})/(${protectedRoutes.join("|")})/:path*`, // protect orders
+    "/(bg|en|fr|de|it|es|tr|gr|nl|swe|por|cr|est|fin|irl|lat|lit|lux|mal|slovakian|slovenian)/(orders|profile)/:path*", // protect orders and profile
   ],
 };

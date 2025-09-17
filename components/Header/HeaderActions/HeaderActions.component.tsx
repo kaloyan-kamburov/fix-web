@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { BellIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -14,6 +15,12 @@ export default function HeaderActions() {
   const menuRef = React.useRef<HTMLDivElement | null>(null);
   const [isLoadingLogout, setIsLoadingLogout] = React.useState(false);
   const t = useTranslations();
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const LOCALES = React.useMemo(
     () =>
@@ -108,55 +115,90 @@ export default function HeaderActions() {
   };
 
   return (
-    <nav className="flex gap-3 items-center">
-      <button
-        className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid border-neutral-400 cursor-pointer`}
-        aria-label="Нотификации"
-      >
-        <BellIcon className="text-white" />
-      </button>
-
-      <div className="relative" ref={menuRef}>
+    <>
+      <nav className="flex gap-3 items-center">
         <button
-          className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid cursor-pointer ${
-            isMenuOpen ? "bg-white border-transparent" : "border-neutral-400"
-          }`}
-          aria-haspopup="menu"
-          aria-expanded={isMenuOpen}
-          aria-label="Потребителски профил"
-          onClick={() => setIsMenuOpen((v) => !v)}
+          className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid border-neutral-400 cursor-pointer`}
+          aria-label="Нотификации"
         >
-          <UserIcon className={isMenuOpen ? "text-background" : "text-white"} />
+          <BellIcon className="text-white" />
         </button>
 
-        {isMenuOpen && (
-          <div className="absolute right-0 mt-2 w-40 rounded-md border border-[#dadade] bg-white text-background shadow-lg z-50">
-            <Link
-              href={`${localePrefix}/profile`}
-              className="block w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {t("profile")}
-            </Link>
-            <button
-              onClick={onLogout}
-              className="w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
-              disabled={isLoadingLogout}
-            >
-              {isLoadingLogout ? "Изчакайте..." : t("logout")}
-            </button>
-          </div>
-        )}
-      </div>
+        <div className="relative" ref={menuRef}>
+          <button
+            className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid cursor-pointer ${
+              isMenuOpen ? "bg-white border-transparent" : "border-neutral-400"
+            }`}
+            aria-haspopup="menu"
+            aria-expanded={isMenuOpen}
+            aria-label="Потребителски профил"
+            onClick={() => setIsMenuOpen((v) => !v)}
+          >
+            <UserIcon
+              className={isMenuOpen ? "text-background" : "text-white"}
+            />
+          </button>
 
-      <Link
-        href={`${localePrefix}/orders`}
-        className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
-      >
-        <div className="text-button-primary-text text-center relative text-base font-bold">
-          {t("myRequests")}
+          {isMenuOpen && (
+            <div className="absolute right-0 mt-2 w-40 rounded-md border border-[#dadade] bg-white text-background shadow-lg z-50 overflow-hidden">
+              <Link
+                href={`${localePrefix}/profile`}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t("profile")}
+              </Link>
+              <button
+                onClick={() => {
+                  setShowLogoutModal(true);
+                  setIsMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
+                disabled={isLoadingLogout}
+              >
+                {isLoadingLogout ? "Изчакайте..." : t("logout")}
+              </button>
+            </div>
+          )}
         </div>
-      </Link>
-    </nav>
+
+        <Link
+          href={`${localePrefix}/orders`}
+          className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
+        >
+          <div className="text-button-primary-text text-center relative text-base font-bold">
+            {t("myRequests")}
+          </div>
+        </Link>
+      </nav>
+      {mounted &&
+        showLogoutModal &&
+        createPortal(
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
+            <div className="w-full max-w-[520px] bg-white rounded-lg p-6 shadow-lg">
+              <h2 className="text-xl font-bold text-gray-100 mb-4">
+                {t("logoutMessage")}
+              </h2>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="px-4 py-2 rounded-lg border border-[#dadade] text-gray-100 hover:bg-gray-10 cursor-pointer"
+                  disabled={isLoadingLogout}
+                >
+                  {t("refuse")}
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="px-5 py-2.5 rounded-lg bg-button-primary-bg text-black hover:bg-button-primary-bg/90 focus:outline-none focus:ring-2 focus:ring-button-primary-bg cursor-pointer"
+                  disabled={isLoadingLogout}
+                >
+                  {t("logOut")}
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 }

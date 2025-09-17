@@ -49,7 +49,6 @@ api.interceptors.request.use((config) => {
       .find((c) => c.startsWith("auth_token="));
     if (raw) {
       const token = decodeURIComponent(raw.split("=")[1] || "");
-      console.log(token);
       if (token) {
         config.headers = config.headers || {};
         (config.headers as Record<string, string>)[
@@ -76,7 +75,7 @@ api.interceptors.response.use(
       if (typeof data === "string") {
         candidate = data;
       } else if (data?.message) {
-        candidate = String(data.message);
+        candidate = String(data.message?.title || data.message);
       } else if (data?.error) {
         candidate = String(data.error);
       } else if (data?.errors) {
@@ -99,7 +98,13 @@ api.interceptors.response.use(
             clearAuth();
           } catch {}
           toast.error("Сесията е изтекла. Моля, влезте отново.");
-          window.location.href = "/login";
+          try {
+            const parts = window.location.pathname.split("/").filter(Boolean);
+            const maybeLocale = parts[0] || "bg";
+            window.location.href = `/${maybeLocale}/login`;
+          } catch {
+            window.location.href = "/bg/login";
+          }
         }
       } else {
         toast.error(candidate || fallback);
