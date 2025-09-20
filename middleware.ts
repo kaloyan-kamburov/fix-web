@@ -28,23 +28,41 @@ const locales = [
 const protectedRoutes = ["orders", "profile"];
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const url = req.nextUrl;
+  const { pathname, searchParams } = url;
 
   // Redirect root to default locale
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/bg", req.url));
+    return NextResponse.redirect(new URL("/en", req.url));
   }
 
-  // Protect only localized orders pages
   const segments = pathname.split("/").filter(Boolean);
-  const locale = segments[0];
-  const section = segments[1];
-  const isLocalized = locales.includes(locale ?? "");
+  const langParam = (searchParams.get("lang") || "").toLowerCase();
+  const hasLangParam = langParam && locales.includes(langParam);
 
-  if (isLocalized && protectedRoutes.includes(section ?? "")) {
+  // If ?lang is present and valid, rewrite internally to /{lang}/{rest}
+  if (hasLangParam) {
+    const rest = segments.slice(1).join("/"); // treat first segment as country
+    const targetPath = `/${langParam}${rest ? `/${rest}` : ""}`;
+    const res = NextResponse.rewrite(new URL(targetPath + url.search, req.url));
+    // Sync cookie for client-side consumption
+    res.cookies.set("NEXT_LOCALE", langParam, { path: "/" });
+    // Continue with protection using effective locale below by returning here? We can allow fallthrough
+    return res;
+  }
+
+  // Determine effective locale from path when no lang param
+  const maybeLocale = segments[0] || "";
+  const effectiveLocale = locales.includes(maybeLocale) ? maybeLocale : null;
+  const section = segments[1];
+
+  if (effectiveLocale && protectedRoutes.includes(section ?? "")) {
     const token = req.cookies.get("auth_token")?.value;
     if (!token) {
-      return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
+      const nextUrl = new URL(`/${effectiveLocale}/login`, req.url);
+      const lp = url.searchParams.get("lang");
+      if (lp) nextUrl.searchParams.set("lang", lp);
+      return NextResponse.redirect(nextUrl);
     }
   }
 
@@ -52,8 +70,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/", // redirect root
-    "/(bg|en|fr|de|it|es|tr|gr|nl|swe|por|cr|est|fin|irl|lat|lit|lux|mal|slovakian|slovenian)/(orders|profile)/:path*", // protect orders and profile
-  ],
+  // Run on all paths except Next.js internals and assets
+  matcher: "/((?!_next|.*\\..*).*)",
 };

@@ -15,8 +15,8 @@ import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { getAuth, setAuth } from "@/lib/auth";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Задължително поле").email("Невалиден имейл"),
@@ -27,9 +27,37 @@ const loginSchema = z.object({
 type LoginFormData = z.input<typeof loginSchema>;
 
 export default function Login() {
+  const t = useTranslations();
   const [showPassword, setShowPassword] = React.useState(false);
   const router = useRouter();
   const locale = useLocale();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const backHref = React.useMemo(() => {
+    try {
+      const parts = (pathname || "").split("/").filter(Boolean);
+      // On this page, first segment is the locale which we treat as country segment for back URL
+      let country = (parts[0] || "bg").toLowerCase();
+      let lang = (searchParams?.get("lang") || "").toLowerCase();
+      if (!lang && typeof document !== "undefined") {
+        const cookie = document.cookie
+          .split(";")
+          .map((c) => c.trim())
+          .find((c) => c.startsWith("NEXT_LOCALE="));
+        if (cookie) lang = decodeURIComponent(cookie.split("=")[1] || "");
+      }
+      if (!lang && typeof window !== "undefined") {
+        try {
+          lang = (localStorage.getItem("preferred_locale") || "").toLowerCase();
+        } catch {}
+      }
+      if (!lang) lang = country; // fallback to country as language
+      return `/${country}?lang=${lang}`;
+    } catch {
+      return "/bg?lang=bg";
+    }
+  }, [pathname, searchParams]);
   const {
     register,
     handleSubmit,
@@ -46,9 +74,9 @@ export default function Login() {
 
   React.useEffect(() => {
     if (getAuth()) {
-      router.push("/");
+      router.push(backHref);
     }
-  }, [router]);
+  }, [router, backHref]);
 
   const onSubmit: SubmitHandler<LoginFormData> = async (formData) => {
     try {
@@ -58,7 +86,7 @@ export default function Login() {
       });
       if (res.data?.user && res.data?.access_token) {
         setAuth({ user: res.data.user, accessToken: res.data.access_token });
-        router.push("/");
+        router.push(backHref);
       }
     } catch (err: unknown) {
       //   console.error(err);
@@ -76,7 +104,7 @@ export default function Login() {
         <CardContent className="flex flex-col items-center gap-8 p-0 md:p-10">
           <header className="flex items-center w-full">
             <Link
-              href="/"
+              href={backHref}
               aria-label="Назад към вход"
               className="w-6 h-6 inline-flex items-center justify-center"
             >
@@ -84,7 +112,7 @@ export default function Login() {
             </Link>
             <div className="flex items-center justify-center gap-2 flex-1">
               <h1 className="font-h1 font-bold font-[number:var(--h1-font-weight)] text-gray-100 text-[length:var(--h1-font-size)] text-center tracking-[var(--h1-letter-spacing)] leading-[var(--h1-line-height)] [font-style:var(--h1-font-style)]">
-                Вход
+                {t("login")}
               </h1>
             </div>
 
@@ -117,7 +145,7 @@ export default function Login() {
               <div className="flex flex-col items-start gap-0.5 w-full">
                 <div className="flex items-center gap-2 w-full">
                   <Label className="[font-family:'Open_Sans',Helvetica] font-semibold text-gray-100 text-xs tracking-[0] leading-[normal]">
-                    Парола*
+                    {t("password")}*
                   </Label>
                 </div>
 
@@ -133,7 +161,7 @@ export default function Login() {
                       <button
                         type="button"
                         aria-label={
-                          showPassword ? "Скрий паролата" : "Покажи паролата"
+                          showPassword ? t("hidePassword") : t("showPassword")
                         }
                         onClick={() => setShowPassword((prev) => !prev)}
                         className="inline-flex items-center justify-center h-full px-2 bg-transparent rounded-none border-l border-solid border-[#dadade] text-gray-100 cursor-pointer"

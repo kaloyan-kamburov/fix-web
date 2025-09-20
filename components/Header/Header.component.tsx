@@ -6,17 +6,60 @@ import { Logo } from "../Logo/Logo.component";
 import HeaderActions from "./HeaderActions/HeaderActions.component";
 import { LanguageSelector } from "./LanguageSelector";
 import { getAuth, onAuthChanged } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { clearAuth } from "@/lib/auth";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+
+function getLocaleFromPath(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 0) return null;
+  const candidate = parts[0];
+  const LOCALES = new Set([
+    "bg",
+    "en",
+    "fr",
+    "de",
+    "it",
+    "es",
+    "tr",
+    "gr",
+    "nl",
+    "swe",
+    "por",
+    "cr",
+    "est",
+    "fin",
+    "irl",
+    "lat",
+    "lit",
+    "lux",
+    "mal",
+    "slovakian",
+    "slovenian",
+  ]);
+  return LOCALES.has(candidate) ? candidate : null;
+}
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const router = useRouter();
   const t = useTranslations();
-  const locale = useLocale();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const locale = React.useMemo(
+    () => getLocaleFromPath(pathname) || "bg",
+    [pathname]
+  );
+  const langParam = React.useMemo(
+    () => (searchParams?.get("lang") || "").toLowerCase(),
+    [searchParams]
+  );
+  const loginHref = React.useMemo(
+    () => `/${locale}/login${langParam ? `?lang=${langParam}` : ""}`,
+    [locale, langParam]
+  );
 
   React.useEffect(() => {
     // Initialize from client storage to avoid SSR/client mismatch
@@ -43,7 +86,7 @@ export default function Header() {
     } finally {
       clearAuth();
       closeMobileMenu();
-      router.push("/");
+      router.push(`/${locale}`);
     }
   };
 
@@ -63,11 +106,6 @@ export default function Header() {
         <div className="hidden lg:flex justify-center items-center gap-6 relative">
           <div className="flex justify-center items-center gap-1 relative">
             <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
-              {t("start")}
-            </div>
-          </div>
-          <div className="flex justify-center items-center gap-1 relative">
-            <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
               {t("serviceSearch")}
             </div>
           </div>
@@ -79,11 +117,11 @@ export default function Header() {
             <HeaderActions />
           ) : (
             <Link
-              href={`/${locale}/login`}
+              href={loginHref}
               className="flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity"
             >
               <div className="text-button-primary-text text-center relative text-base font-bold">
-                {t("logIn")}
+                {t("login")}
               </div>
             </Link>
           )}
@@ -183,7 +221,7 @@ export default function Header() {
                 </>
               ) : (
                 <Link
-                  href={`/${locale}/login`}
+                  href={loginHref}
                   onClick={closeMobileMenu}
                   className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity"
                 >

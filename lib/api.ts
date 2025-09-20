@@ -17,7 +17,7 @@ export const api = axios.create({
 api.interceptors.request.use((config) => {
   if (typeof document !== "undefined") {
     try {
-      const preferred = localStorage.getItem("preferred_locale") || "bg";
+      const preferred = localStorage.getItem("preferred_locale") || "en";
       const localeHeader = new Map<string, string>([
         ["bg", "bg-BG"],
         ["en", "en-US"],
@@ -100,10 +100,10 @@ api.interceptors.response.use(
           toast.error("Сесията е изтекла. Моля, влезте отново.");
           try {
             const parts = window.location.pathname.split("/").filter(Boolean);
-            const maybeLocale = parts[0] || "bg";
+            const maybeLocale = parts[0] || "en";
             window.location.href = `/${maybeLocale}/login`;
           } catch {
-            window.location.href = "/bg/login";
+            window.location.href = "/en/login";
           }
         }
       } else {

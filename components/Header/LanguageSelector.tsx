@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
+import { createPortal } from "react-dom";
+import CountryLanguageSelector from "../CountryLangaugeSelector/CountryLanguageSelector";
 
 type Country = {
   id: number;
@@ -99,11 +101,15 @@ function getLocaleFromPath(pathname: string): string | null {
 export function LanguageSelector() {
   const router = useRouter();
   const pathname = usePathname();
-  const currentLocale = React.useMemo(
-    () => getLocaleFromPath(pathname) || "bg",
-    [pathname]
-  );
+  const searchParams = useSearchParams();
+  const currentLocale = React.useMemo(() => {
+    const fromQuery = (searchParams?.get("lang") || "").toLowerCase();
+    const locales = new Set<string>(supportedLocales as unknown as string[]);
+    if (fromQuery && locales.has(fromQuery)) return fromQuery;
+    return getLocaleFromPath(pathname) || "bg";
+  }, [pathname, searchParams]);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
   const [countries, setCountries] = React.useState<Country[]>([]);
   const [langFlags, setLangFlags] = React.useState<Record<
     string,
@@ -338,7 +344,7 @@ export function LanguageSelector() {
         }`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        onClick={() => setIsOpen((v) => !v)}
+        onClick={() => setShowModal(true)}
       >
         {selected?.flag ? (
           <Image
@@ -358,31 +364,15 @@ export function LanguageSelector() {
           {displayLocale(currentLocale)}
         </span>
       </button>
-      {isOpen && (
-        <ul
-          className="absolute right-0 mt-2 w-44 rounded-md border border-[#dadade] bg-white text-background shadow-lg z-50 max-h-80 overflow-auto"
-          role="listbox"
-        >
-          {items.map((i) => (
-            <li
-              role="option"
-              aria-selected={i.locale === currentLocale}
-              key={i.locale}
-              onClick={() => onSelect(i.locale)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-gray-10 cursor-pointer"
-            >
-              {i.flag ? (
-                <Image src={i.flag} alt={i.locale} width={20} height={14} />
-              ) : (
-                <span className="w-5 h-3 bg-neutral-300 inline-block" />
-              )}
-              <span className="text-sm uppercase">
-                {displayLocale(i.locale)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {showModal &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <CountryLanguageSelector
+            open={showModal}
+            onClose={() => setShowModal(false)}
+          />,
+          document.body
+        )}
     </div>
   );
 }

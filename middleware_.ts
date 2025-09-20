@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("auth_token")?.value;
   if (!token) {
     const segments = request.nextUrl.pathname.split("/").filter(Boolean);
-    const locale = segments[0] || "bg";
+    const locale = segments[0] || "en";
     return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
   }
   return NextResponse.next();
