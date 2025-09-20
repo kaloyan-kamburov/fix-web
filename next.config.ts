@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "kmp-admin.perspectiveunity.com",
         port: "",
-        pathname: "/flags/**",
+        pathname: "/**",
       },
     ],
   },

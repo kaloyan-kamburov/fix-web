@@ -182,30 +182,19 @@ export const CountryLanguageSelector: React.FC<
         expires: 365,
       });
     } catch {}
-    const url = new URL(
-      typeof window !== "undefined" ? window.location.href : "http://localhost/"
-    );
-    // Determine country segment (lowercase): prefer selected, then stored, then current first segment, fallback bg
-    let countrySegment = selectedCountry?.code?.toLowerCase() || "";
-    if (!countrySegment) {
-      try {
-        const pref =
-          (typeof window !== "undefined" &&
-            localStorage.getItem("preferred_country")) ||
-          "";
-        if (pref) countrySegment = pref.toLowerCase();
-      } catch {}
-    }
-    if (!countrySegment) {
-      const parts = pathname.split("/").filter(Boolean);
-      countrySegment = (parts[0] || "").toLowerCase();
-    }
-    if (!countrySegment) countrySegment = "bg";
-
-    url.pathname = `/${countrySegment}`;
-    // ensure only the lang param controls the language
-    url.search = "";
-    url.searchParams.set("lang", nextLocale);
+    // Replace the first URL segment with the new locale; remove any `lang` query param
+    const href =
+      typeof window !== "undefined"
+        ? window.location.href
+        : "http://localhost/";
+    const url = new URL(href);
+    const parts = pathname.split("/").filter(Boolean);
+    if (parts.length > 0) parts[0] = nextLocale;
+    else parts.unshift(nextLocale);
+    // If second segment is an uppercase country code, remove it (legacy)
+    if (parts.length > 1 && /^[A-Z]{2}$/.test(parts[1])) parts.splice(1, 1);
+    url.pathname = "/" + parts.join("/");
+    url.searchParams.delete("lang");
     router.push(url.pathname + url.search + url.hash);
   };
 

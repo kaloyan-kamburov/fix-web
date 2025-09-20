@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { createPortal } from "react-dom";
 import CountryLanguageSelector from "../CountryLangaugeSelector/CountryLanguageSelector";
@@ -101,13 +101,9 @@ function getLocaleFromPath(pathname: string): string | null {
 export function LanguageSelector() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const currentLocale = React.useMemo(() => {
-    const fromQuery = (searchParams?.get("lang") || "").toLowerCase();
-    const locales = new Set<string>(supportedLocales as unknown as string[]);
-    if (fromQuery && locales.has(fromQuery)) return fromQuery;
     return getLocaleFromPath(pathname) || "bg";
-  }, [pathname, searchParams]);
+  }, [pathname]);
   const [isOpen, setIsOpen] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const [countries, setCountries] = React.useState<Country[]>([]);

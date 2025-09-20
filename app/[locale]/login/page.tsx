@@ -38,24 +38,10 @@ export default function Login() {
     try {
       const parts = (pathname || "").split("/").filter(Boolean);
       // On this page, first segment is the locale which we treat as country segment for back URL
-      let country = (parts[0] || "bg").toLowerCase();
-      let lang = (searchParams?.get("lang") || "").toLowerCase();
-      if (!lang && typeof document !== "undefined") {
-        const cookie = document.cookie
-          .split(";")
-          .map((c) => c.trim())
-          .find((c) => c.startsWith("NEXT_LOCALE="));
-        if (cookie) lang = decodeURIComponent(cookie.split("=")[1] || "");
-      }
-      if (!lang && typeof window !== "undefined") {
-        try {
-          lang = (localStorage.getItem("preferred_locale") || "").toLowerCase();
-        } catch {}
-      }
-      if (!lang) lang = country; // fallback to country as language
-      return `/${country}?lang=${lang}`;
+      const country = (parts[0] || "bg").toLowerCase();
+      return `/${country}`;
     } catch {
-      return "/bg?lang=bg";
+      return "/bg";
     }
   }, [pathname, searchParams]);
   const {

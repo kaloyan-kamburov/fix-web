@@ -37,19 +37,7 @@ export function middleware(req: NextRequest) {
   }
 
   const segments = pathname.split("/").filter(Boolean);
-  const langParam = (searchParams.get("lang") || "").toLowerCase();
-  const hasLangParam = langParam && locales.includes(langParam);
-
-  // If ?lang is present and valid, rewrite internally to /{lang}/{rest}
-  if (hasLangParam) {
-    const rest = segments.slice(1).join("/"); // treat first segment as country
-    const targetPath = `/${langParam}${rest ? `/${rest}` : ""}`;
-    const res = NextResponse.rewrite(new URL(targetPath + url.search, req.url));
-    // Sync cookie for client-side consumption
-    res.cookies.set("NEXT_LOCALE", langParam, { path: "/" });
-    // Continue with protection using effective locale below by returning here? We can allow fallthrough
-    return res;
-  }
+  // No longer support ?lang as locale switcher
 
   // Determine effective locale from path when no lang param
   const maybeLocale = segments[0] || "";

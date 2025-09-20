@@ -48,5 +48,10 @@
   "login": "Вход",
   "privacyPolicy": "Политика за поверителност",
   "email": "Имейл",
-  "password": "Парола"
+  "password": "Парола",
+  "categories": "Категории",
+  "searchCategories": "Търсене на категории",
+  "sendRequest": "Изпрати запитване",
+  "sendRequestDescription": "Изпрати запитване за индивидуална оферта",
+  "back": "Назад"
 }

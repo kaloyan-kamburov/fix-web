@@ -3,6 +3,8 @@ import "../globals.css";
 import { Toaster } from "react-hot-toast";
 import fs from "node:fs/promises";
 import path from "node:path";
+import Header from "@/components/Header/Header.component";
+import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
 
 const legacyMap: Record<string, string> = {
   bg: "bg.i18n.json",
@@ -40,7 +42,12 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider key={locale} messages={messages} locale={locale}>
-      {children}
+      {/* Header (client) */}
+      <Header />
+      {/* Page content */}
+      <main>{children}</main>
+      {/* Footer (client) */}
+      <SiteFooterSection />
       <Toaster position="bottom-right" />
     </NextIntlClientProvider>
   );

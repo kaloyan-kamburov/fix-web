@@ -48,5 +48,10 @@
   "login": "Login",
   "privacyPolicy": "Privacy policy",
   "email": "Email",
-  "password": "Password"
+  "password": "Password",
+  "categories": "Categories",
+  "searchCategories": "Search categories",
+  "sendRequest": "Send request",
+  "sendRequestDescription": "Send request for an individual offer",
+  "back": "Back"
 }

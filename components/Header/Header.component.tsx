@@ -6,7 +6,7 @@ import { Logo } from "../Logo/Logo.component";
 import HeaderActions from "./HeaderActions/HeaderActions.component";
 import { LanguageSelector } from "./LanguageSelector";
 import { getAuth, onAuthChanged } from "@/lib/auth";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { api } from "@/lib/api";
 import { clearAuth } from "@/lib/auth";
 import { useTranslations } from "next-intl";
@@ -47,19 +47,15 @@ export default function Header() {
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const locale = React.useMemo(
     () => getLocaleFromPath(pathname) || "bg",
     [pathname]
   );
-  const langParam = React.useMemo(
-    () => (searchParams?.get("lang") || "").toLowerCase(),
-    [searchParams]
+  const isCategoriesActive = React.useMemo(
+    () => pathname.startsWith(`/${locale}/categories`),
+    [pathname, locale]
   );
-  const loginHref = React.useMemo(
-    () => `/${locale}/login${langParam ? `?lang=${langParam}` : ""}`,
-    [locale, langParam]
-  );
+  const loginHref = React.useMemo(() => `/${locale}/login`, [locale]);
 
   React.useEffect(() => {
     // Initialize from client storage to avoid SSR/client mismatch
@@ -104,11 +100,20 @@ export default function Header() {
 
         {/* Desktop Navigation - Hidden on screens < 1024px */}
         <div className="hidden lg:flex justify-center items-center gap-6 relative">
-          <div className="flex justify-center items-center gap-1 relative">
-            <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
+          <Link
+            href={`/${locale}/categories`}
+            className="flex justify-center items-center gap-1 relative"
+          >
+            <div
+              className={`text-center relative text-lg font-normal cursor-pointer transition-colors ${
+                isCategoriesActive
+                  ? "text-accentaccent"
+                  : "text-gray-00 hover:text-accentaccent"
+              }`}
+            >
               {t("serviceSearch")}
             </div>
-          </div>
+          </Link>
           <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
             {t("emergencySituations")}
           </div>
