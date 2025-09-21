@@ -65,5 +65,19 @@
   "rememberMe": "Remember me",
   "noAccount": "No account?",
   "registration": "Registration",
-  "newRequest": "New request"
+  "newRequest": "New request",
+  "addPhotos": "Add photos",
+  "priceForOneTimeService": "Price for one time service",
+  "timeRange": "Time range",
+  "youCanChooseMoreThanOneOption": "You can choose more than one option",
+  "phone": "Phone",
+  "city": "City",
+  "district": "District",
+  "address": "Address",
+  "comment": "Comment",
+  "haveYouGotAdditionalNotes": "Have you got additional notes?",
+  "addressPlaceholder": "Your address",
+  "districtPlaceholder": "Your district",
+  "phonePlaceholder": "Your phone",
+  "cityPlaceholder": "Your city"
 }

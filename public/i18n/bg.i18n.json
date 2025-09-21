@@ -65,5 +65,19 @@
   "rememberMe": "Запомни ме",
   "noAccount": "Нямате акаунт?",
   "registration": "Регистрация",
-  "newRequest": "Нова заявка"
+  "newRequest": "Нова заявка",
+  "addPhotos": "Добавяне на снимки",
+  "priceForOneTimeService": "Цена за еднократна услуга",
+  "timeRange": "Часов диапазон",
+  "youCanChooseMoreThanOneOption": "Може да изберете повече от 1 опция",
+  "phone": "Телефон",
+  "city": "Град",
+  "district": "Квартал",
+  "address": "Адрес",
+  "comment": "Коментар",
+  "haveYouGotAdditionalNotes": "Имате ли допълнителни бележки?",
+  "addressPlaceholder": "Вашият адрес",
+  "districtPlaceholder": "Вашият квартал",
+  "phonePlaceholder": "Вашият телефон",
+  "cityPlaceholder": "Населено място"
 }

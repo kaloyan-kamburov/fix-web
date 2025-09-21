@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 interface ImageUploadProps extends React.ComponentProps<"input"> {}
@@ -9,7 +10,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     ref
   ) => {
     const inputRef = React.useRef<HTMLInputElement | null>(null);
-
+    const t = useTranslations();
     const onTriggerClick = () => {
       const target =
         (ref as React.RefObject<HTMLInputElement>)?.current || inputRef.current;
@@ -28,15 +29,15 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           type={type}
           multiple={multiple}
           accept={accept}
-          className="hidden"
+          className="hidden cursor-pointer"
           {...props}
         />
         <section
-          className="flex flex-col gap-2 justify-center items-center self-stretch p-5 rounded-xl border border-dashed bg-stone-50 border-zinc-400 max-sm:p-4"
+          className="flex flex-col gap-2 justify-center items-center self-stretch p-5 rounded-xl border border-dashed bg-stone-50 border-zinc-400 max-sm:p-4 cursor-pointer"
           onClick={onTriggerClick}
           role="button"
           tabIndex={0}
-          aria-label="Добавяне на снимки"
+          aria-label={t("addPhotos")}
         >
           <div>
             <svg
@@ -56,7 +57,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           <div className="flex flex-col gap-1 justify-center items-center">
             <div className="flex gap-1.5 items-start">
               <span className="text-base font-semibold tracking-wide text-sky-500">
-                Добавяне на снимки
+                {t("addPhotos")}
               </span>
             </div>
           </div>

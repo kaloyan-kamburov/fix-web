@@ -6,6 +6,7 @@ import { Input } from "../Form/Input";
 import { MapView } from "./MapView";
 import { Label } from "@/components/Form/Label";
 import { QuantitySelector } from "@/components/Request/QuantitySelector";
+import { useTranslations } from "next-intl";
 
 export default function RequestForm({
   serviceId,
@@ -22,6 +23,7 @@ export default function RequestForm({
   currency?: string;
   currency2?: string;
 }) {
+  const t = useTranslations();
   const [files, setFiles] = React.useState<File[]>([]);
   const [phone, setPhone] = React.useState("");
   const [city, setCity] = React.useState("");
@@ -54,7 +56,9 @@ export default function RequestForm({
       )}
 
       <section className="flex flex-col gap-2 justify-center items-start">
-        <h3 className="text-base text-zinc-400 ">Цена за еднократна услуга</h3>
+        <h3 className="text-base text-zinc-400 ">
+          {t("priceForOneTimeService")}
+        </h3>
         {pricePrimary || priceSecondary ? (
           <p className="text-lg font-bold text-zinc-900 max-md:text-base max-sm:text-base">
             {pricePrimary ? (
@@ -72,9 +76,9 @@ export default function RequestForm({
       </section>
 
       <section className="flex flex-col gap-2 items-start self-stretch">
-        <h3 className="text-base text-zinc-600">Часови диапазон</h3>
+        <h3 className="text-base text-zinc-600">{t("timeRange")}</h3>
         <p className="text-sm text-center text-black">
-          Може да изберете повече от 1 опция
+          {t("youCanChooseMoreThanOneOption")}
         </p>
         <TimeSlotButton onClick={() => {}} />
 
@@ -84,7 +88,7 @@ export default function RequestForm({
               htmlFor="phone"
               className="text-xs font-semibold text-zinc-900"
             >
-              Телефон*
+              {t("phone")}*
             </Label>
           </div>
           <Input
@@ -92,7 +96,7 @@ export default function RequestForm({
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="088 000 0000"
+            placeholder={t("phonePlaceholder")}
             className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
           />
         </div>
@@ -103,7 +107,7 @@ export default function RequestForm({
               htmlFor="city"
               className="text-xs font-semibold text-zinc-900"
             >
-              Град*
+              {t("city")}*
             </Label>
           </div>
           <Input
@@ -111,7 +115,7 @@ export default function RequestForm({
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="София"
+            placeholder={t("cityPlaceholder")}
             className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
           />
         </div>
@@ -122,7 +126,7 @@ export default function RequestForm({
               htmlFor="district"
               className="text-xs font-semibold text-zinc-900"
             >
-              Квартал*
+              {t("district")}*
             </Label>
           </div>
           <Input
@@ -130,7 +134,7 @@ export default function RequestForm({
             type="text"
             value={district}
             onChange={(e) => setDistrict(e.target.value)}
-            placeholder="Лозенец"
+            placeholder={t("districtPlaceholder")}
             className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
           />
         </div>
@@ -142,7 +146,7 @@ export default function RequestForm({
                 htmlFor="address"
                 className="text-xs font-semibold text-zinc-900"
               >
-                Адрес*
+                {t("address")}*
               </Label>
             </div>
             <Input
@@ -150,18 +154,18 @@ export default function RequestForm({
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="ул. Пример 1"
+              placeholder={t("addressPlaceholder")}
               className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
             />
           </div>
         </div>
 
-        <MapView />
+        {/* <MapView /> */}
 
         <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
           <div className="flex gap-2 items-center self-stretch">
             <label className="text-xs font-semibold text-zinc-900">
-              Коментар
+              {t("comment")}
             </label>
           </div>
           <div className="self-stretch w-full bg-gray-20 rounded-lg border border-solid border-[#dadade]">
@@ -171,7 +175,7 @@ export default function RequestForm({
                 className="overflow-hidden text-sm leading-6 flex-[1_0_0] text-ellipsis text-zinc-900 bg-transparent border-none outline-none resize-none w-full h-full"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Имате ли допълнителни бележки?"
+                placeholder={t("haveYouGotAdditionalNotes")}
               />
             </div>
           </div>
@@ -187,7 +191,7 @@ export default function RequestForm({
             className="flex gap-2 justify-center items-center self-stretch px-6 py-3 bg-amber-200 rounded-lg cursor-pointer max-md:px-5 max-md:py-2.5 max-sm:px-4 max-sm:py-2 hover:bg-amber-300 transition-colors"
           >
             <span className="text-base font-semibold text-center text-zinc-900 max-md:text-base max-sm:text-sm">
-              Изпращане на заявка
+              {t("sendRequest")}
             </span>
           </button>
         </div>
