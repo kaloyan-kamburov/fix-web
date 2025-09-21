@@ -55,5 +55,8 @@
   "sendRequestDescription": "Send request for an individual offer",
   "back": "Back",
   "servicePrice": "Service price",
-  "searchServices": "Search services"
+  "searchServices": "Search services",
+  "emergencyCategories": "Emergency categories",
+  "noResults": "No results",
+  "forEmegencySituations": "For emergency situations"
 }

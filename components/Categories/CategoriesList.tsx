@@ -15,7 +15,13 @@ export type CategoryItem = {
   secondCurrency?: string;
 };
 
-export default function CategoriesList({ items }: { items: CategoryItem[] }) {
+export default function CategoriesList({
+  items,
+  title,
+}: {
+  items: CategoryItem[];
+  title?: string;
+}) {
   const t = useTranslations();
   const [query, setQuery] = React.useState("");
 
@@ -36,17 +42,24 @@ export default function CategoriesList({ items }: { items: CategoryItem[] }) {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t("searchCategories")}
+              placeholder={t("search")}
               className="w-full bg-transparent outline-none text-base text-zinc-900 placeholder:text-zinc-500 pl-1"
               aria-label="Search categories"
             />
           </div>
         </div>
-        <h1 className="mt-[40px] text-[24px] font-bold">{t("categories")}</h1>
+        <h1 className="mt-[40px] text-[24px] font-bold">
+          {title || t("categories")}
+        </h1>
       </section>
 
       {/* Grid: 2 per row on mobile, 4 per row on large screens */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-stretch px-40 mt-2 w-full tracking-wide max-md:px-5 max-md:max-w-full">
+        {filtered.length === 0 && (
+          <div className="col-span-2 lg:col-span-4 justify-self-center flex items-center justify-center  text-zinc-500 text-center">
+            {t("noResults")}
+          </div>
+        )}
         {filtered.map(({ id, name, picture }) => (
           <Link
             href={`./categories/${id}`}

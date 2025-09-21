@@ -37,7 +37,7 @@
   "cookiesSettings": "Настройки на cookies",
   "pleaseWait": "Моля, изчакайте",
   "searchForAService": "Търсене на услуга",
-  "search": "търсене",
+  "search": "Търсене",
   "request": "заявка",
   "profile": "Профил",
   "notifications": "известия",
@@ -55,5 +55,8 @@
   "sendRequestDescription": "Изпрати запитване за индивидуална оферта",
   "back": "Назад",
   "servicePrice": "Цена на услугата",
-  "searchServices": "Търсене на услуги"
+  "searchServices": "Търсене на услуги",
+  "emergencyCategories": "Категории спешни ситуации",
+  "noResults": "Няма резултати",
+  "forEmegencySituations": "За спешни ситуации"
 }

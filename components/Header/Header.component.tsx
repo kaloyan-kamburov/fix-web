@@ -57,6 +57,11 @@ export default function Header() {
   );
   const loginHref = React.useMemo(() => `/${locale}/login`, [locale]);
 
+  const isEmergenciesActive = React.useMemo(
+    () => pathname.startsWith(`/${locale}/emergencies`),
+    [pathname, locale]
+  );
+
   React.useEffect(() => {
     // Initialize from client storage to avoid SSR/client mismatch
     setIsLoggedIn(!!getAuth());
@@ -114,9 +119,20 @@ export default function Header() {
               {t("serviceSearch")}
             </div>
           </Link>
-          <div className="text-[#F9F9F9] text-center relative text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors">
-            {t("emergencySituations")}
-          </div>
+          <Link
+            href={`/${locale}/emergencies`}
+            className="flex justify-center items-center gap-1 relative"
+          >
+            <div
+              className={`text-center relative text-lg font-normal cursor-pointer transition-colors ${
+                isEmergenciesActive
+                  ? "text-accentaccent"
+                  : "text-gray-00 hover:text-accentaccent"
+              }`}
+            >
+              {t("emergencySituations")}
+            </div>
+          </Link>
           <LanguageSelector />
           {isLoggedIn ? (
             <HeaderActions />
