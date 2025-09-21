@@ -58,5 +58,12 @@
   "searchServices": "Search services",
   "emergencyCategories": "Emergency categories",
   "noResults": "No results",
-  "forEmegencySituations": "For emergency situations"
+  "forEmegencySituations": "For emergency situations",
+  "hidePassword": "Hide password",
+  "showPassword": "Show password",
+  "forgotPassword": "Forgot password?",
+  "rememberMe": "Remember me",
+  "noAccount": "No account?",
+  "registration": "Registration",
+  "newRequest": "New request"
 }

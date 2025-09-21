@@ -58,5 +58,12 @@
   "searchServices": "Търсене на услуги",
   "emergencyCategories": "Категории спешни ситуации",
   "noResults": "Няма резултати",
-  "forEmegencySituations": "За спешни ситуации"
+  "forEmegencySituations": "За спешни ситуации",
+  "hidePassword": "Скриване на парола",
+  "showPassword": "Показване на парола",
+  "forgotPassword": "Забравена парола?",
+  "rememberMe": "Запомни ме",
+  "noAccount": "Нямате акаунт?",
+  "registration": "Регистрация",
+  "newRequest": "Нова заявка"
 }

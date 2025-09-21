@@ -1,17 +1,16 @@
 import Link from "next/link";
-import Image from "next/image";
-import { api } from "@/lib/api";
 import { getTranslations } from "next-intl/server";
+import RequestForm from "@/components/Request/RequestForm";
+import { api } from "@/lib/api";
 
-export default async function ServicePage({
+const RequestPage = async ({
   params,
 }: {
-  params: Promise<{ locale: string; category: string; service: string }>;
-}) {
-  const { locale, category, service: serviceId } = await params;
+  params: Promise<{ locale: string; serviceId: string }>;
+}) => {
+  const { locale, serviceId } = await params;
   const t = await getTranslations({ locale });
   let service: unknown = null;
-
   try {
     const res = await api.get(`services/${serviceId}`, {
       headers: { "app-locale": locale },
@@ -21,10 +20,15 @@ export default async function ServicePage({
     service = { error: true };
   }
 
+  console.log(service);
+
   const s: any = service || {};
   const name = String(s?.name || "");
-  const description = String(s?.description || "");
-  const picture = String(s?.picture || "");
+  const categoryId: string | null =
+    s?.category_id != null ? String(s.category_id) : null;
+  const backHref = categoryId
+    ? `/${locale}/categories/${categoryId}/${serviceId}`
+    : `/${locale}/categories`;
   const currency = String(s?.currency?.symbol || s?.currency?.code || "");
   const currency2 = String(
     s?.second_currency?.symbol || s?.second_currency?.code || ""
@@ -50,12 +54,11 @@ export default async function ServicePage({
     : priceFrom2 && priceTo2
     ? `${priceFrom2} - ${priceTo2}`
     : priceFrom2 || priceTo2 || null;
-
   return (
-    <section className="flex flex-col justify-start pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4 px-4">
-      <div className="mx-auto w-full max-w-[960px]">
+    <section className="flex flex-col pt-[88px] max-md:pt-[76px] w-full">
+      <div className="mx-auto flex justify-start w-full max-w-[960px]">
         <Link
-          href={`/${locale}/categories/${category}`}
+          href={backHref}
           className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
           aria-label={t("back")}
         >
@@ -78,52 +81,24 @@ export default async function ServicePage({
           </div>
         </Link>
       </div>
-      <div className="max-w-[720px] mx-auto mt-[20px] max-md:mt-0">
-        <h1 className="text-2xl font-bold text-neutral-700 text-left">
-          {name}
+      <div className="mx-auto w-full max-w-[720px] bg-gray-00 p-10 rounded-2xl">
+        <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl text-left mt-4">
+          {t("newRequest")}
         </h1>
-        {picture && (
-          <Image
-            src={picture}
-            alt={name}
-            width={1200}
-            height={506}
-            sizes="100vw"
-            className="object-contain mt-6 w-full rounded-xl"
-          />
-        )}
-        <div className="flex gap-4 justify-center items-start self-start mt-6 justify-start">
-          <p className="text-base text-zinc-500 text-left font-normal leading-[28px]">
-            <span>{t("servicePrice")}</span>
-            <span className="text-lg font-bold text-center text-zinc-900 pl-4">
-              {primary ? (
-                <>
-                  {primary} {currency}
-                </>
-              ) : null}
-              {secondary ? (
-                <>
-                  {" "}
-                  ({secondary} {currency2})
-                </>
-              ) : null}
-            </span>
-          </p>
-        </div>
-
-        <p className="mt-6 text-lg text-zinc-600 max-md:max-w-full text-left font-normal">
-          {description}
-        </p>
-
-        <Link
-          href={`/${locale}/request/${serviceId}`}
-          className="flex gap-2 justify-center items-center px-6 py-3 mt-6 w-full text-base font-semibold text-center bg-amber-200 rounded-lg text-zinc-900 max-md:px-5 max-md:max-w-full hover:bg-amber-300 transition-colors"
-        >
-          <span className="self-stretch my-auto text-zinc-900">
-            {t("sendRequest")}
-          </span>
-        </Link>
+        <h2 className="text-lg font-bold text-zinc-900 max-md:text-base max-sm:text-base text-left mt-[24px]">
+          {name || ""}
+        </h2>
+        <RequestForm
+          serviceId={serviceId}
+          locale={locale}
+          pricePrimary={primary}
+          priceSecondary={secondary}
+          currency={currency}
+          currency2={currency2}
+        />
       </div>
     </section>
   );
-}
+};
+
+export default RequestPage;

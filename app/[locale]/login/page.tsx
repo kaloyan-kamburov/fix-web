@@ -186,7 +186,7 @@ export default function Login() {
                     htmlFor="remember-me"
                     className="font-h3 font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] cursor-pointer"
                   >
-                    Запомни ме
+                    {t("rememberMe")}
                   </Label>
                 </div>
 
@@ -194,7 +194,7 @@ export default function Login() {
                   href="/forgot-password"
                   className="font-h3 font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] bg-transparent border-none cursor-pointer hover:underline"
                 >
-                  Забравена парола?
+                  {t("forgotPassword")}
                 </Link>
               </div>
             </div>
@@ -212,7 +212,7 @@ export default function Login() {
       </Card>
 
       <div className="[font-family:'Open_Sans',Helvetica] font-normal text-base text-center leading-4">
-        <span className="text-[#626366] tracking-[0]">Нямате акаунт?</span>
+        <span className="text-[#626366] tracking-[0]">{t("noAccount")}</span>
         <span className="text-[#626366] tracking-[0] leading-[0.1px]">
           &nbsp;
         </span>
@@ -220,7 +220,7 @@ export default function Login() {
           href={`/${locale}/register`}
           className="font-[number:var(--h3-font-weight)] text-[#1b1b1c] tracking-[var(--h3-letter-spacing)] font-h3 [font-style:var(--h3-font-style)] leading-[var(--h3-line-height)] text-[length:var(--h3-font-size)] bg-transparent border-none cursor-pointer hover:underline"
         >
-          Регистрация
+          {t("registration")}
         </Link>
       </div>
     </div>
