@@ -31,6 +31,10 @@ export default function RequestForm({
   const [address, setAddress] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [quantity, setQuantity] = React.useState<number>(1);
+  const [timeframe, setTimeframe] = React.useState<{
+    start_time: string;
+    end_time: string;
+  } | null>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = e.target.files ? Array.from(e.target.files) : [];
@@ -49,11 +53,7 @@ export default function RequestForm({
       onSubmit={handleSubmit}
     >
       <ImageUpload onChange={onChange} />
-      {files.length > 0 && (
-        <div className="text-sm text-zinc-600">
-          {files.length} file{files.length !== 1 ? "s" : ""} selected
-        </div>
-      )}
+      {/* removed files selected text */}
 
       <section className="flex flex-col gap-2 justify-center items-start">
         <h3 className="text-base text-zinc-400 ">
@@ -77,10 +77,14 @@ export default function RequestForm({
 
       <section className="flex flex-col gap-2 items-start self-stretch">
         <h3 className="text-base text-zinc-600">{t("timeRange")}</h3>
-        <p className="text-sm text-center text-black">
+        {/* <p className="text-sm text-center text-black">
           {t("youCanChooseMoreThanOneOption")}
-        </p>
-        <TimeSlotButton onClick={() => {}} />
+        </p> */}
+        <TimeSlotButton
+          onClick={() => {}}
+          onSelect={(tf) => setTimeframe(tf)}
+          selected={timeframe}
+        />
 
         <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
           <div className="flex gap-2 items-center self-stretch ">

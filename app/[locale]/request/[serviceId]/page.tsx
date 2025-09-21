@@ -81,7 +81,7 @@ const RequestPage = async ({
           </div>
         </Link>
       </div>
-      <div className="mx-auto w-full max-w-[720px] bg-gray-00 p-10 rounded-2xl">
+      <div className="mx-auto w-full max-w-[720px] bg-gray-00 p-10 rounded-2xl mt-[20px]">
         <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl text-left mt-4">
           {t("newRequest")}
         </h1>

@@ -68,7 +68,7 @@
   "newRequest": "Нова заявка",
   "addPhotos": "Добавяне на снимки",
   "priceForOneTimeService": "Цена за еднократна услуга",
-  "timeRange": "Часов диапазон",
+  "timeRange": "Часови диапазон",
   "youCanChooseMoreThanOneOption": "Може да изберете повече от 1 опция",
   "phone": "Телефон",
   "city": "Град",
@@ -79,5 +79,6 @@
   "addressPlaceholder": "Вашият адрес",
   "districtPlaceholder": "Вашият квартал",
   "phonePlaceholder": "Вашият телефон",
-  "cityPlaceholder": "Населено място"
+  "cityPlaceholder": "Населено място",
+  "remove": "Премахване"
 }

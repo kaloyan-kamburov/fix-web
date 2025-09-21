@@ -79,5 +79,6 @@
   "addressPlaceholder": "Your address",
   "districtPlaceholder": "Your district",
   "phonePlaceholder": "Your phone",
-  "cityPlaceholder": "Your city"
+  "cityPlaceholder": "Your city",
+  "remove": "Remove"
 }

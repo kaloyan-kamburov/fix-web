@@ -26,13 +26,7 @@ export const QuantitySelector = ({
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const parsed = parseInt(e.target.value, 10);
-    const newValue = Number.isNaN(parsed) ? min : parsed;
-    if (newValue >= min && newValue <= max) {
-      onChange(newValue);
-    }
-  };
+  // No direct input, only +/- controls
 
   return (
     <div className="flex flex-col gap-0.5 items-start self-stretch">
@@ -41,13 +35,13 @@ export const QuantitySelector = ({
           Количество (можете да заявите услугата многократно)
         </label>
       </div>
-      <div className="flex justify-between items-start w-28 rounded-lg border border-solid bg-zinc-200 border-zinc-300">
-        <div className="flex shrink-0 gap-2 justify-center items-center w-10 bg-stone-50">
+      <div className="flex justify-between items-start w-28 rounded-lg border border-solid bg-zinc-200 border-zinc-300 overflow-hidden">
+        <div className="flex shrink-0 gap-2 justify-center items-center w-10 bg-stone-50 ">
           <button
             type="button"
             onClick={handleDecrement}
             disabled={value <= min}
-            className="flex gap-1 justify-center items-center p-2 rounded-sm cursor-pointer bg-zinc-200 hover:bg-zinc-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex gap-1 justify-center items-center p-2 cursor-pointer bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-default"
           >
             <svg
               width="24"
@@ -58,26 +52,21 @@ export const QuantitySelector = ({
               className="minus-icon"
               style={{ width: "24px", height: "24px" }}
             >
-              <path d="M19 13H5V11H19V13Z" fill="#B3B3B7" />
+              <path d="M19 13H5V11H19V13Z" fill="#1C1C1D" />
             </svg>
           </button>
         </div>
-        <div className="flex justify-center items-start p-2 flex-[1_0_0]">
-          <input
-            type="number"
-            min={min}
-            max={max}
-            value={value}
-            onChange={handleInputChange}
-            className="overflow-hidden text-sm leading-6 text-center flex-[1_0_0] text-ellipsis text-zinc-900 bg-transparent border-none outline-none w-full"
-          />
+        <div className="flex justify-center items-center p-2 flex-[1_0_0]">
+          <span className="text-sm leading-6 text-center text-zinc-900 select-none">
+            {value}
+          </span>
         </div>
         <div className="flex shrink-0 gap-2 justify-center items-center w-10 bg-stone-50">
           <button
             type="button"
             onClick={handleIncrement}
             disabled={value >= max}
-            className="flex gap-1 justify-center items-center p-2 rounded-sm cursor-pointer bg-zinc-200 hover:bg-zinc-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex gap-1 justify-center items-center p-2 cursor-pointer bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-default"
           >
             <svg
               width="24"
