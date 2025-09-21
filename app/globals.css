@@ -176,3 +176,7 @@ button {
     transform: rotate(1turn);
   }
 }
+
+main {
+  min-height: calc(100vh - 88px);
+}

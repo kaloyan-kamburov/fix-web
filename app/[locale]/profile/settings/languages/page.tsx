@@ -74,7 +74,7 @@ export default function LanguagesPage() {
           <ul className="w-full flex flex-col gap-3">
             {items.map((it) => (
               <li key={it.locale} className="w-full">
-                <button className="w-full flex items-center gap-3 p-4 rounded-lg bg-gray-00 hover:opacity-90 cursor-pointer">
+                <button className="w-full flex items-center gap-3 p-4 rounded-lg bg-gray-10 hover:opacity-90 cursor-pointer">
                   {it.flag ? (
                     <Image src={it.flag} alt={it.name} width={24} height={16} />
                   ) : (

@@ -95,7 +95,7 @@ export default function ProfilePage() {
               <div className="flex flex-col gap-4 w-full">
                 <Link
                   href={`/${locale}/profile/settings/languages`}
-                  className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full bg-gray-00"
+                  className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full bg-gray-10"
                 >
                   <div className="flex items-center gap-2 flex-1">
                     <Globe size={32} className="flex-shrink-0 text-gray-50" />
@@ -111,7 +111,7 @@ export default function ProfilePage() {
 
                 <button
                   onClick={() => setShowDeleteModal(true)}
-                  className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity bg-gray-00"
+                  className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity bg-gray-10"
                 >
                   <div className="flex items-center gap-2 flex-1">
                     <Trash

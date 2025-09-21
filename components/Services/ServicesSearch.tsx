@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import { api } from "@/lib/api";
+import Loader from "@/components/Loader/Loader";
+import Link from "next/link";
 
 type RawService = any;
 
@@ -64,9 +66,11 @@ function normalizeServices(raw: unknown): ServiceItem[] {
 export default function ServicesSearch({
   initialData,
   locale,
+  categoryId,
 }: {
   initialData: unknown;
   locale: string;
+  categoryId?: string;
 }) {
   const t = useTranslations();
   const [query, setQuery] = React.useState("");
@@ -86,7 +90,10 @@ export default function ServicesSearch({
       try {
         setLoading(true);
         const res = await api.get("services", {
-          params: { "filter[name]": q },
+          params: {
+            "filter[name]": q,
+            ...(categoryId ? { "filter[category_id]": categoryId } : {}),
+          },
           signal: controller.signal as any,
           headers: { "app-locale": locale },
         });
@@ -100,12 +107,12 @@ export default function ServicesSearch({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, initialData, locale]);
+  }, [query, initialData, locale, categoryId]);
 
   return (
     <>
       {/* Search bar */}
-      <section className="box-border flex relative flex-col gap-2 items-center justify-center py-4 w-full bg-zinc-100 max-w-[1440px] mx-auto px-4">
+      <section className="box-border flex relative flex-col gap-2 items-center justify-center py-4 w-full bg-gray-10 max-w-[1440px] mx-auto px-4">
         <div className="w-full max-w-[960px] ">
           <div className="box-border flex relative items-center px-3 py-3 rounded-xl border border-solid bg-stone-50 border-zinc-200">
             <Search className="w-5 h-5 text-zinc-500 mr-2 shrink-0" />
@@ -113,7 +120,7 @@ export default function ServicesSearch({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t("searchCategories")}
+              placeholder={t("searchServices")}
               className="w-full bg-transparent outline-none text-base text-zinc-900 placeholder:text-zinc-500 pl-1"
               aria-label="Search services"
             />
@@ -124,9 +131,10 @@ export default function ServicesSearch({
       {/* Results */}
       <div className="flex flex-col gap-3 items-center w-full max-w-[960px] mx-auto">
         {items.map((it) => (
-          <article
+          <Link
+            href={`/${locale}/categories/${categoryId}/${it.id}`}
             key={it.id}
-            className="flex flex-wrap gap-3 items-center self-stretch p-3 text-base rounded-lg bg-stone-50"
+            className="flex flex-wrap gap-3 items-center self-stretch p-3 text-base rounded-lg bg-stone-50 hover:bg-stone-100 transition-colors"
           >
             <Image
               src={it.picture || "/phones.png"}
@@ -147,11 +155,11 @@ export default function ServicesSearch({
                 {it.priceSecondary ? ` (${it.priceSecondary})` : ""}
               </div>
             </div>
-          </article>
+          </Link>
         ))}
         {loading && (
-          <div className="text-sm text-zinc-500 py-2">
-            {t("loading") || "Loading..."}
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            <Loader />
           </div>
         )}
       </div>

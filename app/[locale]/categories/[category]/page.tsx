@@ -12,6 +12,7 @@ export default async function CategoryPage({
   const id = params.category;
   const t = await getTranslations({ locale: params.locale });
   let services: unknown = null;
+  let categoryData: unknown = null;
   try {
     const res = await api.get(`categories/${id}/services`, {
       headers: {
@@ -23,16 +24,29 @@ export default async function CategoryPage({
     services = { error: true };
   }
 
-  return (
-    <div className="bg-zinc-100 px-[20px]">
-      {/* <header>
-        <h1 className="text-2xl text-zinc-900 max-md:max-w-full">
-          Техническа поддръжка на сгради и съоръжения
-        </h1>
-        <p className="mt-4 text-zinc-500 max-md:max-w-full">3 резултата</p>
-      </header> */}
+  try {
+    const resCat = await api.get(`categories/${id}`, {
+      headers: {
+        "app-locale": params?.locale,
+      },
+    });
+    categoryData = resCat.data;
+  } catch (_) {
+    categoryData = null;
+  }
 
-      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-zinc-100 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
+  const cat: any = categoryData;
+  const categoryName = cat
+    ? typeof cat === "object" && cat !== null && typeof cat.name === "string"
+      ? cat.name
+      : Array.isArray((cat as any)?.data) && (cat as any).data.length
+      ? String((cat as any).data[0]?.name || "")
+      : ""
+    : "";
+
+  return (
+    <div className="bg-gray-10 px-[20px] w-full">
+      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
         <div className="mx-auto w-full max-w-[960px]">
           <Link
             href={`/${params.locale}/categories/`}
@@ -59,7 +73,14 @@ export default async function CategoryPage({
           </Link>
         </div>
 
-        <ServicesSearch initialData={services} locale={params.locale} />
+        <h1 className="text-2xl text-zinc-900 max-md:max-w-full text-left w-full max-w-[960px] mx-auto mt-[20px] max-md:mt-0">
+          {categoryName || t("categories")}
+        </h1>
+        <ServicesSearch
+          initialData={services}
+          locale={params.locale}
+          categoryId={id}
+        />
       </section>
     </div>
   );

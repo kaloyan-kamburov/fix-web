@@ -53,5 +53,7 @@
   "searchCategories": "Търсене на категории",
   "sendRequest": "Изпрати запитване",
   "sendRequestDescription": "Изпрати запитване за индивидуална оферта",
-  "back": "Назад"
+  "back": "Назад",
+  "servicePrice": "Цена на услугата",
+  "searchServices": "Търсене на услуги"
 }

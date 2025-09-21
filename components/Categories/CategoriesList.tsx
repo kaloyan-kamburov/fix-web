@@ -28,7 +28,7 @@ export default function CategoriesList({ items }: { items: CategoryItem[] }) {
   return (
     <>
       {/* Search bar */}
-      <section className="box-border flex relative flex-col gap-2 items-center justify-center py-8 w-full bg-zinc-100 max-w-[1440px] mx-auto px-4">
+      <section className="box-border flex relative flex-col gap-2 items-center justify-center py-8 w-full bg-gray-10 max-w-[1440px] mx-auto px-4">
         <div className="w-full max-w-[960px] ">
           <div className="box-border flex relative items-center px-3 py-3 rounded-xl border border-solid bg-stone-50 border-zinc-200">
             <Search className="w-5 h-5 text-zinc-500 mr-2 shrink-0" />
@@ -51,20 +51,20 @@ export default function CategoriesList({ items }: { items: CategoryItem[] }) {
           <Link
             href={`./categories/${id}`}
             key={id}
-            className="flex relative flex-col rounded-lg overflow-hidden cursor-pointer"
+            className="flex relative flex-col rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
           >
             {picture ? (
-              <div className="relative w-full h-32 md:h-40">
+              <div className="relative w-full h-32 md:h-40 ">
                 <Image
                   src={picture}
                   alt={name}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 25vw"
-                  className="object-cover"
+                  className="object-cover  rounded-xl"
                 />
               </div>
             ) : (
-              <div className="w-full h-32 md:h-40 bg-gray-200" />
+              <div className="w-full h-32 md:h-40 bg-gray-200  rounded-xl" />
             )}
             <div className="flex relative flex-col gap-2 justify-center items-center self-stretch p-3">
               <h3 className="relative self-stretch text-base font-semibold tracking-wide text-center text-zinc-900 max-md:text-base max-sm:text-sm">

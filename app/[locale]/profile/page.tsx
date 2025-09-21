@@ -72,7 +72,7 @@ export default function ProfilePage() {
 
         <div className="flex flex-col items-center gap-4 w-full">
           {/* User Info Card */}
-          <div className="flex flex-col sm:flex-row p-4 justify-between items-start gap-4 w-full rounded-lg relative bg-gray-00">
+          <div className="flex flex-col sm:flex-row p-4 justify-between items-start gap-4 w-full rounded-lg relative bg-gray-10">
             <div className="flex flex-col items-start gap-3 flex-1">
               {/* User Name Section */}
               <div className="flex flex-col items-start gap-1 w-full">
@@ -135,7 +135,7 @@ export default function ProfilePage() {
             <Link
               href={`/${locale}/profile/settings`}
               aria-label={t("settings")}
-              className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full bg-gray-00"
+              className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full bg-gray-10"
             >
               <div className="flex items-center gap-2 flex-1">
                 <Settings size={32} className="flex-shrink-0 text-gray-50" />

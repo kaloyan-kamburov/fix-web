@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { LoginFooter } from "@/components/LoginFooter";
 
 export const metadata: Metadata = {
-  title: "Register",
-  description: "Register page",
+  title: "FIX",
+  description: "FIX",
 };
 
 export default function Layout({
@@ -12,11 +12,10 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-10 md:bg-gray-10 text-gray-100">
-      <main className="flex-1 flex items-center justify-center px-4 py-8">
+    <div className="flex flex-col bg-gray-10 md:bg-gray-10 text-gray-100">
+      <main className="flex-1 flex items-start justify-center px-[16px] md:px-4 py-8 bg-gray-10 w-full max-w-[1440px] mx-auto">
         {children}
       </main>
-      <LoginFooter />
     </div>
   );
 }

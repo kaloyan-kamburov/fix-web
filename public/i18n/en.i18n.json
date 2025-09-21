@@ -53,5 +53,7 @@
   "searchCategories": "Search categories",
   "sendRequest": "Send request",
   "sendRequestDescription": "Send request for an individual offer",
-  "back": "Back"
+  "back": "Back",
+  "servicePrice": "Service price",
+  "searchServices": "Search services"
 }
