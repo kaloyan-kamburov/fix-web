@@ -85,7 +85,7 @@ export const ServiceCategoriesSection = () => {
                 height="40"
                 rx="20"
                 transform="matrix(-1 0 0 1 40 0)"
-                fill="#F9F9F9"
+                fill="#f9f9f9"
               />
               <path
                 d="M13.8248 12.35L16.1748 10L26.1748 20L16.1748 30L13.8248 27.65L21.4581 20L13.8248 12.35Z"
@@ -112,7 +112,7 @@ export const ServiceCategoriesSection = () => {
                 height="40"
                 rx="20"
                 transform="matrix(-1 0 0 1 40 0)"
-                fill="#F9F9F9"
+                fill="#f9f9f9"
               />
               <path
                 d="M13.8248 12.35L16.1748 10L26.1748 20L16.1748 30L13.8248 27.65L21.4581 20L13.8248 12.35Z"

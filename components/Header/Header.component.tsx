@@ -151,13 +151,13 @@ export default function Header() {
         {/* Mobile actions: notifications + hamburger */}
         <div className="flex items-center gap-3 lg:hidden">
           <button
-            className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-[#F9F9F9]"
+            className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-gray-00"
             aria-label={t("notifications")}
           >
             <BellIcon className="text-white" />
           </button>
           <div
-            className="text-[#F9F9F9] text-2xl cursor-pointer w-[35px] h-[35px] flex items-center justify-center"
+            className="text-gray-00 text-2xl cursor-pointer w-[35px] h-[35px] flex items-center justify-center"
             onClick={toggleMobileMenu}
           >
             {isMobileMenuOpen ? (
@@ -201,25 +201,21 @@ export default function Header() {
           id="mobile-menu"
           className={`absolute top-full left-0 w-full bg-[#1C1C1D]/95 border-t border-[#333] shadow-lg z-50 lg:hidden`}
         >
-          <div className={`px-5 py-4 space-y-4`}>
-            <div
-              className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
-              onClick={closeMobileMenu}
-            >
-              {t("start")}
-            </div>
-            <div
-              className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
+          <div className={`px-5 py-4 flex flex-col`}>
+            <Link
+              href={`/${locale}/categories`}
+              className="text-gray-00 text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
               onClick={closeMobileMenu}
             >
               {t("serviceSearch")}
-            </div>
-            <div
-              className="text-[#F9F9F9] text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
+            </Link>
+            <Link
+              href={`/${locale}/emergencies`}
+              className="text-gray-00 text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
               onClick={closeMobileMenu}
             >
               {t("emergencySituations")}
-            </div>
+            </Link>
             <div className="pt-4 space-y-3">
               {isLoggedIn ? (
                 <>
@@ -235,7 +231,7 @@ export default function Header() {
 
                   <button
                     onClick={handleLogout}
-                    className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg border border-solid border-neutral-400 text-[#F9F9F9]"
+                    className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg border border-solid border-neutral-400 text-gray-00"
                   >
                     {t("logOut")}
                   </button>

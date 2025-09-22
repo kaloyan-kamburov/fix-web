@@ -186,3 +186,21 @@ button {
 main {
   min-height: calc(100vh - 88px);
 }
+
+.react-calendar {
+  width: 100% !important;
+}
+
+.react-calendar__tile--active {
+  color: var(--button-primary-text) !important;
+  background-color: var(--button-primary-bg) !important;
+}
+
+.react-calendar__tile--now {
+  background-color: transparent !important;
+  border: 1px solid var(--button-primary-text) !important;
+}
+
+.react-calendar__tile--active {
+  background-color: var(--button-primary-bg) !important;
+}

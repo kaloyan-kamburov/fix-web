@@ -20,8 +20,6 @@ const RequestPage = async ({
     service = { error: true };
   }
 
-  console.log(service);
-
   const s: any = service || {};
   const name = String(s?.name || "");
   const categoryId: string | null =
@@ -54,8 +52,21 @@ const RequestPage = async ({
     : priceFrom2 && priceTo2
     ? `${priceFrom2} - ${priceTo2}`
     : priceFrom2 || priceTo2 || null;
+
+  // Fetch cities for select
+  let cities: string[] = [];
+  try {
+    const resCities = await api.get("cities", {
+      headers: { "app-locale": locale },
+    });
+    const payload = resCities?.data;
+    if (Array.isArray(payload))
+      cities = payload.filter((x: any) => typeof x === "string");
+    else if (Array.isArray(payload?.data))
+      cities = payload.data.filter((x: any) => typeof x === "string");
+  } catch {}
   return (
-    <section className="flex flex-col pt-[88px] max-md:pt-[76px] w-full">
+    <section className="flex flex-col pt-[88px] max-md:pt-[44px] w-full">
       <div className="mx-auto flex justify-start w-full max-w-[960px]">
         <Link
           href={backHref}
@@ -81,20 +92,17 @@ const RequestPage = async ({
           </div>
         </Link>
       </div>
-      <div className="mx-auto w-full max-w-[720px] bg-gray-00 p-10 rounded-2xl mt-[20px]">
-        <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl text-left mt-4">
-          {t("newRequest")}
-        </h1>
-        <h2 className="text-lg font-bold text-zinc-900 max-md:text-base max-sm:text-base text-left mt-[24px]">
-          {name || ""}
-        </h2>
+      <div className="mx-auto w-full max-w-[720px] bg-gray-00 p-10 max-md:p-5 rounded-2xl mt-[20px]">
         <RequestForm
+          name={name}
           serviceId={serviceId}
           locale={locale}
           pricePrimary={primary}
           priceSecondary={secondary}
           currency={currency}
           currency2={currency2}
+          categoryId={categoryId || undefined}
+          cities={cities}
         />
       </div>
     </section>

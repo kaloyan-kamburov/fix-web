@@ -18,7 +18,6 @@ export default function Layout({
       <main className="flex-1 flex items-center justify-center px-[16px] md:px-4 py-8">
         {children}
       </main>
-      <SiteFooterSection />
     </div>
   );
 }
