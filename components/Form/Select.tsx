@@ -64,7 +64,7 @@ const Select: React.FC<SelectProps> = ({
           <button
             type="button"
             onClick={handleToggle}
-            className="flex gap-1 justify-center items-center p-2 rounded-sm cursor-pointer bg-zinc-200 transition-colors"
+            className="flex gap-1 justify-center items-center p-2 rounded-r-sm cursor-pointer bg-zinc-200 transition-colors"
           >
             <svg
               width="24"

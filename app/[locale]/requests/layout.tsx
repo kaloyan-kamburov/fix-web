@@ -14,7 +14,7 @@ export default function Layout({
 }>) {
   return (
     <div className="min-h-screen flex flex-col bg-gray-10 text-gray-100 pt-[90px]">
-      <main className="flex-1 flex items-center justify-center px-4 py-8 flex-col w-full max-w-[720px] mx-auto">
+      <main className="flex-1 flex items-center justify-start px-4 py-8 flex-col w-full max-w-[720px] mx-auto">
         {children}
       </main>
     </div>

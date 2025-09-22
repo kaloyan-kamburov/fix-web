@@ -109,5 +109,10 @@
   "fri": "Fri",
   "sat": "Sat",
   "sun": "Sun",
-  "save": "Save"
+  "save": "Save",
+  "requests": "Requests",
+  "sent": "Sent",
+  "active": "Active",
+  "history": "History",
+  "offers": "Offers"
 }
