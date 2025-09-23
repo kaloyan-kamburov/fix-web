@@ -52,13 +52,8 @@ export function RequestItem({
               </span>
             </div>
           </div>
-          <div className="text-sm text-zinc-900 w-[69px]">
-            {offers && (
-              <RequestBadge
-                text={offers}
-                variant={t("offers") as "offers" | "urgent"}
-              />
-            )}
+          <div className="text-sm text-zinc-900 w-[80px]">
+            {offers && <RequestBadge text={offers} variant={"offers"} />}
             {isUrgent && <RequestBadge text="СПЕШНО" variant="urgent" />}
           </div>
         </header>

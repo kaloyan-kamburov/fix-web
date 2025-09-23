@@ -15,8 +15,6 @@ export function RequestBadge({ text, variant }: RequestBadgeProps) {
   };
 
   return (
-    <div className={`${baseClasses} ${variantClasses[variant]}`}>
-      <span>{text}</span>
-    </div>
+    <div className={`${baseClasses} ${variantClasses[variant]}`}>{text}</div>
   );
 }

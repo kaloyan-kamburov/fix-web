@@ -258,7 +258,7 @@ export default function Requests() {
       const quantityLabel = `x ${it?.quantity || 1}`;
 
       const offersLabel = it?.offers_count
-        ? `${it.offers_count} ${t("offers")}`
+        ? `${it.offers_count} ${it.offers_count > 1 ? t("offers") : t("offer")}`
         : undefined;
       const urgent = !!it?.urgent;
       return {

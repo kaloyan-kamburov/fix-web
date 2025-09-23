@@ -38,7 +38,7 @@
   "pleaseWait": "Моля, изчакайте",
   "searchForAService": "Търсене на услуга",
   "search": "Търсене",
-  "request": "заявка",
+  "request": "Заявка",
   "profile": "Профил",
   "notifications": "известия",
   "beginning": "начало",
@@ -113,5 +113,10 @@
   "requests": "Заявки",
   "sent": "Изпратени",
   "active": "Активни",
-  "history": "История"
+  "history": "История",
+  "offers": "Оферти",
+  "noOffers": "Все още няма оферти за тази заявка",
+  "date": "Дата",
+  "quantity": "Брой",
+  "offer": "Оферта"
 }

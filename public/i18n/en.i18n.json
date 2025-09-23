@@ -114,5 +114,9 @@
   "sent": "Sent",
   "active": "Active",
   "history": "History",
-  "offers": "Offers"
+  "offers": "Offers",
+  "noOffers": "There are no offers for this request yet",
+  "date": "Date",
+  "quantity": "Quantity",
+  "offer": "Offer"
 }

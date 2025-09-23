@@ -14,6 +14,7 @@
 
   /* Landing page variables */
   --accentaccent: rgba(241, 225, 128, 1);
+  --offers-bg: rgba(241, 225, 128, 0.5);
   --body-m-font-family: "Open Sans", Helvetica;
   --body-m-font-size: 16px;
   --body-m-font-style: normal;
@@ -117,6 +118,11 @@ html {
 
 * {
   box-sizing: border-box;
+}
+
+/* Offers section background helper */
+.offers-bg {
+  background: var(--offers-bg);
 }
 
 /* Hero Banner responsive background */
