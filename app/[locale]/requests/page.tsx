@@ -168,7 +168,7 @@ export default function Requests() {
     (async () => {
       try {
         setLoading(true);
-        let url = "client/orders";
+        let url = "client/orders?filter[client_id]=100";
         if (activeTab === "active") {
           url = "client/orders?filter[status]=approved_offer,request_completed";
         } else if (activeTab === "history") {
@@ -276,58 +276,64 @@ export default function Requests() {
   }, [data, t]);
 
   return (
-    <div className="flex flex-col w-full max-w-[720px]">
-      <header className="self-center text-2xl font-bold text-zinc-900">
-        {t("requests")}
-      </header>
-      <nav className="flex flex-wrap gap-2 items-center pt-2 pb-3 mt-6 w-full text-base tracking-wider text-center whitespace-nowrap text-zinc-600 max-md:max-w-full">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-1 shrink justify-between items-center self-stretch px-2 py-3 my-auto rounded border border-solid basis-0 border-zinc-300 text-center ${
-              activeTab === tab.id
-                ? "font-semibold tracking-wide bg-zinc-200 text-zinc-900"
-                : "text-zinc-600"
-            }`}
-          >
-            <span
-              className={`self-stretch m-auto ${
-                activeTab === tab.id ? "text-zinc-900" : "text-zinc-600"
+    <>
+      <div className="flex flex-col w-full max-w-[720px]">
+        <header className="self-center text-2xl font-bold text-zinc-900">
+          {t("requests")}
+        </header>
+        <nav className="flex flex-wrap gap-2 items-center pt-2 pb-3 mt-6 w-full text-base tracking-wider text-center whitespace-nowrap text-zinc-600 max-md:max-w-full">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex flex-1 shrink justify-between items-center self-stretch px-2 py-3 my-auto rounded border border-solid basis-0 border-zinc-300 text-center ${
+                activeTab === tab.id
+                  ? "font-semibold tracking-wide bg-zinc-200 text-zinc-900"
+                  : "text-zinc-600"
               }`}
             >
-              {tab.label}
-            </span>
-          </button>
-        ))}
-      </nav>
-      <section className="mt-6 w-full max-md:max-w-full">
-        {loading ? (
-          <div className="flex justify-center items-center">
-            <Loader />
-          </div>
-        ) : items.length === 0 ? (
-          <div className="text-sm text-zinc-500 text-center">
-            {t("noResults")}
-          </div>
-        ) : (
-          items.map((request: any, index: number) => (
-            <div key={request.id || index} className={index > 0 ? "mt-4" : ""}>
-              <RequestItem
-                id={request.id}
-                image={request.image}
-                title={request.title}
-                date={request.date}
-                time={request.time}
-                price={request.price}
-                quantity={request.quantity}
-                offers={request.offers}
-                isUrgent={request.isUrgent}
-              />
+              <span
+                className={`self-stretch m-auto ${
+                  activeTab === tab.id ? "text-zinc-900" : "text-zinc-600"
+                }`}
+              >
+                {tab.label}
+              </span>
+            </button>
+          ))}
+        </nav>
+        <section className="mt-6 w-full max-md:max-w-full">
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <Loader />
             </div>
-          ))
-        )}
-      </section>
-    </div>
+          ) : items.length === 0 ? (
+            <div className="text-sm text-zinc-500 text-center">
+              {t("noResults")}
+            </div>
+          ) : (
+            items.map((request: any, index: number) => (
+              <div
+                key={request.id || index}
+                className={index > 0 ? "mt-4" : ""}
+              >
+                <RequestItem
+                  id={request.id}
+                  image={request.image}
+                  title={request.title}
+                  date={request.date}
+                  time={request.time}
+                  price={request.price}
+                  quantity={request.quantity}
+                  offers={request.offers}
+                  isUrgent={request.isUrgent}
+                />
+              </div>
+            ))
+          )}
+        </section>
+      </div>
+      {/* <pre>{JSON.stringify(data?.data?.length, null, 2)}</pre> */}
+    </>
   );
 }

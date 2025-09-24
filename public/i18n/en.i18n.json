@@ -118,5 +118,16 @@
   "noOffers": "There are no offers for this request yet",
   "date": "Date",
   "quantity": "Quantity",
-  "offer": "Offer"
+  "offer": "Offer",
+  "craftsman": "Craftsman",
+  "receivedOffer": "Received offer",
+  "rating": "Rating",
+  "exactTime": "Exact time of execution",
+  "acceptAndPay": "Accept and pay",
+  "securityNotice": "The funds are protected.",
+  "securityNoticeDescription": "The payments are stored securely and released only after the service is completed.",
+  "price": "Price",
+  "of": "of",
+  "reviews": "reviews",
+  "viewAll": "View all"
 }

@@ -2,6 +2,7 @@ import * as React from "react";
 import StarRating from "./StarRating";
 import { useLocale } from "next-intl";
 import Image from "next/image";
+import Link from "next/link";
 
 interface OfferCardProps {
   title: string;
@@ -13,6 +14,8 @@ interface OfferCardProps {
   imageUrl: string;
   interval?: { date: string; start_time: string; end_time: string } | null;
   intervals?: Array<{ date: string; start_time: string; end_time: string }>;
+  requestId: string;
+  id: string;
 }
 
 function OfferCard({
@@ -25,6 +28,8 @@ function OfferCard({
   imageUrl,
   interval,
   intervals,
+  requestId,
+  id,
 }: OfferCardProps) {
   const locale = useLocale();
   const intervalLines = React.useMemo(() => {
@@ -62,7 +67,10 @@ function OfferCard({
     return [] as string[];
   }, [intervals, interval, date, timeSlot, locale]);
   return (
-    <article className="flex relative gap-3 items-center self-stretch p-3 rounded-lg bg-stone-50 max-md:flex-col max-md:gap-2 max-md:items-start max-sm:gap-2 max-sm:p-2 cursor-pointer hover:bg-stone-100 transition-colors">
+    <Link
+      href={`/${locale}/offers/${id}`}
+      className="flex relative gap-3 items-center self-stretch p-3 rounded-lg bg-stone-50 max-md:flex-col max-md:gap-2 max-md:items-start max-sm:gap-2 max-sm:p-2 cursor-pointer hover:bg-stone-100 transition-colors"
+    >
       <div className="relative w-20 h-20 rounded-lg overflow-hidden max-sm:h-[60px] max-sm:w-[60px]">
         {imageUrl && (
           <Image
@@ -101,7 +109,7 @@ function OfferCard({
           <StarRating rating={rating} reviewCount={reviewCount} />
         </div>
       </div>
-      <button className="flex relative gap-2 items-center p-2 rounded-3xl bg-zinc-200 max-sm:p-1.5">
+      <div className="flex relative gap-2 items-center p-2 rounded-3xl bg-zinc-200 max-sm:p-1.5">
         <svg
           width="16"
           height="17"
@@ -116,8 +124,9 @@ function OfferCard({
             fill="#626366"
           />
         </svg>
-      </button>
-    </article>
+        {JSON.stringify(id)}
+      </div>
+    </Link>
   );
 }
 

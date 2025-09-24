@@ -25,160 +25,6 @@ function InfoItem({ label, value }: InfoItemProps) {
   );
 }
 
-//order response for request GET client/orders/:id
-// {
-//     "id": 2,
-//     "price": null,
-//     "price_from": 10,
-//     "price_to": 20,
-//     "kmp_commission_percentage": "10.00",
-//     "organization_commission_percentage": "10.00",
-//     "pictures_before": [],
-//     "pictures_after": [],
-//     "client_interval_start": "12:00",
-//     "client_interval_stop": "16:00",
-//     "employee_interval_start": "13:30",
-//     "employee_interval_stop": "15:15",
-//     "comment": "bla - bla",
-//     "client_paid": false,
-//     "total": "10.00",
-//     "implementation_date": "Дек 2023",
-//     "phone": null,
-//     "city": null,
-//     "address": null,
-//     "neighbourhood": null,
-//     "payment_date": null,
-//     "organization_id": 1,
-//     "client_id": 1,
-//     "employee_id": 1,
-//     "service_id": 1,
-//     "status": "request_completed",
-//     "latitude": null,
-//     "longitude": null,
-//     "created_at": "2023-12-18T11:51:13.000000Z",
-//     "updated_at": "2023-12-18T11:51:13.000000Z",
-//     "service_name": "repair",
-//     "offers_count": 6,
-//     "reviews_count": 2,
-//     "review_avg_rating": 3,
-//     "employee_phone": "1-757-844-5592",
-//     "employee_name": "employee test",
-//     "client_review": {
-//         "id": 9,
-//         "employee_id": 8,
-//         "order_id": 2,
-//         "rating": 5,
-//         "text": "Corrupti voluptas autem.",
-//         "created_at": "2023-12-18T11:51:14.000000Z",
-//         "updated_at": "2023-12-18T11:51:14.000000Z"
-//     },
-//     "request_completed_at": "2023-12-18 11:51:13"
-// }
-
-//get order offers response for request GET client/orders/:id/offers
-// {
-//     "data": [
-//         {
-//             "id": 5,
-//             "price": 10,
-//             "status": "approved",
-//             "employee_interval_start": "10:00",
-//             "employee_interval_stop": "12:00",
-//             "order_id": 1,
-//             "employee_id": 8,
-//             "reviews_count": 4,
-//             "review_avg_rating": 3.5
-//         },
-//         {
-//             "id": 10,
-//             "price": 10,
-//             "status": "pending",
-//             "employee_interval_start": "10:00",
-//             "employee_interval_stop": "12:00",
-//             "order_id": 1,
-//             "employee_id": 6,
-//             "reviews_count": 2,
-//             "review_avg_rating": 4.5
-//         },
-//         {
-//             "id": 13,
-//             "price": 10,
-//             "status": "pending",
-//             "employee_interval_start": "10:00",
-//             "employee_interval_stop": "12:00",
-//             "order_id": 1,
-//             "employee_id": 3,
-//             "reviews_count": 2,
-//             "review_avg_rating": 4.5
-//         },
-//         {
-//             "id": 16,
-//             "price": 10,
-//             "status": "approved",
-//             "employee_interval_start": "10:00",
-//             "employee_interval_stop": "12:00",
-//             "order_id": 1,
-//             "employee_id": 2,
-//             "reviews_count": 3,
-//             "review_avg_rating": 3.3
-//         },
-//         {
-//             "id": 17,
-//             "price": 10,
-//             "status": "approved",
-//             "employee_interval_start": "10:00",
-//             "employee_interval_stop": "12:00",
-//             "order_id": 1,
-//             "employee_id": 3,
-//             "reviews_count": 2,
-//             "review_avg_rating": 4.5
-//         },
-//         {
-//             "id": 20,
-//             "price": 10,
-//             "status": "pending",
-//             "employee_interval_start": "10:00",
-//             "employee_interval_stop": "12:00",
-//             "order_id": 1,
-//             "employee_id": 1,
-//             "reviews_count": 2,
-//             "review_avg_rating": 4
-//         }
-//     ],
-//     "links": {
-//         "first": "http://localhost:8000/api/client/orders/1/offers?page=1",
-//         "last": "http://localhost:8000/api/client/orders/1/offers?page=1",
-//         "prev": null,
-//         "next": null
-//     },
-//     "meta": {
-//         "current_page": 1,
-//         "from": 1,
-//         "last_page": 1,
-//         "links": [
-//             {
-//                 "url": null,
-//                 "label": "&laquo; Previous",
-//                 "active": false
-//             },
-//             {
-//                 "url": "http://localhost:8000/api/client/orders/1/offers?page=1",
-//                 "label": "1",
-//                 "active": true
-//             },
-//             {
-//                 "url": null,
-//                 "label": "Next &raquo;",
-//                 "active": false
-//             }
-//         ],
-//         "path": "http://localhost:8000/api/client/orders/1/offers",
-//         "per_page": 10,
-//         "to": 6,
-//         "total": 6
-//     }
-// }
-
 export default function RequestPage({
   params,
 }: {
@@ -190,6 +36,7 @@ export default function RequestPage({
   const [order, setOrder] = useState<any>(null);
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       try {
@@ -241,7 +88,6 @@ export default function RequestPage({
   const dateLabel = useMemo(() => {
     const raw = String(order?.created_at || "");
     if (!raw) return "";
-    // Try to parse common formats like "YYYY-MM-DD HH:mm:ss"
     const isoCandidate = raw.includes(" ") ? raw.replace(" ", "T") : raw;
     let parsed = new Date(isoCandidate);
     if (Number.isNaN(parsed.getTime())) {
@@ -277,7 +123,7 @@ export default function RequestPage({
         <div className="mx-auto w-full max-w-[960px]">
           <Link
             href={`/${routeLocale}/requests/`}
-            className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit"
+            className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
             aria-label={t("back")}
           >
             <svg
@@ -302,7 +148,6 @@ export default function RequestPage({
         <h1 className="relative text-2xl font-bold text-zinc-900 max-sm:text-xl">
           {t("request")}
         </h1>
-
         <h2 className="relative text-lg font-bold text-zinc-900 max-sm:text-base">
           {title}
         </h2>
@@ -362,6 +207,8 @@ export default function RequestPage({
                   return (
                     <OfferCard
                       key={index}
+                      requestId={String(order?.id || "")}
+                      id={String(offer?.id || "")}
                       title={String(offer?.employee_name || "")}
                       price={String(offer?.price != null ? offer.price : "")}
                       rating={Number(offer?.review_avg_rating || 0)}
@@ -380,7 +227,6 @@ export default function RequestPage({
           </div>
         </section>
       </div>
-      {/* <pre>{JSON.stringify(order, null, 2)}</pre> */}
     </>
   );
 }

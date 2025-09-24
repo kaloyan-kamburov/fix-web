@@ -68,7 +68,7 @@
   "newRequest": "Нова заявка",
   "addPhotos": "Добавяне на снимки",
   "priceForOneTimeService": "Цена за еднократна услуга",
-  "timeRange": "Часови диапазон",
+  "timeRange": "Часови интервал",
   "youCanChooseMoreThanOneOption": "Може да изберете повече от 1 опция",
   "phone": "Телефон",
   "city": "Град",
@@ -118,5 +118,16 @@
   "noOffers": "Все още няма оферти за тази заявка",
   "date": "Дата",
   "quantity": "Брой",
-  "offer": "Оферта"
+  "offer": "Оферта",
+  "craftsman": "Майстор",
+  "receivedOffer": "Получена оферта",
+  "rating": "Оценка",
+  "exactTime": "Точно време за изпълнение",
+  "acceptAndPay": "Приемане и плащане",
+  "securityNotice": "Средствата са защитени.",
+  "securityNoticeDescription": "СПлатежите се съхраняват сигурно и се освобождават само след коректно приключена работа.",
+  "price": "Цена",
+  "of": "от",
+  "reviews": "отзива",
+  "viewAll": "Виж всички"
 }

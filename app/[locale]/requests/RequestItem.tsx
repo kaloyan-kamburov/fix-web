@@ -3,6 +3,7 @@ import * as React from "react";
 import { RequestBadge } from "./RequestBadge";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 
 interface RequestItemProps {
   id: string;
@@ -34,11 +35,15 @@ export function RequestItem({
       href={`/${locale}/requests/${id}`}
       className="flex flex-wrap gap-3 p-3 w-full rounded-lg bg-stone-50 max-md:max-w-full hover:bg-stone-100 transition-colors cursor-pointer"
     >
-      <img
-        src={image}
-        alt={title}
-        className="object-contain shrink-0 self-start rounded-lg aspect-square w-[104px]"
-      />
+      {image ? (
+        <Image
+          src={image}
+          alt={title}
+          className="object-contain shrink-0 self-start rounded-lg aspect-square w-[104px]"
+        />
+      ) : (
+        <div className="object-contain shrink-0 self-start rounded-lg aspect-square w-[104px]"></div>
+      )}
       <div className="flex flex-col flex-1 shrink justify-between basis-0 min-w-60 max-md:max-w-full">
         <header className="flex flex-wrap gap-3 items-start w-full max-md:max-w-full">
           <div className="flex flex-col flex-1 shrink basis-0 min-w-60 text-neutral-700 max-md:max-w-full">
