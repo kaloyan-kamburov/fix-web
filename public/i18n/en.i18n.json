@@ -129,5 +129,9 @@
   "price": "Price",
   "of": "of",
   "reviews": "reviews",
-  "viewAll": "View all"
+  "viewAll": "View all",
+  "successPaymentTitle": "Order paid",
+  "backToRequests": "Back to requests",
+  "workerTime": "Worker time",
+  "payNow": "Pay"
 }

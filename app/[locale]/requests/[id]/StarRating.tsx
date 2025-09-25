@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 interface StarRatingProps {
@@ -6,6 +7,8 @@ interface StarRatingProps {
 }
 
 function StarRating({ rating, reviewCount }: StarRatingProps) {
+  const t = useTranslations();
+
   return (
     <div className="flex relative gap-1 justify-center items-center rounded">
       <div className="flex relative gap-0.5 items-center">
@@ -32,7 +35,7 @@ function StarRating({ rating, reviewCount }: StarRatingProps) {
         </span>
       </div>
       <span className="relative text-sm text-center text-neutral-700 max-sm:text-xs">
-        от {reviewCount} отзива
+        {t("of")} {reviewCount} {t("reviews")}
       </span>
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
+import { ChevronRight } from "lucide-react";
 import * as React from "react";
 
 interface StarRatingProps {
@@ -48,19 +49,14 @@ export const StarRating: React.FC<StarRatingProps> = ({
           {rating.toFixed(1)} {t("of")} {reviewCount} {t("reviews")}
         </p>
       </div>
-      <div className="flex gap-0.5 justify-end items-center max-sm:self-end">
-        <span className="text-sm font-bold text-center text-neutral-700">
-          {t("viewAll")}
-        </span>
-        <div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html:
-                '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="chevron-icon" style="width: 20px; height: 20px"> <path d="M8.08711 5L6.91211 6.175L10.7288 10L6.91211 13.825L8.08711 15L13.0871 10L8.08711 5Z" fill="#39393B"></path> </svg>',
-            }}
-          />
+      {reviewCount > 0 && (
+        <div className="flex gap-0.5 justify-end items-center max-sm:self-end cursor-pointer">
+          <span className="text-sm font-bold text-center text-neutral-700">
+            {t("viewAll")}
+          </span>
+          <ChevronRight />
         </div>
-      </div>
+      )}
     </div>
   );
 };

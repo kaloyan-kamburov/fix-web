@@ -105,7 +105,7 @@ api.interceptors.response.use(
           }
         }
       } else {
-        toast.error(candidate || fallback);
+        toast.error(candidate || fallback, { duration: 5000 });
       }
     } catch {
       toast.error("Възникна грешка. Опитайте отново.");

@@ -129,5 +129,9 @@
   "price": "Цена",
   "of": "от",
   "reviews": "отзива",
-  "viewAll": "Виж всички"
+  "viewAll": "Виж всички",
+  "successPaymentTitle": "Заявката е платена",
+  "backToRequests": "Назад към заявки",
+  "workerTime": "Час на работника",
+  "payNow": "Плати"
 }

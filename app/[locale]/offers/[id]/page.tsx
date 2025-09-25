@@ -29,6 +29,8 @@ export default function OfferPage({
         });
         if (!cancelled) setOffer(res?.data ?? null);
       } catch (_) {
+        debugger;
+        console.log("here");
         if (!cancelled) setOffer({ error: true });
       } finally {
         if (!cancelled) setLoading(false);
@@ -40,8 +42,8 @@ export default function OfferPage({
   }, [id, locale]);
 
   return (
-    <div className="bg-gray-10 px-[20px] w-full">
-      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
+    <div className="bg-gray-10 px-[20px] w-full flex w-full max-w-[960px] flex-1 mx-auto">
+      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
         <div className="mx-auto w-full max-w-[960px]">
           <Link
             href={`/${locale}/requests`}
@@ -68,8 +70,14 @@ export default function OfferPage({
           </Link>
         </div>
         {loading ? (
-          <div className="text-sm w-full flex justify-center items-center">
+          <div className="text-sm w-full flex flex-1 justify-center items-center">
             <Loader />
+          </div>
+        ) : offer?.error ? (
+          <div className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
+            <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl">
+              {t("error")}
+            </h1>
           </div>
         ) : (
           <div className="flex flex-col gap-6 items-start p-10 mx-auto max-w-none rounded-2xl bg-stone-50 w-[640px] max-md:p-8 max-md:w-full max-md:max-w-[600px] max-sm:gap-5 max-sm:p-5 max-sm:w-full max-sm:max-w-full">
@@ -171,11 +179,14 @@ export default function OfferPage({
 
             <SecurityNotice />
 
-            <button className="flex gap-2 justify-center items-center self-stretch px-6 py-3 bg-amber-200 rounded-lg cursor-pointer">
+            <Link
+              href={`/${locale}/checkout/${offer?.id}`}
+              className="flex gap-2 justify-center items-center self-stretch px-6 py-3 bg-amber-200 rounded-lg cursor-pointer"
+            >
               <span className="text-base font-bold text-center text-zinc-900">
                 {t("acceptAndPay")}
               </span>
-            </button>
+            </Link>
           </div>
         )}
       </section>

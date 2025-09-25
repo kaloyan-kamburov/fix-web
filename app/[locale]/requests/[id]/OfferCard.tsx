@@ -1,6 +1,6 @@
 import * as React from "react";
 import StarRating from "./StarRating";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -32,6 +32,7 @@ function OfferCard({
   id,
 }: OfferCardProps) {
   const locale = useLocale();
+  const t = useTranslations();
   const intervalLines = React.useMemo(() => {
     const source: Array<{
       date: string;
@@ -89,7 +90,7 @@ function OfferCard({
         </h3>
         <div className="flex relative flex-col gap-1 justify-center items-start self-stretch">
           <div className="relative text-sm text-neutral-700 max-sm:text-xs">
-            Час на работника:
+            {t("workerTime")}
           </div>
           <div className="flex relative flex-col gap-0.5 items-start self-stretch">
             {intervalLines.map((line, idx) => (
@@ -124,7 +125,6 @@ function OfferCard({
             fill="#626366"
           />
         </svg>
-        {JSON.stringify(id)}
       </div>
     </Link>
   );
