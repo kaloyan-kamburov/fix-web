@@ -51,7 +51,6 @@ export default function CheckoutForm({
       });
       if (paymentIntent?.status === "succeeded") {
         if (paymentIntent?.payment_method_types?.[0]) {
-          // debugger;
           // acceptOffer(paymentIntent?.payment_method_types?.[0]);
           acceptOffer("pm_card_visa");
         }
