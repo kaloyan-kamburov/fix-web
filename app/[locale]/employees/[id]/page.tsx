@@ -27,8 +27,6 @@ const EmployeePage = async ({
     ? reviewsPayload.data
     : [];
 
-  console.log(reviewsPayload);
-
   const name = `${profile?.first_name ?? ""} ${
     profile?.last_name ?? ""
   }`.trim();
@@ -115,18 +113,3 @@ const EmployeePage = async ({
 };
 
 export default EmployeePage;
-
-//review response
-// "data": [
-//         {
-//             "id": 1,
-//             "employee_id": 4,
-//             "employee_name": "Destiney Sipes",
-//             "order_id": 39,
-//             "rating": 1,
-//             "text": "Molestias sit deleniti quaerat perferendis.",
-//             "created": "Дек 2023",
-//             "client_name": "client test",
-//             "service_name": "repair"
-//         },
-// ]
