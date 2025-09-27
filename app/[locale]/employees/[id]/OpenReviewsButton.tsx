@@ -63,7 +63,7 @@ export default function OpenReviewsButton({
               </button>
             </div>
             <div className="p-6 pt-4">
-              <RequestsContent />
+              <RequestsContent rating={rating} total={total} />
             </div>
           </div>
         </div>

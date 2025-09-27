@@ -38,19 +38,31 @@ const reviewsData = [
   },
 ];
 
-function RequestsContent() {
+function RequestsContent({
+  rating,
+  total,
+  reviews,
+}: {
+  rating?: number;
+  total?: number;
+  reviews?: typeof reviewsData;
+}) {
+  const list =
+    Array.isArray(reviews) && reviews.length > 0 ? reviews : reviewsData;
+  const totalReviews = total != null ? Number(total) : list.length;
+  const avgRating = rating != null ? Number(rating) : 0;
   return (
     <main className="flex flex-col max-w-[720px]">
       <h1 className="text-2xl font-bold text-zinc-900">Отзиви</h1>
 
       <RatingDisplay
-        rating={3.5}
-        totalReviews={4}
+        rating={avgRating}
+        totalReviews={totalReviews}
         starsImageSrc="https://api.builder.io/api/v1/image/assets/TEMP/e3c2726a3f3e2c0ab6a62f178b21f8beb88a7480?placeholderIfAbsent=true&apiKey=042670c1c1e54b9ca6a013c582610f50"
       />
 
       <section className="mt-6 w-full max-md:max-w-full">
-        {reviewsData.map((review, index) => (
+        {list.map((review, index) => (
           <div key={review.id} className={index > 0 ? "mt-4" : ""}>
             <ReviewCard
               reviewerName={review.reviewerName}

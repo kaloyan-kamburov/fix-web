@@ -11,10 +11,14 @@ function buildTargetUrl(
   return `${baseUrl}${path}${qs}`;
 }
 
-async function handle(req: NextRequest, ctx: { params: { path: string[] } }) {
+async function handle(
+  req: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
+) {
+  const { path } = await context.params;
   const target = buildTargetUrl(
     process.env.NEXT_PUBLIC_API_BASE_URL,
-    ctx.params.path,
+    path,
     req
   );
 
