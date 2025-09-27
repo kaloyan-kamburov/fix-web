@@ -3,16 +3,27 @@ import toast from "react-hot-toast";
 import { clearAuth } from "@/lib/auth";
 // No longer rely on localStorage for auth; attach token from cookie
 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// Use absolute API base on the server; proxy on the client to avoid CORS
+const baseURL =
+  typeof window === "undefined"
+    ? (process.env.NEXT_PUBLIC_API_BASE_URL as string | undefined)
+    : "/api/proxy";
 
 export const api = axios.create({
   baseURL,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
+  // Ensure joining baseURL + path doesn't double the slash
+  transformRequest: [(data, headers) => data],
 });
 // Attach bearer token
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
+  // Normalize url to be relative to baseURL in the browser
+  if (typeof window !== "undefined" && typeof config.url === "string") {
+    config.url = config.url.replace(/^\/+/, "");
+  }
   if (typeof document !== "undefined") {
     try {
       const preferred = localStorage.getItem("preferred_locale") || "en";
@@ -40,20 +51,59 @@ api.interceptors.request.use((config) => {
         (config.headers as Record<string, string>)["Accept-Language"] =
           localeHeader;
       }
+      // Also attach app-locale based on URL path if available (backend expects it)
+      try {
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const maybeLocale = parts[0] || preferred || "en";
+        (config.headers as Record<string, string>)["app-locale"] = maybeLocale;
+      } catch {}
     } catch {}
+    let bearerToken: string | null = null;
     const raw = document.cookie
       .split(";")
       .map((c) => c.trim())
       .find((c) => c.startsWith("auth_token="));
-    if (raw) {
-      const token = decodeURIComponent(raw.split("=")[1] || "");
-      if (token) {
+    if (raw) bearerToken = decodeURIComponent(raw.split("=")[1] || "");
+    if (!bearerToken) {
+      try {
+        const lsToken = localStorage.getItem("auth_token");
+        if (lsToken) bearerToken = lsToken;
+      } catch {}
+    }
+    if (bearerToken) {
+      config.headers = config.headers || {};
+      (config.headers as Record<string, string>)[
+        "Authorization"
+      ] = `Bearer ${bearerToken}`;
+    }
+    // Helpful for some backends that expect XHR
+    config.headers = config.headers || {};
+    (config.headers as Record<string, string>)["X-Requested-With"] =
+      "XMLHttpRequest";
+  } else {
+    // Server-side: read cookie/header values from the incoming request context
+    try {
+      const nh: any = await import("next/headers");
+      const cookieStore = await nh.cookies?.();
+      const auth = cookieStore?.get?.("auth_token")?.value as
+        | string
+        | undefined;
+      if (auth) {
         config.headers = config.headers || {};
         (config.headers as Record<string, string>)[
           "Authorization"
-        ] = `Bearer ${token}`;
+        ] = `Bearer ${auth}`;
       }
-    }
+      const preferred = cookieStore?.get?.("preferred_locale")?.value || "en";
+      const headersList = await nh.headers?.();
+      const acceptLang = headersList?.get?.("accept-language") || "en-US";
+      config.headers = config.headers || {};
+      (config.headers as Record<string, string>)["app-locale"] = preferred;
+      (config.headers as Record<string, string>)["Accept-Language"] =
+        acceptLang as string;
+      (config.headers as Record<string, string>)["X-Requested-With"] =
+        "XMLHttpRequest";
+    } catch {}
   }
   return config;
 });
@@ -95,7 +145,7 @@ api.interceptors.response.use(
           try {
             clearAuth();
           } catch {}
-          toast.error("Сесията е изтекла. Моля, влезте отново.");
+          toast?.error?.("Сесията е изтекла. Моля, влезте отново.");
           try {
             const parts = window.location.pathname.split("/").filter(Boolean);
             const maybeLocale = parts[0] || "en";
@@ -105,10 +155,10 @@ api.interceptors.response.use(
           }
         }
       } else {
-        toast.error(candidate || fallback, { duration: 5000 });
+        toast?.error?.(candidate || fallback, { duration: 5000 });
       }
     } catch {
-      toast.error("Възникна грешка. Опитайте отново.");
+      toast?.error?.("Възникна грешка. Опитайте отново.");
     }
     return Promise.reject(error);
   }

@@ -66,8 +66,8 @@ const RequestPage = async ({
       cities = payload.data.filter((x: any) => typeof x === "string");
   } catch {}
   return (
-    <section className="flex flex-col pt-[88px] max-md:pt-[44px] w-full">
-      <div className="mx-auto flex justify-start w-full max-w-[960px]">
+    <section className="flex flex-col pt-[88px] max-md:pt-[44px] w-full px-[16px]">
+      <div className="mx-auto flex justify-start w-full max-w-[1440px]">
         <Link
           href={backHref}
           className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { LoginFooter } from "@/components/LoginFooter";
 
 export const metadata: Metadata = {
   title: "FIX",
@@ -13,9 +12,9 @@ export default function Layout({
 }>) {
   return (
     <div className="flex flex-col bg-gray-10 md:bg-gray-10 text-gray-100">
-      <div className="flex-1 flex items-center justify-start py-8 bg-gray-10 w-full max-w-[1440px] mx-auto">
+      <main className="flex-1 flex flex-col items-start justify-center px-[16px] md:px-4 py-8 bg-gray-10 w-full max-w-[1440px] mx-auto">
         {children}
-      </div>
+      </main>
     </div>
   );
 }

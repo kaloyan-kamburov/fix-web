@@ -1,5 +1,5 @@
 import * as React from "react";
-import StarRating from "./StarRating";
+import { StarRating } from "@/components/StarRating/StarRating";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -80,7 +80,6 @@ function OfferCard({
             fill
             sizes="(max-width: 640px) 60px, 80px"
             className="object-cover"
-            unoptimized
           />
         )}
       </div>

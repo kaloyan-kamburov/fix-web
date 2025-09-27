@@ -4,7 +4,7 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Loader from "@/components/Loader/Loader";
-import { StarRating } from "./StarRating";
+import { StarRating } from "../../../../components/StarRating/StarRating";
 import { InfoField } from "./InfoField";
 import { CraftsmanInfo } from "./CraftsmanInfo";
 import { SecurityNotice } from "./SecurityNotice";
@@ -29,8 +29,6 @@ export default function OfferPage({
         });
         if (!cancelled) setOffer(res?.data ?? null);
       } catch (_) {
-        debugger;
-        console.log("here");
         if (!cancelled) setOffer({ error: true });
       } finally {
         if (!cancelled) setLoading(false);
@@ -42,11 +40,11 @@ export default function OfferPage({
   }, [id, locale]);
 
   return (
-    <div className="bg-gray-10 px-[20px] w-full flex w-full max-w-[960px] flex-1 mx-auto">
+    <div className="bg-gray-10 w-full flex w-full max-w-[1440px] flex-1 mx-auto">
       <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
-        <div className="mx-auto w-full max-w-[960px]">
+        <div className="mx-auto w-full max-w-[1440px]">
           <Link
-            href={`/${locale}/requests`}
+            href={`/${locale}/requests/${offer?.order_id}`}
             className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
             aria-label={t("back")}
           >

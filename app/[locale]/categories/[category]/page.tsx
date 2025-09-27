@@ -45,9 +45,9 @@ export default async function CategoryPage({
     : "";
 
   return (
-    <div className="bg-gray-10 px-[20px] w-full">
+    <div className="bg-gray-10 w-full">
       <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
-        <div className="mx-auto w-full max-w-[960px]">
+        <div className="mx-auto w-full max-w-[1440px]">
           <Link
             href={`/${params.locale}/categories/`}
             className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
@@ -79,6 +79,7 @@ export default async function CategoryPage({
           initialData={services}
           locale={params.locale}
           categoryId={id}
+          isUrgent={false}
         />
       </section>
     </div>

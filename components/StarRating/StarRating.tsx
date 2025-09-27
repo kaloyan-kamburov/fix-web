@@ -49,14 +49,14 @@ export const StarRating: React.FC<StarRatingProps> = ({
           {rating.toFixed(1)} {t("of")} {reviewCount} {t("reviews")}
         </p>
       </div>
-      {reviewCount > 0 && (
+      {/* {reviewCount > 0 && (
         <div className="flex gap-0.5 justify-end items-center max-sm:self-end cursor-pointer">
           <span className="text-sm font-bold text-center text-neutral-700">
             {t("viewAll")}
           </span>
           <ChevronRight />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

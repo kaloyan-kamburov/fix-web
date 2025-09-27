@@ -34,6 +34,7 @@
   --button-letter-spacing: 0px;
   --button-line-height: normal;
   --gray-10: #f1f1f2;
+  --gray-30: #dadade;
   --gray-00: #f9f9f9;
   --gray-100: rgba(28, 28, 29, 1);
   --gray-20: rgba(228, 228, 231, 1);
@@ -191,6 +192,8 @@ button {
 
 main {
   min-height: calc(100vh - 88px);
+  display: flex;
+  flex-direction: column;
 }
 
 .react-calendar {

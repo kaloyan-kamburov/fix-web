@@ -160,29 +160,44 @@ export default function Requests() {
     ],
     [t]
   );
-  const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id || "sent");
+  const [activeTab, setActiveTab] = useState<string>("");
   const [data, setData] = useState<unknown>({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    // sent -> new_order
+    // active -> approved_offer,request_completed
+    // history -> request_finished, paid
+
     (async () => {
       try {
         setLoading(true);
-        let url = "client/orders?filter[client_id]=100";
-        if (activeTab === "active") {
-          url = "client/orders?filter[status]=approved_offer,request_completed";
+        let url = "";
+        if (activeTab === "sent") {
+          url = "/client/orders?filter[status]=new_order";
+        } else if (activeTab === "active") {
+          url =
+            "/client/orders?filter[status]=approved_offer,request_completed";
         } else if (activeTab === "history") {
-          url = "client/orders?filter[status]=request_finished,paid";
+          url = "/client/orders?filter[status]=request_finished,paid";
         }
-        const res = await api.get(url);
-        setData(res.data);
+
+        if (url) {
+          const res = await api.get(url);
+          setData(res.data);
+        }
       } catch (e) {
         setData({ error: true });
       } finally {
         setLoading(false);
       }
     })();
-  }, [router, activeTab]);
+    window.scrollTo(0, 0);
+  }, [activeTab]);
 
   const items = useMemo(() => {
     const root: any = data;
@@ -275,17 +290,27 @@ export default function Requests() {
     });
   }, [data, t]);
 
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      setActiveTab(hash.slice(1));
+    }
+  }, []);
+
   return (
     <>
       <div className="flex flex-col w-full max-w-[720px]">
-        <header className="self-center text-2xl font-bold text-zinc-900">
+        <header className="self-center text-2xl font-bold text-zinc-900 mt-4">
           {t("requests")}
         </header>
         <nav className="flex flex-wrap gap-2 items-center pt-2 pb-3 mt-6 w-full text-base tracking-wider text-center whitespace-nowrap text-zinc-600 max-md:max-w-full">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                setActiveTab(tab.id);
+                window.location.hash = tab.id;
+              }}
               className={`flex flex-1 shrink justify-between items-center self-stretch px-2 py-3 my-auto rounded border border-solid basis-0 border-zinc-300 text-center ${
                 activeTab === tab.id
                   ? "font-semibold tracking-wide bg-zinc-200 text-zinc-900"
@@ -327,6 +352,7 @@ export default function Requests() {
                   quantity={request.quantity}
                   offers={request.offers}
                   isUrgent={request.isUrgent}
+                  shouldHideOfferCount={activeTab !== "sent"}
                 />
               </div>
             ))

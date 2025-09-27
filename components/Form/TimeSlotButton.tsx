@@ -117,7 +117,7 @@ export const TimeSlotButton = ({
 
   const minSelectableDate = React.useMemo(() => {
     const d = new Date();
-    d.setDate(d.getDate() - 1);
+    d.setDate(d.getDate());
     d.setHours(0, 0, 0, 0);
     return d;
   }, []);

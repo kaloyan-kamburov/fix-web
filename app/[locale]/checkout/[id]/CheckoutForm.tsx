@@ -26,9 +26,7 @@ export default function CheckoutForm({
   const locale = useLocale();
 
   const acceptOffer = async (paymentMethodId: string) => {
-    const res = await api.post(`client/offers/${id}/accept`, {
-      payment_method_id: paymentMethodId,
-    });
+    const res = await api.post(`client/offers/${id}/accept`);
   };
 
   useEffect(() => {
@@ -88,7 +86,7 @@ export default function CheckoutForm({
       <div className="flex gap-4 justify-center items-center self-stretch mt-[16px]">
         <Link
           className="flex gap-2 justify-center items-center px-6 py-3 mt-4 max-w-full text-base font-semibold text-center whitespace-nowrap rounded-lg border border-solid bg-stone-50 border-zinc-400 text-zinc-900 w-[300px] max-md:px-5 hover:bg-stone-100 transition-colors"
-          href={`/${locale}/requests`}
+          href={`/${locale}/requests#active`}
           type="button"
         >
           <span className="self-stretch my-auto text-zinc-900">

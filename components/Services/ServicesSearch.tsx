@@ -67,10 +67,12 @@ export default function ServicesSearch({
   initialData,
   locale,
   categoryId,
+  isUrgent,
 }: {
   initialData: unknown;
   locale: string;
   categoryId?: string;
+  isUrgent?: boolean;
 }) {
   const t = useTranslations();
   const [query, setQuery] = React.useState("");
@@ -89,10 +91,11 @@ export default function ServicesSearch({
     const timer = setTimeout(async () => {
       try {
         setLoading(true);
+
         const res = await api.get("services", {
           params: {
             "filter[name]": q,
-            ...(categoryId ? { "filter[category_id]": categoryId } : {}),
+            ...(isUrgent ? { "filter[is_urgent]": isUrgent } : {}),
           },
           signal: controller.signal as any,
           headers: { "app-locale": locale },
@@ -107,7 +110,7 @@ export default function ServicesSearch({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, initialData, locale, categoryId]);
+  }, [query, initialData, locale, isUrgent]);
 
   return (
     <>
