@@ -128,7 +128,7 @@
   "securityNoticeDescription": "The payments are stored securely and released only after the service is completed.",
   "price": "Price",
   "of": "of",
-  "reviews": "reviews",
+  "reviews": "Reviews",
   "viewAll": "View all",
   "successPaymentTitle": "Order paid",
   "backToRequests": "Back to requests",
@@ -151,5 +151,10 @@
   "services": "Services",
   "projects": "Projects",
   "language": "Language",
-  "deleteAccount": "Delete account"
+  "deleteAccount": "Delete account",
+  "addReview": "Add review",
+  "cancel": "Cancel",
+  "send": "Send",
+  "reviewAddedSuccessfully": "Review added successfully",
+  "offerError": "An offer error occurred"
 }

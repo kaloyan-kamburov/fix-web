@@ -25,6 +25,10 @@ async function handle(
   const headers = new Headers(req.headers);
   headers.delete("host");
   headers.delete("content-length");
+  // Ensure Content-Type remains correct when proxying JSON (avoid [object Object])
+  if (!headers.get("content-type") && req.headers.get("content-type")) {
+    headers.set("content-type", req.headers.get("content-type") as string);
+  }
 
   // Promote auth_token cookie to Authorization header if present
   const authCookie = req.cookies.get("auth_token")?.value;

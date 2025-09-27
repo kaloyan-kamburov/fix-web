@@ -15,15 +15,9 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
   withCredentials: true,
-  // Ensure joining baseURL + path doesn't double the slash
-  transformRequest: [(data, headers) => data],
 });
 // Attach bearer token
 api.interceptors.request.use(async (config) => {
-  // Normalize url to be relative to baseURL in the browser
-  if (typeof window !== "undefined" && typeof config.url === "string") {
-    config.url = config.url.replace(/^\/+/, "");
-  }
   if (typeof document !== "undefined") {
     try {
       const preferred = localStorage.getItem("preferred_locale") || "en";

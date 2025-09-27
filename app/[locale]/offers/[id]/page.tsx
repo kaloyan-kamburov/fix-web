@@ -74,7 +74,7 @@ export default function OfferPage({
         ) : offer?.error ? (
           <div className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
             <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl">
-              {t("error")}
+              {t("offerError")}
             </h1>
           </div>
         ) : (

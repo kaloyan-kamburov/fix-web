@@ -151,5 +151,10 @@
   "services": "Услуги",
   "projects": "Проекти",
   "language": "Език",
-  "deleteAccount": "Изтриване на акаунт"
+  "deleteAccount": "Изтриване на акаунт",
+  "addReview": "Добавяне на отзив",
+  "cancel": "Отказ",
+  "send": "Изпрати",
+  "reviewAddedSuccessfully": "Отзивът е добавен успешно",
+  "offerError": "Грешка при получаване на оферта"
 }

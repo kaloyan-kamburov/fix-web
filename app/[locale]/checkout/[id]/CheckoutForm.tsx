@@ -10,6 +10,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { api } from "@/lib/api";
+import Loader from "@/components/Loader/Loader";
 
 export default function CheckoutForm({
   id,
@@ -109,9 +110,13 @@ export default function CheckoutForm({
         <button
           type="submit"
           disabled={!stripe || !elements || submitting}
-          className="px-4 py-2 rounded-md bg-amber-200 text-zinc-900 font-bold disabled:opacity-50"
+          className="px-4 py-2 rounded-md bg-amber-200 text-zinc-900 font-bold disabled:opacity-50 disabled:cursor-default flex justify-center items-center"
         >
-          {t("payNow")}
+          {submitting ? (
+            <Loader className="max-w-[24px] max-h-[24px]" />
+          ) : (
+            t("payNow")
+          )}
         </button>
       </form>
     </>

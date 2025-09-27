@@ -7,12 +7,14 @@ interface StarRatingProps {
   rating: number;
   totalStars?: number;
   reviewCount: number;
+  showTotalCount?: boolean;
 }
 
 export const StarRating: React.FC<StarRatingProps> = ({
   rating,
   totalStars = 5,
   reviewCount,
+  showTotalCount = true,
 }) => {
   const t = useTranslations();
   const filledStars = Math.floor(rating);
@@ -45,18 +47,17 @@ export const StarRating: React.FC<StarRatingProps> = ({
             </div>
           ))}
         </div>
-        <p className="text-base text-center text-neutral-700">
-          {rating.toFixed(1)} {t("of")} {reviewCount} {t("reviews")}
-        </p>
+        {showTotalCount && (
+          <p
+            className={`text-base text-center text-neutral-700 ${
+              reviewCount > 0 ? "pl-2" : ""
+            }`}
+          >
+            {(rating || 0).toFixed(1)} {t("of")} {reviewCount || 0}{" "}
+            {t("reviews").toLowerCase()}
+          </p>
+        )}
       </div>
-      {/* {reviewCount > 0 && (
-        <div className="flex gap-0.5 justify-end items-center max-sm:self-end cursor-pointer">
-          <span className="text-sm font-bold text-center text-neutral-700">
-            {t("viewAll")}
-          </span>
-          <ChevronRight />
-        </div>
-      )} */}
     </div>
   );
 };

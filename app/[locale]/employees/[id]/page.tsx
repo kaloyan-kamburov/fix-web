@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 import Image from "next/image";
 import EmployeeGallery from "@/components/EmployeeCard/EmployeeGallery";
 import OpenReviewsButton from "./OpenReviewsButton";
+// import ReviewForm from "./ReviewForm"; // moved to requests modal after order completion
 
 const EmployeePage = async ({
   params,
@@ -15,6 +16,18 @@ const EmployeePage = async ({
 
   const res = await api.get(`client/portfolio/${id}`);
   const profile = res?.data ?? {};
+  // Fetch reviews for this employee
+  const reviewsRes = await api.get("client/reviews", {
+    params: { "filter[employee_id]": id },
+  });
+  const reviewsPayload = reviewsRes?.data;
+  const reviewsList: any[] = Array.isArray(reviewsPayload)
+    ? reviewsPayload
+    : Array.isArray(reviewsPayload?.data)
+    ? reviewsPayload.data
+    : [];
+
+  console.log(reviewsPayload);
 
   const name = `${profile?.first_name ?? ""} ${
     profile?.last_name ?? ""
@@ -25,8 +38,6 @@ const EmployeePage = async ({
   const services: any[] = Array.isArray(profile?.services)
     ? profile.services
     : [];
-  const avgRating: number = Number(profile?.review_avg_rating || 0);
-  const reviewCount: number = Number(profile?.reviews_count || 0);
 
   return (
     <div className="flex relative flex-col gap-6 items-start w-full flex-1 pt-[76px] max-md:pt-[76px]">
@@ -73,7 +84,7 @@ const EmployeePage = async ({
           <div className="flex flex-col">
             <h1 className="text-lg font-bold text-zinc-900">{name || "N/A"}</h1>
           </div>
-          <OpenReviewsButton rating={avgRating} total={reviewCount} />
+          <OpenReviewsButton reviews={reviewsList} />
         </div>
 
         <section className="mt-6">
@@ -90,6 +101,8 @@ const EmployeePage = async ({
           </div>
         </section>
 
+        {/* Review form is shown after order completion in the request modal */}
+
         {description && (
           <section className="mt-6">
             <h3 className="text-zinc-600">{t("experience")}</h3>
@@ -97,7 +110,6 @@ const EmployeePage = async ({
           </section>
         )}
       </div>
-      <pre>{JSON.stringify(profile, null, 2)}</pre>
     </div>
   );
 };

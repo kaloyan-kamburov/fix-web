@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import FsLightbox from "fslightbox-react";
 import { Button } from "@/components/ui/button";
+import ReviewForm from "../../employees/[id]/ReviewForm";
 import { createPortal } from "react-dom";
 import toast from "react-hot-toast";
 import EmployeeCard from "@/components/EmployeeCard/EmployeeCard";
@@ -47,6 +48,7 @@ export default function RequestPage({
   const [showMarkAsCompletedModal, setShowMarkAsCompletedModal] =
     useState(false);
   const [markAsCompletedLoading, setMarkAsCompletedLoading] = useState(false);
+  const [openReviewsModal, setOpenReviewsModal] = useState(false);
 
   const markAsCompleted = async () => {
     try {
@@ -57,31 +59,36 @@ export default function RequestPage({
       toast.success(t("markAsCompletedSuccess"));
       setOrder({ ...order, status: "request_finished" });
       window.scrollTo({ top: 0, behavior: "smooth" });
+      setOpenReviewsModal(true);
     } finally {
       setMarkAsCompletedLoading(false);
       setShowMarkAsCompletedModal(false);
     }
   };
 
+  const fetchData = async (silent: boolean) => {
+    if (!silent) setLoading(true);
+    try {
+      const [o, off] = await Promise.all([
+        api.get(`client/orders/${id}`),
+        api.get(`client/orders/${id}/offers`),
+      ]);
+      setOrder(o?.data || null);
+      const root = off?.data;
+      const arr = Array.isArray(root)
+        ? root
+        : Array.isArray(root?.data)
+        ? root.data
+        : [];
+      setOffers(arr);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const [o, off] = await Promise.all([
-          api.get(`client/orders/${id}`),
-          api.get(`client/orders/${id}/offers`),
-        ]);
-        setOrder(o?.data || null);
-        const root = off?.data;
-        const arr = Array.isArray(root)
-          ? root
-          : Array.isArray(root?.data)
-          ? root.data
-          : [];
-        setOffers(arr);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    fetchData(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const title = String(order?.service_name || "");
@@ -217,7 +224,7 @@ export default function RequestPage({
                         src={String(src)}
                         alt={title || "image"}
                         fill
-                        sizes="(max-width: 640px) 80px, 96px"
+                        sizes="(max-width: 640px) 96px, 80px"
                         className="object-cover"
                       />
                     )}
@@ -247,7 +254,7 @@ export default function RequestPage({
                             src={String(src)}
                             alt={title || "image"}
                             fill
-                            sizes="(max-width: 640px) 80px, 96px"
+                            sizes="(max-width: 640px) 96px, 80px"
                             className="object-cover border-1 border-gray-30"
                           />
                         )}
@@ -390,12 +397,36 @@ export default function RequestPage({
                 </button>
                 <button
                   onClick={markAsCompleted}
-                  className="flex-1 px-5 py-2.5 rounded-lg bg-button-primary-bg text-black hover:bg-button-primary-bg/90 focus:outline-none focus:ring-2 focus:ring-button-primary-bg cursor-pointer"
+                  className="flex-1 flex justify-center items-center px-5 py-2.5 rounded-lg bg-button-primary-bg text-black hover:bg-button-primary-bg/90 focus:outline-none focus:ring-2 focus:ring-button-primary-bg cursor-pointer disabled:opacity-50 disabled:cursor-default"
                   disabled={markAsCompletedLoading}
                 >
-                  {t("yes")}
+                  {markAsCompletedLoading ? (
+                    <Loader className="max-w-[24px] max-h-[24px]" />
+                  ) : (
+                    t("yes")
+                  )}
                 </button>
               </div>
+            </div>
+          </div>,
+          document.body
+        )}
+      {openReviewsModal &&
+        createPortal(
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
+            <div className="w-full max-w-[520px] bg-white rounded-lg p-6 shadow-lg">
+              <h2 className="text-xl font-bold text-gray-100 mb-4 text-center">
+                {t("addReview")}
+              </h2>
+              <ReviewForm
+                employeeId={String(order?.employee_id || "")}
+                defaultOrderId={String(order?.id || id)}
+                onSuccess={async () => {
+                  setOpenReviewsModal(false);
+                  await fetchData(true);
+                }}
+                onCancel={() => setOpenReviewsModal(false)}
+              />
             </div>
           </div>,
           document.body

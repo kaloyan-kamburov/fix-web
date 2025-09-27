@@ -10,7 +10,6 @@ import { Select } from "@/components/Form/Select";
 import { useTranslations } from "next-intl";
 import { loadGoogleMaps } from "@/lib/maps";
 import { api } from "@/lib/api";
-import toast from "react-hot-toast";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -132,13 +131,6 @@ export default function RequestForm({
           headers: { "Content-Type": "multipart/form-data" },
         });
         setSuccess(true);
-        toast.success(
-          t("requestSentSuccessfully", {
-            default: "Успешно изпратена заявка",
-          } as any)
-        );
-        // Optionally reset minimal fields
-        // setFiles([]); setComment("");
       } finally {
         setIsSubmitting(false);
       }
@@ -377,7 +369,7 @@ export default function RequestForm({
           <div className="flex flex-col gap-4 justify-center items-center self-stretch mt-[16px]">
             <button
               type="submit"
-              className="flex gap-2 justify-center items-center self-stretch px-6 py-3 bg-amber-200 rounded-lg cursor-pointer max-md:px-5 max-md:py-2.5 max-sm:px-4 max-sm:py-2 hover:bg-amber-300 transition-colors"
+              className="flex gap-2 justify-center items-center self-stretch px-6 py-3 bg-amber-200 rounded-lg cursor-pointer max-md:px-5 max-md:py-2.5 max-sm:px-4 max-sm:py-2 hover:bg-amber-300 transition-colors disabled:opacity-50"
               disabled={isSubmitting}
             >
               <span className="text-base font-semibold text-center text-zinc-900 max-md:text-base max-sm:text-sm">

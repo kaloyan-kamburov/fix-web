@@ -1,44 +1,45 @@
 "use client";
 import * as React from "react";
 import { useTranslations } from "next-intl";
-import RequestsContent from "../RequestContent";
+import RequestsContent from "./ReviewsContent";
+import { StarRating } from "@/components/StarRating/StarRating";
 
 export default function OpenReviewsButton({
-  rating = 0,
-  total = 0,
+  reviews = [],
 }: {
-  rating?: number;
-  total?: number;
+  reviews?: any[];
 }) {
   const t = useTranslations();
   const [open, setOpen] = React.useState(false);
 
+  const rating =
+    reviews?.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+  const total = reviews?.length;
+
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="px-4 py-2 rounded-lg bg-amber-200 text-zinc-900 font-bold hover:bg-amber-300 transition-colors"
-      >
-        {`${Number(rating || 0).toFixed(1)} / 5 ${t("of", {
-          default: "of",
-        } as any)} ${Number(total || 0)} ${t("reviews", {
-          default: "reviews",
-        } as any)}`}
-      </button>
+      <div className="flex gap-1 items-center">
+        <StarRating rating={rating} reviewCount={rating} />
+        <span
+          className="text-sm font-bold text-center text-neutral-700 cursor-pointer hover:underline"
+          onClick={() => setOpen(true)}
+        >
+          {t("viewAll")}
+        </span>
+      </div>
 
       {open && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
           <div className="w-full max-w-[720px] bg-white rounded-lg shadow-lg relative max-h-[85vh] overflow-y-auto">
             <div className="sticky top-0 z-10 flex items-center justify-between gap-2  bg-white/95 backdrop-blur p-4 rounded-t-lg">
               <div className="text-lg font-bold text-zinc-900">
-                {t("reviews", { default: "Reviews" } as any)}
+                {t("reviews")}
               </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close"
-                className="p-1 rounded hover:bg-gray-10"
+                className="p-1 rounded"
               >
                 <svg
                   width="20"
@@ -49,21 +50,21 @@ export default function OpenReviewsButton({
                 >
                   <path
                     d="M15 5L5 15"
-                    stroke="#1C1C1D"
                     strokeWidth="2"
                     strokeLinecap="round"
+                    className="stroke-gray-90"
                   />
                   <path
                     d="M5 5L15 15"
-                    stroke="#1C1C1D"
                     strokeWidth="2"
                     strokeLinecap="round"
+                    className="stroke-gray-90"
                   />
                 </svg>
               </button>
             </div>
-            <div className="p-6 pt-4">
-              <RequestsContent rating={rating} total={total} />
+            <div className="p-4">
+              <RequestsContent rating={rating || 0} reviews={reviews} />
             </div>
           </div>
         </div>
