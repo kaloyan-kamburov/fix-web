@@ -10,7 +10,14 @@ import axios from "axios";
 import { api } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import formatDate from "@/lib/formatDate";
-export default function HeaderActions() {
+import { useNotifications } from "../NotificationsProvider";
+export default function HeaderActions({
+  onlyNotifications = false,
+  onNotificationsOpen,
+}: {
+  onlyNotifications?: boolean;
+  onNotificationsOpen?: () => void;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = React.useState(false);
@@ -22,50 +29,16 @@ export default function HeaderActions() {
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
   const locale = useLocale();
-  const [notifications, setNotifications] = React.useState<any[]>([]);
-
-  const getNotifications = async () => {
-    const res = await api.get("client/notifications");
-    // example response:
-    // { data: [{
-    //   "id": "9ffb1800-1a71-47ee-b81f-1ce0641a4d5b",
-    //   "title": "Order Completed",
-    //   "message": "Your order was marked as completed automatically by the system due to the lack of objection within the specified period",
-    //   "is_read": 0,
-    //   "type": "order_updated",
-    //   "object_id": 187,
-    //   "created_at": "2025-09-27T21:18:02.000000Z",
-    //   "updated_at": "2025-09-27T21:18:02.000000Z"
-    // }]}
-    const raw = res?.data;
-    const list = Array.isArray(raw)
-      ? raw
-      : Array.isArray(raw?.data)
-      ? raw.data
-      : [];
-    setNotifications(list);
-  };
-
+  const { notifications, refresh } = useNotifications();
   React.useEffect(() => {
-    getNotifications();
     setMounted(true);
-    const id = setInterval(() => {
-      getNotifications();
-    }, 45000);
-    return () => clearInterval(id);
   }, []);
 
   const updateNotification = async (id: string) => {
     await api.put(`client/notifications/${id}`, {
       is_read: true,
     });
-    const newData = notifications.map((n) => {
-      if (n?.id === id) {
-        return { ...n, is_read: true };
-      }
-      return n;
-    });
-    setNotifications(newData);
+    await refresh();
   };
 
   const LOCALES = React.useMemo(
@@ -209,7 +182,11 @@ export default function HeaderActions() {
             aria-haspopup="menu"
             aria-expanded={isNotificationsOpen}
             onClick={() => {
-              setIsNotificationsOpen((v) => !v);
+              setIsNotificationsOpen((v) => {
+                const next = !v;
+                if (next && onNotificationsOpen) onNotificationsOpen();
+                return next;
+              });
               setIsProfileMenuOpen(false);
             }}
           >
@@ -226,9 +203,9 @@ export default function HeaderActions() {
               )}
           </button>
           {isNotificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 rounded-md bg-white text-background shadow-lg z-50 overflow-hidden w-[420px]">
+            <div className="absolute right-0 mt-2 w-80 rounded-md bg-white text-background shadow-lg z-50 overflow-hidden w-[420px] max-sm:w-[360px] max-sm:right-[-56px]">
               <div className="max-h-[500px] overflow-y-auto ">
-                <div className="sticky top-0 bg-white z-10 p-5 max-sm:p-2 font-semibold text-sm">
+                <div className="sticky top-0 bg-white z-10 p-5 max-sm:p-2 font-semibold text-sm max-sm:justify-center max-sm:flex">
                   {t("newNotifications")}
                 </div>
                 <div className="p-5 pt-0 max-sm:p-2">
@@ -313,57 +290,61 @@ export default function HeaderActions() {
           )}
         </div>
 
-        <div className="relative" ref={menuRef}>
-          <button
-            className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid cursor-pointer ${
-              isProfileMenuOpen
-                ? "bg-white border-transparent"
-                : "border-neutral-400"
-            }`}
-            aria-haspopup="menu"
-            aria-expanded={isProfileMenuOpen}
-            aria-label={t("profile")}
-            onClick={() => {
-              setIsProfileMenuOpen((v) => !v);
-              setIsNotificationsOpen(false);
-            }}
-          >
-            <UserIcon
-              className={isProfileMenuOpen ? "text-background" : "text-white"}
-            />
-          </button>
+        {!onlyNotifications && (
+          <div className="relative" ref={menuRef}>
+            <button
+              className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid cursor-pointer ${
+                isProfileMenuOpen
+                  ? "bg-white border-transparent"
+                  : "border-neutral-400"
+              }`}
+              aria-haspopup="menu"
+              aria-expanded={isProfileMenuOpen}
+              aria-label={t("profile")}
+              onClick={() => {
+                setIsProfileMenuOpen((v) => !v);
+                setIsNotificationsOpen(false);
+              }}
+            >
+              <UserIcon
+                className={isProfileMenuOpen ? "text-background" : "text-white"}
+              />
+            </button>
 
-          {isProfileMenuOpen && (
-            <div className="absolute right-0 mt-2 w-40 rounded-md bg-white text-background shadow-lg z-50 overflow-hidden">
-              <Link
-                href={`${localePrefix}/profile`}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
-                onClick={() => setIsProfileMenuOpen(false)}
-              >
-                {t("profile")}
-              </Link>
-              <button
-                onClick={() => {
-                  setShowLogoutModal(true);
-                  setIsProfileMenuOpen(false);
-                }}
-                className="w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
-                disabled={isLoadingLogout || !getAuth()}
-              >
-                {t("logOut")}
-              </button>
-            </div>
-          )}
-        </div>
-
-        <Link
-          href={`${localePrefix}/requests#active`}
-          className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
-        >
-          <div className="text-button-primary-text text-center relative text-base font-bold">
-            {t("myRequests")}
+            {isProfileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-40 rounded-md bg-white text-background shadow-lg z-50 overflow-hidden">
+                <Link
+                  href={`${localePrefix}/profile`}
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
+                  onClick={() => setIsProfileMenuOpen(false)}
+                >
+                  {t("profile")}
+                </Link>
+                <button
+                  onClick={() => {
+                    setShowLogoutModal(true);
+                    setIsProfileMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
+                  disabled={isLoadingLogout || !getAuth()}
+                >
+                  {t("logOut")}
+                </button>
+              </div>
+            )}
           </div>
-        </Link>
+        )}
+
+        {!onlyNotifications && (
+          <Link
+            href={`${localePrefix}/requests#active`}
+            className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border border-solid border-transparent bg-button-secondary-bg hover:opacity-90 transition-opacity"
+          >
+            <div className="text-button-primary-text text-center relative text-base font-bold">
+              {t("myRequests")}
+            </div>
+          </Link>
+        )}
       </nav>
       {mounted &&
         showLogoutModal &&

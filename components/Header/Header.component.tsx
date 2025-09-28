@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BellIcon } from "lucide-react";
 import { Logo } from "../Logo/Logo.component";
 import HeaderActions from "./HeaderActions/HeaderActions.component";
+import { NotificationsProvider } from "./NotificationsProvider";
 import { LanguageSelector } from "./LanguageSelector";
 import { getAuth, onAuthChanged } from "@/lib/auth";
 import { useRouter, usePathname } from "next/navigation";
@@ -137,7 +138,11 @@ export default function Header() {
           </Link>
           {!isLoggedIn && <LanguageSelector />}
           {isLoggedIn ? (
-            <HeaderActions />
+            <NotificationsProvider isEnabled={true}>
+              <HeaderActions
+                onNotificationsOpen={() => setIsMobileMenuOpen(false)}
+              />
+            </NotificationsProvider>
           ) : (
             <Link
               href={loginHref}
@@ -152,12 +157,21 @@ export default function Header() {
 
         {/* Mobile actions: notifications + hamburger */}
         <div className="flex items-center gap-3 lg:hidden">
-          <button
-            className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-gray-00"
-            aria-label={t("notifications")}
-          >
-            <BellIcon className="text-white" />
-          </button>
+          {isLoggedIn ? (
+            <NotificationsProvider isEnabled={true}>
+              <HeaderActions
+                onlyNotifications
+                onNotificationsOpen={() => setIsMobileMenuOpen(false)}
+              />
+            </NotificationsProvider>
+          ) : (
+            <button
+              className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-gray-00"
+              aria-label={t("notifications")}
+            >
+              <BellIcon className="text-white" />
+            </button>
+          )}
           <div
             className="text-gray-00 text-2xl cursor-pointer w-[35px] h-[35px] flex items-center justify-center"
             onClick={toggleMobileMenu}
