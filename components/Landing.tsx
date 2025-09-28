@@ -15,7 +15,6 @@ export const Landing = () => {
       <CallToActionSection />
       <ServiceCategoriesSection />
       <MainContentSection />
-      <SiteFooterSection />
     </>
   );
 };
