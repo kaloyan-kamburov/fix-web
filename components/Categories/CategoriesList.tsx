@@ -13,14 +13,17 @@ export type CategoryItem = {
   currency?: string;
   secondPrice?: string | null;
   secondCurrency?: string;
+  isEmergencyList?: boolean;
 };
 
 export default function CategoriesList({
   items,
   title,
+  isEmergencyList,
 }: {
   items: CategoryItem[];
   title?: string;
+  isEmergencyList?: boolean;
 }) {
   const t = useTranslations();
   const [query, setQuery] = React.useState("");
@@ -62,7 +65,11 @@ export default function CategoriesList({
         )}
         {filtered.map(({ id, name, picture }) => (
           <Link
-            href={`./categories/${id}`}
+            href={
+              isEmergencyList
+                ? `./categories/emergencies/${id}`
+                : `./categories/${id}`
+            }
             key={id}
             className="flex relative flex-col rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
           >
