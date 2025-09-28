@@ -10,7 +10,6 @@ import Header from "./Header/Header.component";
 export const Landing = () => {
   return (
     <>
-      <Header />
       <HeroBannerSection />
       <FeaturedServicesSection />
       <CallToActionSection />

@@ -133,7 +133,7 @@ export default function Header() {
               {t("emergencySituations")}
             </div>
           </Link>
-          <LanguageSelector />
+          {!isLoggedIn && <LanguageSelector />}
           {isLoggedIn ? (
             <HeaderActions />
           ) : (
@@ -243,7 +243,7 @@ export default function Header() {
                   className="w-full flex py-3 px-6 justify-center items-center gap-2 rounded-lg relative cursor-pointer border-none bg-button-primary-bg hover:opacity-90 transition-opacity"
                 >
                   <div className="text-button-primary-text text-center relative text-base font-bold">
-                    {t("logIn")}
+                    {t("login")}
                   </div>
                 </Link>
               )}

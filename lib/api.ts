@@ -139,7 +139,7 @@ api.interceptors.response.use(
           try {
             clearAuth();
           } catch {}
-          toast?.error?.("Сесията е изтекла. Моля, влезте отново.");
+          toast?.error?.("Session expired. Please login again.");
           try {
             const parts = window.location.pathname.split("/").filter(Boolean);
             const maybeLocale = parts[0] || "en";
@@ -149,10 +149,10 @@ api.interceptors.response.use(
           }
         }
       } else {
-        toast?.error?.(candidate || fallback, { duration: 5000 });
+        toast?.error?.(JSON.stringify(error) || fallback, { duration: 5000 });
       }
     } catch {
-      toast?.error?.("Възникна грешка. Опитайте отново.");
+      toast?.error?.("An error occurred. Please try again.");
     }
     return Promise.reject(error);
   }

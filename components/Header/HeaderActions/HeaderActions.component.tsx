@@ -13,6 +13,7 @@ export default function HeaderActions() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement | null>(null);
+  const notificationsRef = React.useRef<HTMLDivElement | null>(null);
   const [isLoadingLogout, setIsLoadingLogout] = React.useState(false);
   const t = useTranslations();
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
@@ -117,12 +118,14 @@ export default function HeaderActions() {
   return (
     <>
       <nav className="flex gap-3 items-center">
-        <button
-          className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid border-neutral-400 cursor-pointer`}
-          aria-label="Нотификации"
-        >
-          <BellIcon className="text-white" />
-        </button>
+        <div className="relative" ref={notificationsRef}>
+          <button
+            className={`flex gap-2 items-center self-stretch p-2 my-auto w-11 h-11 rounded border border-solid border-neutral-400 cursor-pointer`}
+            aria-label="Нотификации"
+          >
+            <BellIcon className="text-white" />
+          </button>
+        </div>
 
         <div className="relative" ref={menuRef}>
           <button
@@ -131,7 +134,7 @@ export default function HeaderActions() {
             }`}
             aria-haspopup="menu"
             aria-expanded={isMenuOpen}
-            aria-label="Потребителски профил"
+            aria-label={t("profile")}
             onClick={() => setIsMenuOpen((v) => !v)}
           >
             <UserIcon
@@ -140,7 +143,7 @@ export default function HeaderActions() {
           </button>
 
           {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-40 rounded-md border border-[#dadade] bg-white text-background shadow-lg z-50 overflow-hidden">
+            <div className="absolute right-0 mt-2 w-40 rounded-md bg-white text-background shadow-lg z-50 overflow-hidden">
               <Link
                 href={`${localePrefix}/profile`}
                 className="block w-full text-left px-4 py-2 hover:bg-gray-10 cursor-pointer"
