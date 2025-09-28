@@ -72,7 +72,7 @@ export default function ForgotPassword() {
             <div className="flex flex-col items-center gap-4 w-full py-8">
               <Image
                 src="/success.webp"
-                alt="Успешно"
+                alt="Success"
                 width={560}
                 height={560}
                 className="object-contain success-img w-full max-w-[560px]"

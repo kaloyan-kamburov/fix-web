@@ -162,5 +162,6 @@
   "areYouSureYouWantToDeleteAccount": "Are you sure you want to delete your account?",
   "deletedProfileCannotBeRestored": "Deleted profile cannot be restored",
   "delete": "Delete",
-  "editProfile": "Edit profile"
+  "editProfile": "Edit profile",
+  "urgent": "Urgent"
 }

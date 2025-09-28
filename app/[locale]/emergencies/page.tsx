@@ -86,6 +86,30 @@ export default async function CategoriesPage({
 
   return (
     <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[130px] max-md:pt-[76px] mx-auto">
+      <div className="mx-auto w-full max-w-[960px]">
+        <div className="flex relative gap-6 items-center p-5 bg-white rounded-lg border border-[var(--color-brand-red)] border-solid max-w-[400px] max-md:gap-5 max-md:p-5 max-sm:flex-col max-sm:gap-4 max-sm:items-center max-sm:p-4 max-sm:text-center">
+          <Image
+            src="/siren.webp"
+            alt="siren"
+            width={64}
+            height={64}
+            className="shrink-0"
+          />
+
+          <section className="flex relative flex-col gap-4 items-start w-[265px] max-md:flex-1 max-md:w-auto max-sm:gap-3 max-sm:items-center max-sm:w-full">
+            <span className="text-lg font-bold text-zinc-900 max-sm:text-base text-left">
+              {t("forEmegencySituations")}
+            </span>
+            <div className="flex relative gap-4 items-center self-stretch">
+              <p className="relative text-base font-semibold text-center text-black max-md:text-base max-sm:text-sm">
+                <span className="text-base font-bold text-black max-md:text-base max-sm:text-sm">
+                  +359 89 030 892
+                </span>
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
       <CategoriesList
         title={t("emergencyServices")}
         items={items}
