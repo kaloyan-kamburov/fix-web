@@ -15,6 +15,7 @@ import {
   Shield,
   ChevronRight,
 } from "lucide-react";
+import Loader from "@/components/Loader/Loader";
 
 export default function ProfilePage() {
   const t = useTranslations();
@@ -69,84 +70,90 @@ export default function ProfilePage() {
       <div className="flex flex-col items-center gap-6 w-full max-w-4xl">
         {/* Title */}
         <h1 className="text-2xl font-bold text-gray-100">{t("profile")}</h1>
-
-        <div className="flex flex-col items-center gap-4 w-full">
-          {/* User Info Card */}
-          <div className="flex flex-col sm:flex-row p-4 justify-between items-start gap-4 w-full rounded-lg relative bg-gray-10">
-            <div className="flex flex-col items-start gap-3 flex-1">
-              {/* User Name Section */}
-              <div className="flex flex-col items-start gap-1 w-full">
-                <h2 className="text-lg font-bold text-gray-100">
-                  {isLoading
-                    ? ""
-                    : `${me?.first_name ?? ""} ${me?.last_name ?? ""}`.trim() ||
-                      "—"}
-                </h2>
-              </div>
-
-              {/* Contact Info */}
-              <div className="flex flex-col gap-2 w-full">
-                <div className="flex items-center gap-2">
-                  <Phone size={24} className="flex-shrink-0 text-gray-50" />
-                  <span className="text-base font-normal text-gray-100">
-                    {isLoading ? "" : me?.phone || "—"}
-                  </span>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="flex flex-col items-center gap-4 w-full">
+            {/* User Info Card */}
+            <div className="flex flex-col sm:flex-row p-4 justify-between items-start gap-4 w-full rounded-lg relative bg-gray-10">
+              <div className="flex flex-col items-start gap-3 flex-1">
+                {/* User Name Section */}
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <h2 className="text-lg font-bold text-gray-100">
+                    {isLoading
+                      ? ""
+                      : `${me?.first_name ?? ""} ${
+                          me?.last_name ?? ""
+                        }`.trim() || "—"}
+                  </h2>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Mail size={24} className="flex-shrink-0 text-gray-50" />
-                  <span className="text-base font-normal text-gray-100">
-                    {isLoading ? "" : me?.email || "—"}
-                  </span>
-                </div>
+                {/* Contact Info */}
+                <div className="flex flex-col gap-2 w-full">
+                  <div className="flex items-center gap-2">
+                    <Phone size={24} className="flex-shrink-0 text-gray-50" />
+                    <span className="text-base font-normal text-gray-100">
+                      {isLoading ? "" : me?.phone || "—"}
+                    </span>
+                  </div>
 
-                <div className="flex items-start gap-2">
-                  <MapPin
-                    size={24}
-                    className="flex-shrink-0 mt-0.5 text-gray-50"
-                  />
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex items-center gap-2">
+                    <Mail size={24} className="flex-shrink-0 text-gray-50" />
                     <span className="text-base font-normal text-gray-100">
-                      {isLoading ? "" : me?.city || t("cityNotSpecified")}
+                      {isLoading ? "" : me?.email || "—"}
                     </span>
-                    <span className="text-base font-normal text-gray-100">
-                      {isLoading ? "" : me?.address || me?.neighborhood || ""}
-                    </span>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <MapPin
+                      size={24}
+                      className="flex-shrink-0 mt-0.5 text-gray-50"
+                    />
+                    <div className="flex flex-wrap gap-1">
+                      <span className="text-base font-normal text-gray-100">
+                        {isLoading ? "" : me?.city || t("cityNotSpecified")}
+                      </span>
+                      <span className="text-base font-normal text-gray-100">
+                        {isLoading ? "" : me?.address || me?.neighborhood || ""}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Edit Icon */}
+              <Link
+                href={`/${locale}/profile/edit`}
+                aria-label={t("editProfile")}
+                className="absolute right-4 top-4"
+              >
+                <Edit
+                  size={24}
+                  className="cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-gray-50"
+                />
+              </Link>
             </div>
 
-            {/* Edit Icon */}
-            <Link
-              href={`/${locale}/profile/edit`}
-              aria-label={t("editProfileClient")}
-              className="absolute right-4 top-4"
-            >
-              <Edit
-                size={24}
-                className="cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-gray-50"
-              />
-            </Link>
-          </div>
+            {/* Menu Items */}
+            <div className="flex flex-col gap-4 w-full">
+              <Link
+                href={`/${locale}/profile/settings`}
+                aria-label={t("settings")}
+                className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full bg-gray-10"
+              >
+                <div className="flex items-center gap-2 flex-1">
+                  <Settings size={32} className="flex-shrink-0 text-gray-50" />
+                  <span className="text-lg font-bold text-gray-100">
+                    {t("settings")}
+                  </span>
+                </div>
+                <ChevronRight
+                  size={24}
+                  className="flex-shrink-0 text-gray-50"
+                />
+              </Link>
 
-          {/* Menu Items */}
-          <div className="flex flex-col gap-4 w-full">
-            <Link
-              href={`/${locale}/profile/settings`}
-              aria-label={t("settings")}
-              className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity w-full bg-gray-10"
-            >
-              <div className="flex items-center gap-2 flex-1">
-                <Settings size={32} className="flex-shrink-0 text-gray-50" />
-                <span className="text-lg font-bold text-gray-100">
-                  {t("settings")}
-                </span>
-              </div>
-              <ChevronRight size={24} className="flex-shrink-0 text-gray-50" />
-            </Link>
-
-            {/* <button
+              {/* <button
               className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
               style={{ backgroundColor: "#F9F9F9" }}
             >
@@ -174,7 +181,7 @@ export default function ProfilePage() {
               />
             </button> */}
 
-            {/* <button
+              {/* <button
               className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
               style={{ backgroundColor: "#F9F9F9" }}
             >
@@ -202,7 +209,7 @@ export default function ProfilePage() {
               />
             </button> */}
 
-            {/* <button
+              {/* <button
               className="flex p-4 justify-between items-center w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
               style={{ backgroundColor: "#F9F9F9" }}
             >
@@ -229,10 +236,10 @@ export default function ProfilePage() {
                 className="flex-shrink-0"
               />
             </button> */}
-          </div>
+            </div>
 
-          {/* CTA Button */}
-          {/* <div className="w-full py-3">
+            {/* CTA Button */}
+            {/* <div className="w-full py-3">
             <button
               className="flex py-3 px-6 justify-center items-center gap-2 w-full rounded-lg border cursor-pointer hover:opacity-90 transition-opacity text-base font-bold"
               style={{
@@ -246,7 +253,8 @@ export default function ProfilePage() {
               {t("contactUs")}
             </button>
           </div> */}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export default async function CategoriesPage({
   }> = [];
   // [10, 17, 26, 41, 43, 55, 58, 59, 63, 65, 79, 81, 91, 97, 98, 104, 120, 137, 154, 155, 161]
   try {
-    const res = await api.get("categories?filter[is_urgent]=1", {
+    const res = await api.get("categories?filter[is_urgent]=true", {
       headers: {
         "X-Tenant-ID": 65,
       },

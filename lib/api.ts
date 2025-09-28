@@ -11,9 +11,6 @@ const baseURL =
 
 export const api = axios.create({
   baseURL,
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
 });
 // Attach bearer token
@@ -109,6 +106,7 @@ api.interceptors.response.use(
     try {
       const status = error?.response?.status;
       const data = error?.response?.data;
+
       const fallback = status
         ? `Възникна грешка (${status}). Опитайте отново.`
         : "Възникна грешка. Опитайте отново.";
@@ -149,7 +147,9 @@ api.interceptors.response.use(
           }
         }
       } else {
-        toast?.error?.(JSON.stringify(error) || fallback, { duration: 5000 });
+        toast?.error?.(candidate || JSON.stringify(error) || fallback, {
+          duration: 5000,
+        });
       }
     } catch {
       toast?.error?.("An error occurred. Please try again.");

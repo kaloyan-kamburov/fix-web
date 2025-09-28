@@ -156,5 +156,11 @@
   "cancel": "Cancel",
   "send": "Send",
   "reviewAddedSuccessfully": "Review added successfully",
-  "offerError": "An offer error occurred"
+  "offerError": "An offer error occurred",
+  "newNotifications": "New",
+  "noNotifications": "No notifications",
+  "areYouSureYouWantToDeleteAccount": "Are you sure you want to delete your account?",
+  "deletedProfileCannotBeRestored": "Deleted profile cannot be restored",
+  "delete": "Delete",
+  "editProfile": "Edit profile"
 }

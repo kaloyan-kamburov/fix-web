@@ -44,6 +44,7 @@
   --gray-70: #626366;
   --gray-90: rgba(57, 57, 59, 1);
   --gray-95: rgba(39, 39, 41, 1);
+  --success-light: #d4e5d3;
   --neutral-50: #f5f5f5;
   --h2-font-family: "Open Sans", Helvetica;
   --h2-font-size: 18px;
@@ -85,6 +86,7 @@
   --color-gray-90: var(--gray-90);
   --color-gray-95: var(--gray-95);
   --color-neutral-50: var(--neutral-50);
+  --color-success-light: var(--success-light);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -156,5 +156,11 @@
   "cancel": "Отказ",
   "send": "Изпрати",
   "reviewAddedSuccessfully": "Отзивът е добавен успешно",
-  "offerError": "Грешка при получаване на оферта"
+  "offerError": "Грешка при получаване на оферта",
+  "newNotifications": "Нови",
+  "noNotifications": "Няма известия",
+  "areYouSureYouWantToDeleteAccount": "Сигурни ли сте, че желаете да изтриете акаунта си?",
+  "deletedProfileCannotBeRestored": "Изтрит профил не може да бъде възстановеен",
+  "delete": "Изтриване",
+  "editProfile": "Редактиране на профил"
 }

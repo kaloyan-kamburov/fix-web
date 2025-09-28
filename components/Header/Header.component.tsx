@@ -44,6 +44,7 @@ function getLocaleFromPath(pathname: string): string | null {
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [notifications, setNotifications] = React.useState([]);
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
@@ -51,6 +52,7 @@ export default function Header() {
     () => getLocaleFromPath(pathname) || "bg",
     [pathname]
   );
+
   const isCategoriesActive = React.useMemo(
     () => pathname.startsWith(`/${locale}/categories`),
     [pathname, locale]
@@ -70,6 +72,14 @@ export default function Header() {
     });
     return unsubscribe;
   }, []);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) return;
+    const id = setInterval(() => {
+      getNotifications();
+    }, 45000);
+    return () => clearInterval(id);
+  }, [isLoggedIn]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

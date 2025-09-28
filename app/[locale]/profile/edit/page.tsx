@@ -93,7 +93,7 @@ export default function ProfileEditPage() {
             </Link>
             <div className="flex items-center justify-center gap-2 flex-1">
               <h1 className="font-h1 font-bold font-[number:var(--h1-font-weight)] text-gray-100 text-[length:var(--h1-font-size)] text-center tracking-[var(--h1-letter-spacing)] leading-[var(--h1-line-height)] [font-style:var(--h1-font-style)]">
-                {t("editProfileClient")}
+                {t("editProfile")}
               </h1>
             </div>
 

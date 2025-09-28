@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { clearAuth } from "@/lib/auth";
+import axios from "axios";
 import {
   Phone,
   Mail,
@@ -21,6 +22,7 @@ import {
   Globe,
   Trash,
 } from "lucide-react";
+import Loader from "@/components/Loader/Loader";
 
 export default function ProfilePage() {
   const t = useTranslations();
@@ -140,7 +142,7 @@ export default function ProfilePage() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 rounded-lg border border-[#dadade] text-gray-100 hover:bg-gray-10 cursor-pointer"
+                className="flex-1 px-4 py-2 rounded-lg border border-[#dadade] text-gray-100 hover:bg-gray-10 cursor-pointer"
                 disabled={isDeleting}
               >
                 {t("cancel")}
@@ -151,7 +153,29 @@ export default function ProfilePage() {
                     setIsDeleting(true);
                     await api.delete("client/profile");
                     try {
-                      await api.post("client/logout");
+                      const base = (
+                        process.env.NEXT_PUBLIC_API_BASE_URL || ""
+                      ).replace(/\/$/, "");
+                      const url = `${base}/logout`;
+                      let token: string | null = null;
+                      try {
+                        const raw = document.cookie
+                          .split(";")
+                          .map((c) => c.trim())
+                          .find((c) => c.startsWith("auth_token="));
+                        if (raw)
+                          token = decodeURIComponent(raw.split("=")[1] || "");
+                        if (!token) token = localStorage.getItem("auth_token");
+                      } catch {}
+                      await axios.post(url, undefined, {
+                        withCredentials: true,
+                        headers: {
+                          Accept: "application/json",
+                          ...(token
+                            ? { Authorization: `Bearer ${token}` }
+                            : {}),
+                        },
+                      });
                     } catch (_) {}
                     clearAuth();
                     toast.success(t("accountDeleted"));
@@ -160,10 +184,14 @@ export default function ProfilePage() {
                     setIsDeleting(false);
                   }
                 }}
-                className="px-5 py-2.5 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
+                className="flex-1 px-5 py-2.5 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer flex justify-center items-center disabled:opacity-50 disabled:cursor-default"
                 disabled={isDeleting}
               >
-                {t("delete")}
+                {isDeleting ? (
+                  <Loader className="max-w-[24px] max-h-[24px]" />
+                ) : (
+                  t("delete")
+                )}
               </button>
             </div>
           </div>

@@ -25,10 +25,6 @@ async function handle(
   const headers = new Headers(req.headers);
   headers.delete("host");
   headers.delete("content-length");
-  // Ensure Content-Type remains correct when proxying JSON (avoid [object Object])
-  if (!headers.get("content-type") && req.headers.get("content-type")) {
-    headers.set("content-type", req.headers.get("content-type") as string);
-  }
 
   // Promote auth_token cookie to Authorization header if present
   const authCookie = req.cookies.get("auth_token")?.value;
@@ -44,14 +40,17 @@ async function handle(
     headers.set("Accept-Language", maybeLocale);
   headers.set("X-Requested-With", "XMLHttpRequest");
 
+  const hasBody = !["GET", "HEAD"].includes(req.method);
+  const hasStreamBody = hasBody && Boolean((req as any).body);
+  if (!hasStreamBody) {
+    headers.delete("content-type");
+  }
   const init: RequestInit & { duplex?: "half" } = {
     method: req.method,
     headers,
-    // Forward the raw body stream to preserve multipart/form-data uploads
-    body: ["GET", "HEAD"].includes(req.method) ? undefined : (req as any).body,
+    body: hasStreamBody ? ((req as any).body as any) : undefined,
     cache: "no-store",
-    // Required by Node 18/undici when streaming a request body
-    duplex: "half",
+    ...(hasStreamBody ? { duplex: "half" as const } : {}),
   };
 
   const resp = await fetch(target, init);

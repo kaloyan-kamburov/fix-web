@@ -366,20 +366,24 @@ export default function RequestPage({
           )}
         </div>
       </div>
-      <FsLightbox
-        toggler={togglerBefore}
-        sources={order?.pictures_before}
-        types={order?.pictures_before?.map(() => "image")}
-        slide={slide}
-        onClose={() => setSlide(1)}
-      />
-      <FsLightbox
-        toggler={togglerAfter}
-        sources={order?.pictures_after}
-        types={order?.pictures_after?.map(() => "image")}
-        slide={slide}
-        onClose={() => setSlide(1)}
-      />
+      {order?.pictures_before?.length && (
+        <FsLightbox
+          toggler={togglerBefore}
+          sources={order?.pictures_before}
+          types={order?.pictures_before?.map(() => "image")}
+          slide={slide}
+          onClose={() => setSlide(1)}
+        />
+      )}
+      {order?.pictures_after?.length && (
+        <FsLightbox
+          toggler={togglerAfter}
+          sources={order?.pictures_after}
+          types={order?.pictures_after?.map(() => "image")}
+          slide={slide}
+          onClose={() => setSlide(1)}
+        />
+      )}
       {showMarkAsCompletedModal &&
         createPortal(
           <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
