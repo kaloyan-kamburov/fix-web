@@ -55,13 +55,16 @@ export default function Header() {
   );
 
   const isCategoriesActive = React.useMemo(
-    () => pathname.startsWith(`/${locale}/categories`),
+    () =>
+      pathname.startsWith(`/${locale}/categories`) &&
+      !pathname.includes("emergencies"),
     [pathname, locale]
   );
+
   const loginHref = React.useMemo(() => `/${locale}/login`, [locale]);
 
   const isEmergenciesActive = React.useMemo(
-    () => pathname.startsWith(`/${locale}/emergencies`),
+    () => pathname.includes("emergencies"),
     [pathname, locale]
   );
 

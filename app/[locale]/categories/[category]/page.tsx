@@ -7,16 +7,17 @@ import { getTranslations } from "next-intl/server";
 export default async function CategoryPage({
   params,
 }: {
-  params: { category: string; locale: string };
+  params: Promise<{ category: string; locale: string }>;
 }) {
-  const id = params.category;
-  const t = await getTranslations({ locale: params.locale });
+  const { category, locale } = await params;
+  const id = category;
+  const t = await getTranslations({ locale });
   let services: unknown = null;
   let categoryData: unknown = null;
   try {
     const res = await api.get(`categories/${id}/services`, {
       headers: {
-        "app-locale": params?.locale,
+        "app-locale": locale,
       },
     });
     services = res.data;
@@ -27,7 +28,7 @@ export default async function CategoryPage({
   try {
     const resCat = await api.get(`categories/${id}`, {
       headers: {
-        "app-locale": params?.locale,
+        "app-locale": locale,
       },
     });
     categoryData = resCat.data;
@@ -49,7 +50,7 @@ export default async function CategoryPage({
       <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
         <div className="mx-auto w-full max-w-[1440px]">
           <Link
-            href={`/${params.locale}/categories/`}
+            href={`/${locale}/categories/`}
             className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
             aria-label={t("back")}
           >
@@ -77,7 +78,7 @@ export default async function CategoryPage({
         </h1>
         <ServicesSearch
           initialData={services}
-          locale={params.locale}
+          locale={locale}
           categoryId={id}
           isUrgent={false}
         />

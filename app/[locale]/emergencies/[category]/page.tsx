@@ -122,7 +122,7 @@ export default async function EmergenciesPage({
         </div>
 
         <h1 className="text-2xl text-zinc-900 max-md:max-w-full text-left w-full max-w-[960px] mx-auto mt-[20px] max-md:mt-0">
-          {categoryName || t("emergencyCategories")}
+          {categoryName || t("emergencyServices")}
         </h1>
 
         <ServicesSearch initialData={services} locale={locale} isUrgent />
