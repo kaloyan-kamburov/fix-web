@@ -73,14 +73,6 @@ export default function Header() {
     return unsubscribe;
   }, []);
 
-  React.useEffect(() => {
-    if (!isLoggedIn) return;
-    const id = setInterval(() => {
-      getNotifications();
-    }, 45000);
-    return () => clearInterval(id);
-  }, [isLoggedIn]);
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
