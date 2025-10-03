@@ -366,7 +366,7 @@ export default function RequestPage({
           )}
         </div>
       </div>
-      {order?.pictures_before?.length && (
+      {order?.pictures_before?.length ? (
         <FsLightbox
           toggler={togglerBefore}
           sources={order?.pictures_before}
@@ -374,8 +374,8 @@ export default function RequestPage({
           slide={slide}
           onClose={() => setSlide(1)}
         />
-      )}
-      {order?.pictures_after?.length && (
+      ) : null}
+      {order?.pictures_after?.length ? (
         <FsLightbox
           toggler={togglerAfter}
           sources={order?.pictures_after}
@@ -383,7 +383,7 @@ export default function RequestPage({
           slide={slide}
           onClose={() => setSlide(1)}
         />
-      )}
+      ) : null}
       {showMarkAsCompletedModal &&
         createPortal(
           <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">

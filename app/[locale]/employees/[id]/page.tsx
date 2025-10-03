@@ -103,8 +103,8 @@ const EmployeePage = async ({
 
         {description && (
           <section className="mt-6">
-            <h3 className="text-zinc-600">{t("experience")}</h3>
-            <p className="mt-2 font-semibold text-zinc-900">{description}</p>
+            <h3 className="text-zinc-900 font-bold ">{t("experience")}</h3>
+            <p className="mt-2 text-zinc-900">{description}</p>
           </section>
         )}
       </div>
