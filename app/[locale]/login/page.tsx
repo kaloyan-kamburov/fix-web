@@ -15,7 +15,12 @@ import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { getAuth, setAuth } from "@/lib/auth";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import {
+  useRouter,
+  usePathname,
+  useSearchParams,
+  useParams,
+} from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 const loginSchema = z.object({
@@ -30,9 +35,9 @@ export default function Login() {
   const t = useTranslations();
   const [showPassword, setShowPassword] = React.useState(false);
   const router = useRouter();
-  const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { locale } = useParams();
 
   const backHref = React.useMemo(() => {
     try {

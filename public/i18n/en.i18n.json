@@ -163,5 +163,6 @@
   "deletedProfileCannotBeRestored": "Deleted profile cannot be restored",
   "delete": "Delete",
   "editProfile": "Edit profile",
-  "urgent": "Urgent"
+  "urgent": "Urgent",
+  "country": "Country"
 }

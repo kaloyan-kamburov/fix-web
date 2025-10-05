@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Header from "@/components/Header/Header.component";
 import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
+import I18nClientBridge from "@/components/I18nClientBridge";
 
 const legacyMap: Record<string, string> = {
   bg: "bg.i18n.json",
@@ -42,13 +43,15 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider key={locale} messages={messages} locale={locale}>
-      {/* Header (client) */}
-      <Header />
-      {/* Page content */}
-      <main>{children}</main>
-      {/* Footer (client) */}
-      <SiteFooterSection />
-      <Toaster position="bottom-right" />
+      <I18nClientBridge country={locale}>
+        {/* Header (client) */}
+        <Header />
+        {/* Page content */}
+        <main>{children}</main>
+        {/* Footer (client) */}
+        <SiteFooterSection />
+        <Toaster position="bottom-right" />
+      </I18nClientBridge>
     </NextIntlClientProvider>
   );
 }

@@ -5,54 +5,21 @@ import { BellIcon } from "lucide-react";
 import { Logo } from "../Logo/Logo.component";
 import HeaderActions from "./HeaderActions/HeaderActions.component";
 import { NotificationsProvider } from "./NotificationsProvider";
-import { LanguageSelector } from "./LanguageSelector";
+import LanguageSelector from "./LanguageSelector";
+import CountrySelector from "./CountrySelector";
 import { getAuth, onAuthChanged } from "@/lib/auth";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { clearAuth } from "@/lib/auth";
 import { useTranslations } from "next-intl";
 
-function getLocaleFromPath(pathname: string): string | null {
-  const parts = pathname.split("/").filter(Boolean);
-  if (parts.length === 0) return null;
-  const candidate = parts[0];
-  const LOCALES = new Set([
-    "bg",
-    "en",
-    "fr",
-    "de",
-    "it",
-    "es",
-    "tr",
-    "gr",
-    "nl",
-    "swe",
-    "por",
-    "cr",
-    "est",
-    "fin",
-    "irl",
-    "lat",
-    "lit",
-    "lux",
-    "mal",
-    "slovakian",
-    "slovenian",
-  ]);
-  return LOCALES.has(candidate) ? candidate : null;
-}
-
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [notifications, setNotifications] = React.useState([]);
   const router = useRouter();
   const t = useTranslations();
   const pathname = usePathname();
-  const locale = React.useMemo(
-    () => getLocaleFromPath(pathname) || "bg",
-    [pathname]
-  );
+  const { locale } = useParams();
 
   const isCategoriesActive = React.useMemo(
     () =>
@@ -98,8 +65,7 @@ export default function Header() {
   };
 
   return (
-    <div
-      key={locale}
+    <header
       className={`fixed top-0 left-0 right-0 z-50 flex w-full px-16 py-[16px] md:py-5 flex-col justify-center items-center md:px-8 px-[16px] sm:h-auto transition-all duration-300 lg:transparent bg-[#1C1C1D]/95 will-change-transform transform-gpu`}
     >
       <div className="flex justify-between items-center w-full relative sm:justify-between">
@@ -139,7 +105,10 @@ export default function Header() {
               {t("emergencySituations")}
             </div>
           </Link>
-          {!isLoggedIn && <LanguageSelector />}
+          <div className="flex items-center gap-3">
+            <CountrySelector />
+            <LanguageSelector />
+          </div>
           {isLoggedIn ? (
             <NotificationsProvider isEnabled={true}>
               <HeaderActions
@@ -160,6 +129,10 @@ export default function Header() {
 
         {/* Mobile actions: notifications + hamburger */}
         <div className="flex items-center gap-3 lg:hidden">
+          <div className="flex items-center gap-2">
+            <CountrySelector />
+            <LanguageSelector />
+          </div>
           {isLoggedIn ? (
             <NotificationsProvider isEnabled={true}>
               <HeaderActions
@@ -270,6 +243,6 @@ export default function Header() {
           </div>
         </div>
       )}
-    </div>
+    </header>
   );
 }

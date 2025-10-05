@@ -33,7 +33,7 @@ export function middleware(req: NextRequest) {
 
   // Redirect root to default locale
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/en", req.url));
+    return NextResponse.redirect(new URL("/bg", req.url));
   }
 
   const segments = pathname.split("/").filter(Boolean);

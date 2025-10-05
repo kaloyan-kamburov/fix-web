@@ -163,5 +163,6 @@
   "deletedProfileCannotBeRestored": "Изтрит профил не може да бъде възстановеен",
   "delete": "Изтриване",
   "editProfile": "Редактиране на профил",
-  "urgent": "Спешно"
+  "urgent": "Спешно",
+  "country": "Държава"
 }
