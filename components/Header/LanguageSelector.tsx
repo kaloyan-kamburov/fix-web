@@ -355,7 +355,7 @@ export default function LanguageSelector() {
   return (
     <div className="relative" ref={rootRef}>
       <button
-        className={`flex items-center gap-2 px-2 py-1 rounded border border-neutral-400 cursor-pointer ${
+        className={`flex items-center gap-2 px-2 py-1 rounded border border-neutral-400 cursor-pointer h-11 ${
           isOpen ? "bg-white hover:bg-gray-50" : "bg-transparent"
         }`}
         aria-haspopup="listbox"

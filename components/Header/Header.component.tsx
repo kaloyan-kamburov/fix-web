@@ -106,7 +106,8 @@ export default function Header() {
             </div>
           </Link>
           <div className="flex items-center gap-3">
-            <CountrySelector />
+            {!isLoggedIn && <CountrySelector />}
+
             <LanguageSelector />
           </div>
           {isLoggedIn ? (
@@ -130,7 +131,8 @@ export default function Header() {
         {/* Mobile actions: notifications + hamburger */}
         <div className="flex items-center gap-3 lg:hidden">
           <div className="flex items-center gap-2">
-            <CountrySelector />
+            {!isLoggedIn && <CountrySelector />}
+
             <LanguageSelector />
           </div>
           {isLoggedIn ? (

@@ -3,8 +3,9 @@
 import * as React from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Globe } from "lucide-react";
 
 type ApiCountry = {
   id?: unknown;
@@ -35,6 +36,7 @@ export default function CountrySelector() {
   const [mounted, setMounted] = React.useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { locale } = useParams();
 
   React.useEffect(() => setMounted(true), []);
 
@@ -102,12 +104,13 @@ export default function CountrySelector() {
   return (
     <div className="relative">
       <button
-        className="flex items-center gap-2 px-2 py-1 rounded border border-neutral-400 cursor-pointer bg-transparent"
+        className="flex items-center gap-2 px-2 py-1 rounded border border-neutral-400 cursor-pointer bg-transparent h-11"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <span className="text-sm text-white">{t("country")}</span>
+        <Globe />
+        {locale && `${locale}`.toUpperCase()}
       </button>
       {open &&
         mounted &&
