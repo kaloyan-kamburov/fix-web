@@ -6,7 +6,6 @@ import { BellIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { clearAuth, getAuth } from "@/lib/auth";
-import axios from "axios";
 import { api } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import formatDate from "@/lib/formatDate";
@@ -41,39 +40,11 @@ export default function HeaderActions({
     await refresh();
   };
 
-  const LOCALES = React.useMemo(
-    () =>
-      new Set([
-        "bg",
-        "en",
-        "fr",
-        "de",
-        "it",
-        "es",
-        "tr",
-        "gr",
-        "nl",
-        "swe",
-        "por",
-        "cr",
-        "est",
-        "fin",
-        "irl",
-        "lat",
-        "lit",
-        "lux",
-        "mal",
-        "slovakian",
-        "slovenian",
-      ]),
-    []
-  );
-
   const localePrefix = React.useMemo(() => {
     const parts = pathname.split("/").filter(Boolean);
-    const maybeLocale = parts[0];
-    return LOCALES.has(maybeLocale) ? `/${maybeLocale}` : "";
-  }, [pathname, LOCALES]);
+    const first = parts[0];
+    return first ? `/${first}` : "/bg-bg";
+  }, [pathname]);
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -109,11 +80,6 @@ export default function HeaderActions({
       if (!getAuth()) {
         return;
       }
-      const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
-        /\/$/,
-        ""
-      );
-      const url = `${base}/logout`;
       // Try to forward bearer token explicitly to avoid cookie-only failures
       let token: string | null = null;
       try {
@@ -124,13 +90,45 @@ export default function HeaderActions({
         if (raw) token = decodeURIComponent(raw.split("=")[1] || "");
         if (!token) token = localStorage.getItem("auth_token");
       } catch {}
-      await axios.post(url, undefined, {
-        withCredentials: true,
-        headers: {
-          Accept: "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      let tenantId: string | null = null;
+      try {
+        const raw = document.cookie
+          .split(";")
+          .map((c) => c.trim())
+          .find((c) => c.startsWith("tenant_id="));
+        if (raw) tenantId = decodeURIComponent(raw.split("=")[1] || "");
+        if (!tenantId) tenantId = localStorage.getItem("preferred_country_id");
+        if (!tenantId) {
+          const parts = window.location.pathname.split("/").filter(Boolean);
+          const first = parts[0] || "bg-bg";
+          const [, countryRaw] = first.split("-");
+          const code = (countryRaw || "bg").toUpperCase();
+          const mapRaw = localStorage.getItem("COUNTRY_CODE_TO_ID");
+          if (mapRaw) {
+            const map = JSON.parse(mapRaw) as Record<string, number>;
+            const found = map[code];
+            if (found) tenantId = String(found);
+          }
+        }
+      } catch {}
+
+      const parts = pathname.split("/").filter(Boolean);
+      const first = parts[0] || "bg-bg";
+      const appLang = (first.split("-")[0] || "bg").toLowerCase();
+      await api.post(
+        "logout",
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...(tenantId ? { "X-Tenant-ID": String(tenantId) } : {}),
+            "app-locale": appLang,
+            "Content-Type": "application/json",
+          },
+        }
+      );
     } catch (e) {
       // ignore, interceptor will handle toast; we'll still clear locally
     } finally {
@@ -138,31 +136,8 @@ export default function HeaderActions({
       setIsProfileMenuOpen(false);
       // Preserve locale in URL if present
       const parts = pathname.split("/").filter(Boolean);
-      const maybeLocale = parts[0];
-      const locales = new Set([
-        "bg",
-        "en",
-        "fr",
-        "de",
-        "it",
-        "es",
-        "tr",
-        "gr",
-        "nl",
-        "swe",
-        "por",
-        "cr",
-        "est",
-        "fin",
-        "irl",
-        "lat",
-        "lit",
-        "lux",
-        "mal",
-        "slovakian",
-        "slovenian",
-      ]);
-      const target = locales.has(maybeLocale) ? `/${maybeLocale}` : "/";
+      const first = parts[0];
+      const target = first ? `/${first}` : "/bg-bg";
       router.push(target);
       setIsLoadingLogout(false);
     }
@@ -356,18 +331,18 @@ export default function HeaderActions({
               </h2>
               <div className="flex justify-center gap-3">
                 <button
-                  onClick={() => setShowLogoutModal(false)}
-                  className="px-4 py-2 rounded-lg border border-[#dadade] text-gray-100 hover:bg-gray-10 cursor-pointer"
-                  disabled={isLoadingLogout}
-                >
-                  {t("refuse")}
-                </button>
-                <button
                   onClick={onLogout}
                   className="px-5 py-2.5 rounded-lg bg-button-primary-bg text-black hover:bg-button-primary-bg/90 focus:outline-none focus:ring-2 focus:ring-button-primary-bg cursor-pointer"
                   disabled={isLoadingLogout}
                 >
                   {t("logOut")}
+                </button>
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="px-4 py-2 rounded-lg border border-[#dadade] text-gray-100 hover:bg-gray-10 cursor-pointer"
+                  disabled={isLoadingLogout}
+                >
+                  {t("refuse")}
                 </button>
               </div>
             </div>

@@ -32,8 +32,9 @@ export default async function CategoriesPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  const t = await getTranslations({ locale });
+  const { locale } = await params; // lang-country
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
 
   let data: unknown = null;
   let items: Array<{

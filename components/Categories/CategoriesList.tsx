@@ -14,6 +14,7 @@ export type CategoryItem = {
   secondPrice?: string | null;
   secondCurrency?: string;
   isEmergencyList?: boolean;
+  slug?: string;
 };
 
 export default function CategoriesList({
@@ -63,12 +64,12 @@ export default function CategoriesList({
             {t("noResults")}
           </div>
         )}
-        {filtered.map(({ id, name, picture }) => (
+        {filtered.map(({ id, name, picture, slug }) => (
           <Link
             href={
               isEmergencyList
                 ? `./categories/emergencies/${id}`
-                : `./categories/${id}`
+                : `./categories/${slug}`
             }
             key={id}
             className="flex relative flex-col rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"

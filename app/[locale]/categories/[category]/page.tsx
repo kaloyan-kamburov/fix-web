@@ -9,28 +9,24 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ category: string; locale: string }>;
 }) {
-  const { category, locale } = await params;
-  const id = category;
-  const t = await getTranslations({ locale });
+  const { category: slug, locale } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
   let services: unknown = null;
   let categoryData: unknown = null;
+  console.log(3443434334);
+  console.log(`categories/${slug}/services`);
   try {
-    const res = await api.get(`categories/${id}/services`, {
-      headers: {
-        "app-locale": locale,
-      },
-    });
+    const res = await api.get(`categories/${slug}/services`);
+    console.log(`categories/${slug}/services`);
+    console.log(666666666666666);
     services = res.data;
   } catch (_) {
     services = { error: true };
   }
-
   try {
-    const resCat = await api.get(`categories/${id}`, {
-      headers: {
-        "app-locale": locale,
-      },
-    });
+    const resCat = await api.get(`categories/${slug}`);
+
     categoryData = resCat.data;
   } catch (_) {
     categoryData = null;
@@ -79,7 +75,7 @@ export default async function CategoryPage({
         <ServicesSearch
           initialData={services}
           locale={locale}
-          categoryId={id}
+          categoryId={slug}
           isUrgent={false}
         />
       </section>

@@ -7,7 +7,7 @@ import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { clearAuth } from "@/lib/auth";
-import axios from "axios";
+// Use shared API instance
 import {
   Phone,
   Mail,
@@ -153,10 +153,7 @@ export default function ProfilePage() {
                     setIsDeleting(true);
                     await api.delete("client/profile");
                     try {
-                      const base = (
-                        process.env.NEXT_PUBLIC_API_BASE_URL || ""
-                      ).replace(/\/$/, "");
-                      const url = `${base}/logout`;
+                      // Call centrally-configured API instance
                       let token: string | null = null;
                       try {
                         const raw = document.cookie
@@ -167,7 +164,7 @@ export default function ProfilePage() {
                           token = decodeURIComponent(raw.split("=")[1] || "");
                         if (!token) token = localStorage.getItem("auth_token");
                       } catch {}
-                      await axios.post(url, undefined, {
+                      await api.post("logout", undefined, {
                         withCredentials: true,
                         headers: {
                           Accept: "application/json",

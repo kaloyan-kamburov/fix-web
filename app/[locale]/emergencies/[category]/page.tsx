@@ -10,13 +10,14 @@ export default async function EmergenciesPage({
   params: Promise<{ category: string; locale: string }>;
 }) {
   const { category: id, locale } = await params;
-  const t = await getTranslations({ locale });
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
   let services: unknown = null;
   let categoryData: unknown = null;
   try {
     const res = await api.get(`categories/${id}/services`, {
       headers: {
-        "app-locale": locale,
+        "app-locale": lang,
       },
     });
     services = res.data;
@@ -27,7 +28,7 @@ export default async function EmergenciesPage({
   try {
     const resCat = await api.get(`categories/${id}`, {
       headers: {
-        "app-locale": locale,
+        "app-locale": lang,
       },
     });
     categoryData = resCat.data;

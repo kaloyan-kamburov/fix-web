@@ -32,8 +32,9 @@ export default async function CategoriesPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  const t = await getTranslations({ locale });
+  const { locale } = await params; // now lang-country
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
 
   let data: unknown = null;
   let items: Array<{
@@ -48,7 +49,7 @@ export default async function CategoriesPage({
   try {
     const res = await api.get("categories", {
       headers: {
-        "app-locale": locale,
+        "app-locale": lang,
       },
     });
     data = res.data;
@@ -69,9 +70,11 @@ export default async function CategoriesPage({
       const secondCurrency = String(
         c?.second_currency?.symbol || c?.second_currency?.code || ""
       );
+      const slug = String(c?.slug ?? "");
       return {
         id,
         name,
+        slug,
         picture,
         price,
         currency,

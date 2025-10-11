@@ -48,9 +48,31 @@ export function clearAuth(): void {
   if (typeof window === "undefined") return;
   try {
     Cookies.remove("auth_token", { path: "/" });
+    // Also clear tenant and locale cookies commonly used by the app
+    try {
+      Cookies.remove("tenant_id", { path: "/" });
+    } catch {}
+    try {
+      Cookies.remove("NEXT_LOCALE", { path: "/" });
+    } catch {}
   } catch {
     document.cookie = `auth_token=; Path=/; Max-Age=0; SameSite=Lax`;
+    document.cookie = `tenant_id=; Path=/; Max-Age=0; SameSite=Lax`;
+    document.cookie = `NEXT_LOCALE=; Path=/; Max-Age=0; SameSite=Lax`;
   }
+  // Clear related localStorage values
+  try {
+    localStorage.removeItem("auth_token");
+  } catch {}
+  try {
+    localStorage.removeItem("preferred_locale");
+  } catch {}
+  try {
+    localStorage.removeItem("preferred_country");
+  } catch {}
+  try {
+    localStorage.removeItem("preferred_country_id");
+  } catch {}
   window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
 }
 

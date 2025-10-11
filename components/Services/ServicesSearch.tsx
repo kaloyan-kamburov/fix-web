@@ -44,7 +44,7 @@ function normalizeServices(raw: unknown): ServiceItem[] {
       s?.price_to_second != null ? String(s.price_to_second) : null;
     const fixed2 =
       s?.fixed_price_second != null ? String(s.fixed_price_second) : null;
-
+    const slug = String(s?.slug ?? "");
     const primary = useFixed
       ? fixedPrice
       : priceFrom && priceTo
@@ -59,7 +59,15 @@ function normalizeServices(raw: unknown): ServiceItem[] {
     const pricePrimary = primary ? `${primary} ${currency}` : null;
     const priceSecondary = secondary ? `${secondary} ${currency2}` : null;
 
-    return { id, name, description, picture, pricePrimary, priceSecondary };
+    return {
+      id,
+      name,
+      description,
+      picture,
+      pricePrimary,
+      priceSecondary,
+      slug,
+    };
   });
 }
 
@@ -75,6 +83,7 @@ export default function ServicesSearch({
   isUrgent?: boolean;
 }) {
   const t = useTranslations();
+  const lang = React.useMemo(() => (locale || "bg").split("-")[0], [locale]);
   const [query, setQuery] = React.useState("");
   const [items, setItems] = React.useState<ServiceItem[]>(() =>
     normalizeServices(initialData)
@@ -98,7 +107,7 @@ export default function ServicesSearch({
             ...(isUrgent ? { "filter[is_urgent]": isUrgent } : {}),
           },
           signal: controller.signal as any,
-          headers: { "app-locale": locale },
+          headers: { "app-locale": lang },
         });
         setItems(normalizeServices(res.data));
       } catch (_) {
@@ -110,7 +119,7 @@ export default function ServicesSearch({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, initialData, locale, isUrgent]);
+  }, [query, initialData, lang, isUrgent]);
 
   return (
     <>
@@ -135,7 +144,7 @@ export default function ServicesSearch({
       <div className="flex flex-col gap-3 items-center w-full max-w-[960px] mx-auto">
         {items.map((it) => (
           <Link
-            href={`/${locale}/categories/${categoryId}/${it.id}`}
+            href={`/${locale}/categories/${categoryId}/${it.slug}`}
             key={it.id}
             className="flex flex-wrap gap-3 items-center self-stretch p-3 text-base rounded-lg bg-stone-50 hover:bg-stone-100 transition-colors"
           >

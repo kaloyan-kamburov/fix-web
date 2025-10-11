@@ -1,13 +1,9 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { clearAuth } from "@/lib/auth";
-// No longer rely on localStorage for auth; attach token from cookie
 
-// Use absolute API base on the server; proxy on the client to avoid CORS
-const baseURL =
-  typeof window === "undefined"
-    ? (process.env.NEXT_PUBLIC_API_BASE_URL as string | undefined)
-    : "/api/proxy";
+// Use upstream API base (no proxy)
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const api = axios.create({
   baseURL,
@@ -16,61 +12,88 @@ export const api = axios.create({
 // Attach bearer token
 api.interceptors.request.use(async (config) => {
   if (typeof document !== "undefined") {
+    // Browser: avoid cross-site cookies; rely on bearer tokens when needed
+    config.withCredentials = false;
+    const urlStr = String(config.url || "");
+    const isLogin = /(^|\/)client\/login(\b|$)/.test(urlStr);
     try {
       const preferred = localStorage.getItem("preferred_locale") || "en";
-      const localeHeader = new Map<string, string>([
-        ["bg", "bg-BG"],
-        ["en", "en-US"],
-        ["tr", "tr-TR"],
-        ["gr", "el-GR"],
-        ["nl", "nl-NL"],
-        ["swe", "sv-SE"],
-        ["por", "pt-PT"],
-        ["cr", "hr-HR"],
-        ["est", "et-EE"],
-        ["fin", "fi-FI"],
-        ["irl", "en-IE"],
-        ["lat", "lv-LV"],
-        ["lit", "lt-LT"],
-        ["lux", "lb-LU"],
-        ["mal", "mt-MT"],
-        ["slovakian", "sk-SK"],
-        ["slovenian", "sl-SI"],
-      ]).get(preferred);
-      if (localeHeader) {
-        config.headers = config.headers || {};
-        (config.headers as Record<string, string>)["Accept-Language"] =
-          localeHeader;
-      }
+
       // Also attach app-locale based on URL path if available (backend expects it)
-      try {
-        const parts = window.location.pathname.split("/").filter(Boolean);
-        const maybeLocale = parts[0] || preferred || "en";
-        (config.headers as Record<string, string>)["app-locale"] = maybeLocale;
-      } catch {}
+      if (!isLogin) {
+        try {
+          const parts = window.location.pathname.split("/").filter(Boolean);
+          const first = parts[0] || preferred || "en-bg";
+          const onlyLang = (
+            first.split("-")[0] ||
+            preferred ||
+            "en"
+          ).toLowerCase();
+          (config.headers as Record<string, string>)["app-locale"] = onlyLang;
+        } catch {}
+      }
+    } catch {}
+
+    // Attach X-Tenant-ID header from cookie/localStorage/mapping
+    try {
+      if (!isLogin) {
+        // 1) Cookie set by selector/header bootstrap
+        const tenantCookie = document.cookie
+          .split(";")
+          .map((c) => c.trim())
+          .find((c) => c.startsWith("tenant_id="));
+        let tenantId: string | null = tenantCookie
+          ? decodeURIComponent(tenantCookie.split("=")[1] || "")
+          : null;
+
+        // 2) LocalStorage direct id
+        if (!tenantId) tenantId = localStorage.getItem("preferred_country_id");
+
+        // 3) From URL country and cached mapping
+        if (!tenantId) {
+          try {
+            const parts = window.location.pathname.split("/").filter(Boolean);
+            const first = parts[0] || "bg-bg";
+            const [, countryRaw] = first.split("-");
+            const countryCode = (countryRaw || "bg").toUpperCase();
+            const mapRaw = localStorage.getItem("COUNTRY_CODE_TO_ID");
+            if (mapRaw) {
+              const map = JSON.parse(mapRaw) as Record<string, number>;
+              const found = map[countryCode];
+              if (found) tenantId = String(found);
+            }
+          } catch {}
+        }
+
+        if (tenantId) {
+          config.headers = config.headers || {};
+          (config.headers as Record<string, string>)["X-Tenant-ID"] =
+            String(tenantId);
+        }
+      }
     } catch {}
     let bearerToken: string | null = null;
-    const raw = document.cookie
-      .split(";")
-      .map((c) => c.trim())
-      .find((c) => c.startsWith("auth_token="));
-    if (raw) bearerToken = decodeURIComponent(raw.split("=")[1] || "");
-    if (!bearerToken) {
-      try {
+    try {
+      // For login, don't attach Authorization to avoid preflight/CORS issues
+      if (!isLogin) {
         const lsToken = localStorage.getItem("auth_token");
         if (lsToken) bearerToken = lsToken;
-      } catch {}
-    }
-    if (bearerToken) {
-      config.headers = config.headers || {};
-      (config.headers as Record<string, string>)[
-        "Authorization"
-      ] = `Bearer ${bearerToken}`;
-    }
-    // Helpful for some backends that expect XHR
-    config.headers = config.headers || {};
-    (config.headers as Record<string, string>)["X-Requested-With"] =
-      "XMLHttpRequest";
+        if (!bearerToken) {
+          const raw = document.cookie
+            .split(";")
+            .map((c) => c.trim())
+            .find((c) => c.startsWith("auth_token="));
+          if (raw) bearerToken = decodeURIComponent(raw.split("=")[1] || "");
+        }
+        if (bearerToken) {
+          config.headers = config.headers || {};
+          (config.headers as Record<string, string>)[
+            "Authorization"
+          ] = `Bearer ${bearerToken}`;
+        }
+      }
+    } catch {}
+    // Do not set X-Requested-With to avoid preflight
   } else {
     // Server-side: read cookie/header values from the incoming request context
     try {
@@ -90,6 +113,13 @@ api.interceptors.request.use(async (config) => {
       const acceptLang = headersList?.get?.("accept-language") || "en-US";
       config.headers = config.headers || {};
       (config.headers as Record<string, string>)["app-locale"] = preferred;
+      // Attach X-Tenant-ID if available on server via cookie
+      const tenantId = cookieStore?.get?.("tenant_id")?.value as
+        | string
+        | undefined;
+      if (tenantId) {
+        (config.headers as Record<string, string>)["X-Tenant-ID"] = tenantId;
+      }
       (config.headers as Record<string, string>)["Accept-Language"] =
         acceptLang as string;
       (config.headers as Record<string, string>)["X-Requested-With"] =

@@ -9,12 +9,13 @@ export default async function ServicePage({
   params: Promise<{ locale: string; category: string; service: string }>;
 }) {
   const { locale, category, service: serviceId } = await params;
-  const t = await getTranslations({ locale });
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
   let service: unknown = null;
 
   try {
     const res = await api.get(`services/${serviceId}`, {
-      headers: { "app-locale": locale },
+      headers: { "app-locale": lang },
     });
     service = res.data;
   } catch (_) {

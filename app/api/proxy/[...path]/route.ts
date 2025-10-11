@@ -32,12 +32,64 @@ async function handle(
     headers.set("Authorization", `Bearer ${authCookie}`);
   }
 
-  // Ensure locale headers are present
+  // Attach tenant header if available via cookie; fallback to env mapping by country code
+  const tenantCookie = req.cookies.get("tenant_id")?.value;
+  if (tenantCookie) {
+    headers.set("X-Tenant-ID", String(tenantCookie));
+  } else {
+    try {
+      const segments = req.nextUrl.pathname.split("/").filter(Boolean);
+      const first = segments[0] || "bg-bg";
+      const [, countryRaw] = first.split("-");
+      const code = (countryRaw || "bg").toUpperCase();
+      const envKey = `TENANT_ID_${code}`;
+      const envVal = (process.env as Record<string, string | undefined>)[
+        envKey
+      ];
+      if (envVal) headers.set("X-Tenant-ID", envVal);
+      // Final fallback: try to resolve from upstream /countries
+      if (!headers.get("X-Tenant-ID")) {
+        const upstream = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+          /\/$/,
+          ""
+        );
+        if (upstream) {
+          try {
+            const langForFetch = (first.split("-")[0] || "en").toLowerCase();
+            const resp = await fetch(`${upstream}/countries`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "app-locale": langForFetch,
+                "Accept-Language": langForFetch,
+                "X-Requested-With": "XMLHttpRequest",
+              },
+              cache: "no-store",
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              const arr: any[] = Array.isArray(data)
+                ? data
+                : Array.isArray((data as any)?.data)
+                ? (data as any).data
+                : [];
+              const match = arr.find(
+                (it) => String(it?.code || "").toUpperCase() === code
+              );
+              if (match?.id) headers.set("X-Tenant-ID", String(match.id));
+            }
+          } catch {}
+        }
+      }
+    } catch {}
+  }
+
+  // Ensure locale headers are present (use language for app-locale)
   const segments = req.nextUrl.pathname.split("/").filter(Boolean);
-  const maybeLocale = segments[0] || "en";
-  if (!headers.get("app-locale")) headers.set("app-locale", maybeLocale);
-  if (!headers.get("Accept-Language"))
-    headers.set("Accept-Language", maybeLocale);
+  const first = segments[0] || "en-bg";
+  const lang = (first.split("-")[0] || "en").toLowerCase();
+  if (!headers.get("app-locale")) headers.set("app-locale", lang);
+  if (!headers.get("Accept-Language")) headers.set("Accept-Language", lang);
   headers.set("X-Requested-With", "XMLHttpRequest");
 
   const hasBody = !["GET", "HEAD"].includes(req.method);

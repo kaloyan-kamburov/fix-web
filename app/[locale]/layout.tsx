@@ -5,7 +5,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Header from "@/components/Header/Header.component";
 import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
-import I18nClientBridge from "@/components/I18nClientBridge";
 
 const legacyMap: Record<string, string> = {
   bg: "bg.i18n.json",
@@ -21,18 +20,16 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  const { locale: incomingLocale } = await params;
-  const locale = supportedLocales.has(incomingLocale) ? incomingLocale : "bg";
+  const { locale: incoming } = await params; // now expects lang-country
+  const [langRaw] = (incoming || "").split("-");
+  const lang = supportedLocales.has(langRaw) ? langRaw : "bg";
   const baseDir = path.join(process.cwd(), "public", "i18n");
   let messages: Record<string, unknown> = {};
   try {
-    const data = await fs.readFile(
-      path.join(baseDir, `${locale}.json`),
-      "utf8"
-    );
+    const data = await fs.readFile(path.join(baseDir, `${lang}.json`), "utf8");
     messages = JSON.parse(data);
   } catch {
-    const legacy = legacyMap[locale];
+    const legacy = legacyMap[lang];
     if (legacy) {
       try {
         const data = await fs.readFile(path.join(baseDir, legacy), "utf8");
@@ -42,16 +39,14 @@ export default async function LocaleLayout({
   }
 
   return (
-    <NextIntlClientProvider key={locale} messages={messages} locale={locale}>
-      <I18nClientBridge country={locale}>
-        {/* Header (client) */}
-        <Header />
-        {/* Page content */}
-        <main>{children}</main>
-        {/* Footer (client) */}
-        <SiteFooterSection />
-        <Toaster position="bottom-right" />
-      </I18nClientBridge>
+    <NextIntlClientProvider key={lang} messages={messages} locale={lang}>
+      {/* Header (client) */}
+      <Header />
+      {/* Page content */}
+      <main>{children}</main>
+      {/* Footer (client) */}
+      <SiteFooterSection />
+      <Toaster position="bottom-right" />
     </NextIntlClientProvider>
   );
 }
