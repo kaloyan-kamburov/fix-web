@@ -202,7 +202,7 @@ export default function Header() {
             {!isLoggedIn && (
               <div className="flex items-center gap-3">
                 <button
-                  className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-gray-00"
+                  className="flex items-center justify-center gap-2 px-2 h-11 rounded border border-solid border-neutral-400 text-gray-00"
                   onClick={() => setIsLocaleSelectorOpen(true)}
                   aria-label={t("chooseLanguage")}
                 >
@@ -212,6 +212,7 @@ export default function Header() {
                     width={24}
                     height={18}
                   />
+                  {currentCountry?.toUpperCase()}
                 </button>
               </div>
             )}

@@ -47,8 +47,8 @@ export default async function EmergenciesPage({
 
   return (
     <div className="bg-gray-10 w-full">
-      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
-        <div className="mx-auto w-full max-w-[1440px]">
+      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[76px] mx-auto gap-4">
+        <div className="mx-auto w-full">
           <Link
             href={`/${locale}/emergencies/`}
             className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
@@ -97,7 +97,7 @@ export default async function EmergenciesPage({
           </section>
         </article>
 
-        <div className="mx-auto w-full max-w-[1440px]">
+        <div className="mx-auto w-full">
           <article className="flex relative gap-6 items-center p-5 bg-white rounded-lg border border-[var(--color-brand-red)] border-solid max-w-[400px] max-md:gap-5 max-md:p-5 max-sm:flex-col max-sm:gap-4 max-sm:items-center max-sm:p-4 max-sm:text-center">
             <Image
               src="/siren.webp"

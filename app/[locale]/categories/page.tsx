@@ -3,30 +3,6 @@ import { api } from "@/lib/api";
 import Image from "next/image";
 import CategoriesList from "@/components/Categories/CategoriesList";
 
-const LOCALE_TO_ACCEPT_LANGUAGE: Record<string, string> = {
-  bg: "bg-BG",
-  en: "en-US",
-  tr: "tr-TR",
-  gr: "el-GR",
-  nl: "nl-NL",
-  swe: "sv-SE",
-  por: "pt-PT",
-  cr: "hr-HR",
-  est: "et-EE",
-  fin: "fi-FI",
-  irl: "en-IE",
-  lat: "lv-LV",
-  lit: "lt-LT",
-  lux: "lb-LU",
-  mal: "mt-MT",
-  slovakian: "sk-SK",
-  slovenian: "sl-SI",
-  fr: "fr-FR",
-  de: "de-DE",
-  it: "it-IT",
-  es: "es-ES",
-};
-
 export default async function CategoriesPage({
   params,
 }: {

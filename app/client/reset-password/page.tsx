@@ -136,7 +136,7 @@ function ResetPasswordContent() {
                 className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
               >
                 <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-                  {isSubmitting ? "Моля, изчакайте..." : "Смени паролата"}
+                  {t("changePassword")}
                 </span>
               </Button>
             </form>

@@ -186,7 +186,7 @@ export default function HeaderActions({
                 <div className="p-5 pt-0 max-sm:p-2">
                   {(Array.isArray(notifications) ? notifications : [])
                     .length === 0 ? (
-                    <div className="px-4 py-3 text-sm text-gray-500">
+                    <div className=" py-3 text-sm text-gray-500">
                       {t("noNotifications")}
                     </div>
                   ) : (

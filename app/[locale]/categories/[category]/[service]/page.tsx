@@ -53,8 +53,8 @@ export default async function ServicePage({
     : priceFrom2 || priceTo2 || null;
 
   return (
-    <section className="flex flex-col justify-start w-full pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[44px] mx-auto gap-4">
-      <div className="mx-auto w-full max-w-[1440px]">
+    <section className="flex flex-col justify-start w-full pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[44px] mx-auto gap-4">
+      <div className="mx-auto w-full">
         <Link
           href={
             category === "emergencies"

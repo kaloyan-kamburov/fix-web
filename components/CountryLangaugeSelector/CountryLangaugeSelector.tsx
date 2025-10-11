@@ -244,7 +244,7 @@ export const CountryLanguageSelector: React.FC<
       aria-modal="true"
     >
       <div className="w-full max-w-[720px] bg-white rounded-xl p-6 shadow-lg">
-        <header className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <button
             aria-label="Close"
             onClick={onClose}
@@ -263,7 +263,7 @@ export const CountryLanguageSelector: React.FC<
               />
             </svg>
           </button>
-        </header>
+        </div>
         <div className="mt-4">
           {loading ? (
             <div className="flex justify-center py-10">
@@ -290,11 +290,11 @@ export const CountryLanguageSelector: React.FC<
 
               {selectedCountry && languages.length > 0 && (
                 <>
-                  <div className="mt-2 w-full flex justify-center">
+                  {/* <div className="mt-2 w-full flex justify-center">
                     <span className="px-2 py-1 rounded bg-neutral-100 text-zinc-900 font-semibold uppercase">
                       {selectedCountry.code}
                     </span>
-                  </div>
+                  </div> */}
                   <LanguageSelector
                     languages={languages}
                     selectedCode={null}

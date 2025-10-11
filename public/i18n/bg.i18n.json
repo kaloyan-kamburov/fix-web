@@ -164,5 +164,6 @@
   "delete": "Изтриване",
   "editProfile": "Редактиране на профил",
   "urgent": "Спешно",
-  "country": "Държава"
+  "country": "Държава",
+  "changePassword": "Смяна на парола"
 }

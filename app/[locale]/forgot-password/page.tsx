@@ -14,6 +14,7 @@ import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "@/lib/api";
+import { useTranslations } from "next-intl";
 
 const emailSchema = z.object({
   email: z.string().min(1, "Задължително поле").email("Невалиден имейл"),
@@ -23,6 +24,7 @@ type ForgotFormData = z.input<typeof emailSchema>;
 
 export default function ForgotPassword() {
   const [email, setEmail] = React.useState("");
+  const t = useTranslations();
   const {
     register,
     handleSubmit,
@@ -113,7 +115,7 @@ export default function ForgotPassword() {
                 className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
               >
                 <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-                  {isSubmitting ? "Моля, изчакайте..." : "Изпрати линк"}
+                  {t("sendLink")}
                 </span>
               </Button>
             </form>

@@ -3,30 +3,6 @@ import { api } from "@/lib/api";
 import Image from "next/image";
 import CategoriesList from "@/components/Categories/CategoriesList";
 
-const LOCALE_TO_ACCEPT_LANGUAGE: Record<string, string> = {
-  bg: "bg-BG",
-  en: "en-US",
-  tr: "tr-TR",
-  gr: "el-GR",
-  nl: "nl-NL",
-  swe: "sv-SE",
-  por: "pt-PT",
-  cr: "hr-HR",
-  est: "et-EE",
-  fin: "fi-FI",
-  irl: "en-IE",
-  lat: "lv-LV",
-  lit: "lt-LT",
-  lux: "lb-LU",
-  mal: "mt-MT",
-  slovakian: "sk-SK",
-  slovenian: "sl-SI",
-  fr: "fr-FR",
-  de: "de-DE",
-  it: "it-IT",
-  es: "es-ES",
-};
-
 export default async function CategoriesPage({
   params,
 }: {
@@ -48,11 +24,7 @@ export default async function CategoriesPage({
   }> = [];
   // [10, 17, 26, 41, 43, 55, 58, 59, 63, 65, 79, 81, 91, 97, 98, 104, 120, 137, 154, 155, 161]
   try {
-    const res = await api.get("services?filter[is_urgent]=1", {
-      headers: {
-        "X-Tenant-ID": 65,
-      },
-    });
+    const res = await api.get("services?filter[is_urgent]=1");
     data = res.data;
     const root: any = data;
     const arr: any[] = Array.isArray(root)

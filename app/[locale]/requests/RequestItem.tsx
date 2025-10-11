@@ -41,7 +41,9 @@ export function RequestItem({
         <Image
           src={image}
           alt={title}
-          className="object-contain shrink-0 self-start rounded-lg aspect-square w-[104px]"
+          width={104}
+          height={104}
+          className="object-contain shrink-0 self-start rounded-lg aspect-square w-[104px] h-[104px]"
         />
       ) : (
         <div className="object-contain shrink-0 self-start rounded-lg aspect-square w-[104px]"></div>

@@ -152,6 +152,7 @@ import Loader from "@/components/Loader/Loader";
 export default function Requests() {
   const router = useRouter();
   const t = useTranslations();
+  const [mounted, setMounted] = useState(false);
   const tabs = useMemo(
     () => [
       { id: "sent", label: t("sent") },
@@ -166,6 +167,10 @@ export default function Requests() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -296,6 +301,14 @@ export default function Requests() {
       setActiveTab(hash.slice(1));
     }
   }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex justify-center items-center pt-[88px]">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>

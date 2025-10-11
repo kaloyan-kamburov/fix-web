@@ -2,20 +2,21 @@
 
 import React from "react";
 import { z } from "zod";
-import { useForm, Controller, type SubmitHandler } from "react-hook-form";
+import { useForm, /*Controller,*/ type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon, ArrowLeftIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/Form/Checkbox";
+// import { Checkbox } from "@/components/Form/Checkbox";
 import { Input } from "@/components/Form/Input";
 import { Label } from "@/components/Form/Label";
 import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { getAuth, setAuth } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const emailRegex = /^[\w.+\-]+@([\w\-]+\.)+[A-Za-z]{2,}$/;
 
@@ -39,6 +40,8 @@ type RegisterFormData = z.input<typeof registerSchema>;
 export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
   const router = useRouter();
+  const { locale } = useParams();
+  const t = useTranslations();
   const {
     register,
     handleSubmit,
@@ -59,7 +62,7 @@ export default function Register() {
 
   React.useEffect(() => {
     if (getAuth()) {
-      router.push("/");
+      router.push(`/${locale}`);
     }
   }, [router]);
 
@@ -74,7 +77,7 @@ export default function Register() {
       });
       if (res?.user && res?.access_token) {
         setAuth({ user: res.user, accessToken: res.access_token });
-        router.push("/");
+        router.push(`/${locale}`);
       }
     } catch (err: unknown) {
       console.error(err);
@@ -239,7 +242,7 @@ export default function Register() {
               </div>
 
               {/* Remember me and CTA */}
-              <div className="flex items-center justify-between w-full">
+              {/* <div className="flex items-center justify-between w-full">
                 <div className="inline-flex items-center gap-1">
                   <Controller
                     name="rememberMe"
@@ -260,7 +263,7 @@ export default function Register() {
                     Запомни ме
                   </Label>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <Button
@@ -269,7 +272,7 @@ export default function Register() {
               className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
             >
               <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-                {isSubmitting ? "Моля, изчакайте..." : "Регистрация"}
+                {t("registration")}
               </span>
             </Button>
           </form>

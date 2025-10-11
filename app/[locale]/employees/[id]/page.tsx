@@ -12,7 +12,8 @@ const EmployeePage = async ({
   params: Promise<{ locale: string; id: string }>;
 }) => {
   const { locale, id } = await params;
-  const t = await getTranslations({ locale });
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
 
   const res = await api.get(`client/portfolio/${id}`);
   const profile = res?.data ?? {};

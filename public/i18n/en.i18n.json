@@ -164,5 +164,6 @@
   "delete": "Delete",
   "editProfile": "Edit profile",
   "urgent": "Urgent",
-  "country": "Country"
+  "country": "Country",
+  "changePassword": "Change password"
 }

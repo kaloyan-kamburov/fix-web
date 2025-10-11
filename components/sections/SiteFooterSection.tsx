@@ -39,7 +39,7 @@ export const SiteFooterSection = () => {
   const legalLinks = [
     { text: t("privacyPolicy"), href: "/privacy" },
     { text: t("termsOfService"), href: "/terms" },
-    { text: t("cookiesSettings"), href: "/cookies" },
+    // { text: t("cookiesSettings"), href: "/cookies" },
   ];
   return (
     <footer className="flex flex-col w-full items-center gap-20 py-20 relative bg-gray-100 px-[16px] overflow-hidden">

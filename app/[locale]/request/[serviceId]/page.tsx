@@ -8,12 +8,13 @@ const RequestPage = async ({
 }: {
   params: Promise<{ locale: string; serviceId: string }>;
 }) => {
-  const { locale, serviceId } = await params;
-  const t = await getTranslations({ locale });
+  const { locale, serviceId: serviceSlug } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
   let service: unknown = null;
   try {
-    const res = await api.get(`services/${serviceId}`, {
-      headers: { "app-locale": locale },
+    const res = await api.get(`services/${serviceSlug}`, {
+      headers: { "app-locale": lang },
     });
     service = res.data;
   } catch (_) {
@@ -22,10 +23,15 @@ const RequestPage = async ({
 
   const s: any = service || {};
   const name = String(s?.name || "");
+  const serviceNumericId = (() => {
+    const raw = (s as any)?.id;
+    const n = Number(raw);
+    return Number.isFinite(n) && n > 0 ? String(n) : "";
+  })();
   const categoryId: string | null =
     s?.category_id != null ? String(s.category_id) : null;
   const backHref = categoryId
-    ? `/${locale}/categories/${categoryId}/${serviceId}`
+    ? `/${locale}/categories/${categoryId}/${serviceSlug}`
     : `/${locale}/categories`;
   const currency = String(s?.currency?.symbol || s?.currency?.code || "");
   const currency2 = String(
@@ -57,7 +63,7 @@ const RequestPage = async ({
   let cities: string[] = [];
   try {
     const resCities = await api.get("cities", {
-      headers: { "app-locale": locale },
+      headers: { "app-locale": lang },
     });
     const payload = resCities?.data;
     if (Array.isArray(payload))
@@ -95,7 +101,7 @@ const RequestPage = async ({
       <div className="mx-auto w-full max-w-[720px] bg-gray-00 p-10 max-md:p-5 rounded-2xl mt-[20px]">
         <RequestForm
           name={name}
-          serviceId={serviceId}
+          serviceId={serviceNumericId}
           locale={locale}
           pricePrimary={primary}
           priceSecondary={secondary}

@@ -42,7 +42,7 @@ export default function OfferPage({
   return (
     <div className="bg-gray-10 w-full flex w-full max-w-[1440px] flex-1 mx-auto">
       <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
-        <div className="mx-auto w-full max-w-[1440px]">
+        <div className="mx-auto w-full">
           <Link
             href={`/${locale}/requests/${offer?.order_id}`}
             className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"

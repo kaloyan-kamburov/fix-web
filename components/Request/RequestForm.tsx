@@ -229,9 +229,7 @@ export default function RequestForm({
           />
           {showIntervalError && clientIntervals.length === 0 && (
             <span className="text-red-500 text-xs mt-1">
-              {t("chooseInterval", {
-                default: "Моля, изберете интервал",
-              } as any)}
+              {t("chooseInterval")}
             </span>
           )}
 

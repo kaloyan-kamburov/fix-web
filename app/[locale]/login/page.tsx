@@ -174,7 +174,7 @@ export default function Login() {
               </div>
 
               <div className="flex items-center justify-between w-full">
-                <div className="inline-flex items-center gap-1">
+                {/* <div className="inline-flex items-center gap-1">
                   <Controller
                     name="rememberMe"
                     control={control}
@@ -193,11 +193,11 @@ export default function Login() {
                   >
                     {t("rememberMe")}
                   </Label>
-                </div>
+                </div> */}
 
                 <Link
                   href="/forgot-password"
-                  className="font-h3 font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] bg-transparent border-none cursor-pointer hover:underline"
+                  className="font-h3 ml-auto font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] bg-transparent border-none cursor-pointer hover:underline"
                 >
                   {t("forgotPassword")}
                 </Link>
@@ -209,7 +209,7 @@ export default function Login() {
               className="flex items-center justify-center gap-2 px-6 py-3 w-full bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90 cursor-pointer"
             >
               <span className="font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">
-                {isSubmitting ? "Моля, изчакайте..." : "Вход"}
+                {t("login")}
               </span>
             </Button>
           </form>
