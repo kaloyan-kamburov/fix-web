@@ -16,6 +16,7 @@ type ServiceItem = {
   picture: string;
   pricePrimary: string | null;
   priceSecondary: string | null;
+  slug: string;
 };
 
 function normalizeServices(raw: unknown): ServiceItem[] {
