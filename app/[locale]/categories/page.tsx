@@ -3,6 +3,7 @@ import { api } from "@/lib/api";
 import Image from "next/image";
 import CategoriesCTA from "@/components/Categories/CategoriesCTA";
 import CategoriesList from "@/components/Categories/CategoriesList";
+import type { Metadata } from "next";
 
 export default async function CategoriesPage({
   params,
@@ -61,4 +62,27 @@ export default async function CategoriesPage({
       <CategoriesCTA />
     </section>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  try {
+    const t = await getTranslations({ locale: lang });
+    return {
+      // Layout template will prefix with "FIX |"; if this is empty, layout default "FIX" will be used
+      title: t("categories"),
+      description: t("serviceCategoriesTitle"),
+    };
+  } catch {
+    return {
+      // Let layout default to just "FIX"
+      title: undefined,
+      description: undefined,
+    };
+  }
 }

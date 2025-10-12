@@ -3,6 +3,7 @@ import Image from "next/image";
 import ServicesSearch from "@/components/Services/ServicesSearch";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 
 export default async function CategoryPage({
   params,
@@ -77,4 +78,34 @@ export default async function CategoryPage({
       </section>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string; locale: string }>;
+}): Promise<Metadata> {
+  const { category: slug, locale } = await params;
+  try {
+    const resCat = await (
+      await import("@/lib/api")
+    ).api.get(`categories/${slug}`);
+    const cat: any = resCat?.data;
+    const categoryName = cat
+      ? typeof cat === "object" && cat !== null && typeof cat.name === "string"
+        ? cat.name
+        : Array.isArray((cat as any)?.data) && (cat as any).data.length
+        ? String((cat as any).data[0]?.name || "")
+        : ""
+      : "";
+    return {
+      title: categoryName || undefined,
+      description: categoryName ? `Services in ${categoryName}` : undefined,
+    };
+  } catch {
+    return {
+      title: undefined,
+      description: undefined,
+    };
+  }
 }

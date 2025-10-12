@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 import { api } from "@/lib/api";
 import Image from "next/image";
 import CategoriesList from "@/components/Categories/CategoriesList";
@@ -116,4 +117,25 @@ export default async function CategoriesPage({
       </div>
     </section>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  try {
+    const t = await getTranslations({ locale: lang });
+    return {
+      title: t("emergencyServices"),
+      description: t("forEmegencySituations"),
+    };
+  } catch {
+    return {
+      title: undefined,
+      description: undefined,
+    };
+  }
 }

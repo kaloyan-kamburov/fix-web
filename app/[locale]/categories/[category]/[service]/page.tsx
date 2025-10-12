@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { api } from "@/lib/api";
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 
 export default async function ServicePage({
   params,
@@ -129,4 +130,29 @@ export default async function ServicePage({
       </div>
     </section>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; category: string; service: string }>;
+}): Promise<Metadata> {
+  const { locale, service } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  try {
+    const res = await api.get(`services/${service}`);
+    const s: any = res?.data || {};
+    const name = String(s?.name || "");
+    const description = String(s?.description || "");
+    return {
+      // If empty, layout default ("FIX") will be used; otherwise template adds prefix
+      title: name || undefined,
+      description: description || undefined,
+    };
+  } catch {
+    return {
+      title: undefined,
+      description: undefined,
+    };
+  }
 }

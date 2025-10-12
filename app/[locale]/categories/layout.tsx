@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { LoginFooter } from "@/components/LoginFooter";
 
 export const metadata: Metadata = {
-  title: "FIX",
-  description: "FIX",
+  title: {
+    template: "FIX | %s",
+    default: "FIX",
+  },
 };
 
 export default function Layout({

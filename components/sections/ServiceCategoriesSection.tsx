@@ -7,9 +7,11 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
 export const ServiceCategoriesSection = () => {
   const t = useTranslations();
+  const { locale } = useParams();
 
   const serviceCategories = [
     {
@@ -180,7 +182,7 @@ export const ServiceCategoriesSection = () => {
       </div>
 
       <Link
-        href="/services"
+        href={`/${locale}/categories`}
         className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accentaccent rounded-lg h-auto hover:bg-accentaccent/90"
       >
         <span className="w-fit mt-[-1.00px] font-button font-[number:var(--button-font-weight)] text-gray-100 text-[length:var(--button-font-size)] text-center tracking-[var(--button-letter-spacing)] leading-[var(--button-line-height)] [font-style:var(--button-font-style)]">

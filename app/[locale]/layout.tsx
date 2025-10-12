@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
@@ -6,6 +7,8 @@ import path from "node:path";
 import Header from "@/components/Header/Header.component";
 import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
 import LocaleTenantBootstrap from "@/components/Bootstrap/LocaleTenantBootstrap";
+import CanonicalLink from "@/components/SEO/CanonicalLink";
+import JsonLd from "@/components/SEO/JsonLd";
 
 export default async function LocaleLayout({
   children,
@@ -35,6 +38,23 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider key={lang} messages={messages} locale={lang}>
       <LocaleTenantBootstrap />
+      {/* Canonical link on all public pages */}
+      <CanonicalLink
+        excludePrefixes={[
+          "/" + (await params).locale + "/login",
+          "/" + (await params).locale + "/register",
+          "/" + (await params).locale + "/profile",
+          "/" + (await params).locale + "/checkout",
+        ]}
+      />
+      <JsonLd
+        excludePrefixes={[
+          "/" + (await params).locale + "/login",
+          "/" + (await params).locale + "/register",
+          "/" + (await params).locale + "/profile",
+          "/" + (await params).locale + "/checkout",
+        ]}
+      />
       {/* Header (client) */}
       <Header />
       {/* Page content */}
@@ -45,3 +65,10 @@ export default async function LocaleLayout({
     </NextIntlClientProvider>
   );
 }
+
+export const metadata: Metadata = {
+  title: {
+    template: "FIX | %s",
+    default: "FIX",
+  },
+};
