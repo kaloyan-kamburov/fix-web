@@ -12,6 +12,10 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "FIX website",
   description: "FIX website",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({

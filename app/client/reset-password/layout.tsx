@@ -4,6 +4,10 @@ import { LoginFooter } from "@/components/LoginFooter";
 export const metadata: Metadata = {
   title: "Смяна на парола",
   description: "Смени паролата си",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function Layout({

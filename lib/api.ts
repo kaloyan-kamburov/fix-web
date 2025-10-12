@@ -223,10 +223,10 @@ api.interceptors.response.use(
           toast?.error?.("Session expired. Please login again.");
           try {
             const parts = window.location.pathname.split("/").filter(Boolean);
-            const maybeLocale = parts[0] || "en";
+            const maybeLocale = parts[0] || "bg-bg";
             window.location.href = `/${maybeLocale}/login`;
           } catch {
-            window.location.href = "/en/login";
+            window.location.href = `bg-bg/login`;
           }
         }
       } else {

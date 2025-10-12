@@ -5,6 +5,10 @@ import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
 export const metadata: Metadata = {
   title: "Моите поръчки",
   description: "Моите поръчки",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function Layout({

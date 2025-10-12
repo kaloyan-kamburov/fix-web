@@ -4,6 +4,10 @@ import { LoginFooter } from "@/components/LoginFooter";
 export const metadata: Metadata = {
   title: "Register",
   description: "Register page",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function Layout({

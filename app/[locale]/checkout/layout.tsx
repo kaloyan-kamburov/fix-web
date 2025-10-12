@@ -70,4 +70,8 @@ export const metadata: Metadata = {
     template: "FIX | %s",
     default: "FIX",
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
