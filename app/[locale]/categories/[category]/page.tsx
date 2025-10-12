@@ -14,12 +14,8 @@ export default async function CategoryPage({
   const t = await getTranslations({ locale: lang });
   let services: unknown = null;
   let categoryData: unknown = null;
-  console.log(3443434334);
-  console.log(`categories/${slug}/services`);
   try {
     const res = await api.get(`categories/${slug}/services`);
-    console.log(`categories/${slug}/services`);
-    console.log(666666666666666);
     services = res.data;
   } catch (_) {
     services = { error: true };

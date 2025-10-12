@@ -120,7 +120,7 @@ export default function Header() {
         } else {
           // Lazy fetch mapping if not cached
           const res = await fetch(
-            "https://kmp-admin.perspectiveunity.com/api/countries",
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/countries`,
             { cache: "no-store" }
           );
           const data = await res.json();

@@ -68,7 +68,7 @@ export default function CategoriesList({
           <Link
             href={
               isEmergencyList
-                ? `./categories/emergencies/${id}`
+                ? `./categories/emergencies/${slug}`
                 : `./categories/${slug}`
             }
             key={id}

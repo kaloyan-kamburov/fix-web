@@ -85,12 +85,7 @@ export default function Login() {
   };
 
   return (
-    <div className=" flex flex-col items-center justify-center gap-8 bg-gray-10 md:bg-gray-10 px-0 md:px-4 py-8 w-full">
-      <Logo
-        className="hidden md:block"
-        style={{ width: "92px", height: "40px" }}
-      />
-
+    <div className=" flex flex-col items-center justify-center gap-8 bg-gray-10 md:bg-gray-10 px-0 md:px-4 pt-[88px] pb-8 w-full">
       <Card className="w-full md:w-[720px] bg-gray-10 rounded-2xl border-0 shadow-none">
         <CardContent className="flex flex-col items-center gap-8 p-0 md:p-10">
           <header className="flex items-center w-full">
@@ -196,7 +191,7 @@ export default function Login() {
                 </div> */}
 
                 <Link
-                  href="/forgot-password"
+                  href={`/${locale}/forgot-password`}
                   className="font-h3 ml-auto font-[number:var(--h3-font-weight)] text-gray-100 text-[length:var(--h3-font-size)] text-center tracking-[var(--h3-letter-spacing)] leading-[var(--h3-line-height)] [font-style:var(--h3-font-style)] bg-transparent border-none cursor-pointer hover:underline"
                 >
                   {t("forgotPassword")}

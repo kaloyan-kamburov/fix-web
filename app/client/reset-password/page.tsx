@@ -14,6 +14,7 @@ import { Logo } from "@/components/Logo/Logo.component";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const schema = z
   .object({
@@ -31,6 +32,7 @@ function ResetPasswordContent() {
   const params = useSearchParams();
   const token = params.get("token") || "";
   const email = params.get("email") || "";
+  const t = useTranslations();
 
   const {
     register,
@@ -57,7 +59,7 @@ function ResetPasswordContent() {
   };
 
   return (
-    <div className=" flex flex-col items-center justify-center gap-8 bg-gray-10 md:bg-gray-10 px-0 md:px-4 py-8 w-full">
+    <div className=" flex flex-col items-center justify-center gap-8 bg-gray-10 md:bg-gray-10 px-0 md:px-4 pt-[88px] pb-8 w-full">
       <Logo
         className="hidden md:block"
         style={{ width: "92px", height: "40px" }}

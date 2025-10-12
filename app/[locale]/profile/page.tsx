@@ -69,7 +69,9 @@ export default function ProfilePage() {
     <div className="flex flex-col items-center w-full px-4 sm:px-8 bg-gray-10">
       <div className="flex flex-col items-center gap-6 w-full max-w-4xl">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-100">{t("profile")}</h1>
+        <h1 className="text-2xl font-bold text-gray-100 mt-[20px]">
+          {t("profile")}
+        </h1>
         {isLoading ? (
           <Loader />
         ) : (

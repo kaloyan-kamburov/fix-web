@@ -155,6 +155,7 @@
   "addReview": "Добавяне на отзив",
   "cancel": "Отказ",
   "send": "Изпрати",
+  "sendLink": "Изпрати линк",
   "reviewAddedSuccessfully": "Отзивът е добавен успешно",
   "offerError": "Грешка при получаване на оферта",
   "newNotifications": "Нови",
@@ -165,5 +166,6 @@
   "editProfile": "Редактиране на профил",
   "urgent": "Спешно",
   "country": "Държава",
-  "changePassword": "Смяна на парола"
+  "changePassword": "Смяна на парола",
+  "timeSlot": "Ден и час за посещение"
 }

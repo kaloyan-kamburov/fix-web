@@ -108,7 +108,7 @@ export default function ServicesSearch({
             ...(isUrgent ? { "filter[is_urgent]": isUrgent } : {}),
           },
           signal: controller.signal as any,
-          headers: { "app-locale": lang },
+          // app-locale handled by interceptor
         });
         setItems(normalizeServices(res.data));
       } catch (_) {

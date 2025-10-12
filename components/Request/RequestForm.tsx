@@ -43,7 +43,7 @@ export default function RequestForm({
   const [files, setFiles] = React.useState<File[]>([]);
   const schema = z.object({
     phone: z.string().min(1, t("requiredField")),
-    city: z.string().min(1, t("requiredField")),
+    city: z.string().optional(),
     neighbourhood: z.string().min(1, t("requiredField")),
     address: z.string().min(1, t("requiredField")),
     client_comment: z.string().optional(),
@@ -88,6 +88,22 @@ export default function RequestForm({
   const [success, setSuccess] = React.useState(false);
   const [showIntervalError, setShowIntervalError] = React.useState(false);
   const [showFieldErrors, setShowFieldErrors] = React.useState(false);
+
+  const groupedIntervals = React.useMemo(() => {
+    const byDate = new Map<
+      string,
+      Array<{ start_time: string; end_time: string }>
+    >();
+    for (const it of clientIntervals) {
+      const d = String(it?.date || "");
+      const st = String(it?.start_time || "");
+      const et = String(it?.end_time || "");
+      if (!d || !st || !et) continue;
+      if (!byDate.has(d)) byDate.set(d, []);
+      byDate.get(d)!.push({ start_time: st, end_time: et });
+    }
+    return Array.from(byDate.entries());
+  }, [clientIntervals]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = e.target.files ? Array.from(e.target.files) : [];
@@ -232,6 +248,16 @@ export default function RequestForm({
               {t("chooseInterval")}
             </span>
           )}
+          {groupedIntervals.map(([date, intervals]) => (
+            <p key={date}>
+              <b>{date}: </b>{" "}
+              {intervals
+                .map(
+                  (interval) => `${interval.start_time} - ${interval.end_time}`
+                )
+                .join(", ")}
+            </p>
+          ))}
 
           <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
             <div className="flex gap-2 items-center self-stretch ">
@@ -259,8 +285,8 @@ export default function RequestForm({
           <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
             {Array.isArray(cities) && cities.length > 0 ? (
               <Select
-                label={t("city") + "*"}
-                value={watch("city")}
+                label={t("city")}
+                value={watch("city") || ""}
                 options={cities}
                 onChange={(val) =>
                   setValue("city", val, { shouldValidate: true })
@@ -276,11 +302,7 @@ export default function RequestForm({
                 className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
               />
             )}
-            {showFieldErrors && errors.city && (
-              <span className="text-red-500 text-xs mt-1">
-                {errors.city.message as string}
-              </span>
-            )}
+            {/* City is optional */}
           </div>
 
           <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">

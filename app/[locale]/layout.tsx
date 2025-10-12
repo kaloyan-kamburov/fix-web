@@ -5,13 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Header from "@/components/Header/Header.component";
 import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
-
-const legacyMap: Record<string, string> = {
-  bg: "bg.i18n.json",
-  en: "en.i18n.json",
-};
-
-const supportedLocales = new Set<string>(Object.keys(legacyMap));
+import LocaleTenantBootstrap from "@/components/Bootstrap/LocaleTenantBootstrap";
 
 export default async function LocaleLayout({
   children,
@@ -20,26 +14,27 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  const { locale: incoming } = await params; // now expects lang-country
+  const { locale: incoming } = await params; // expects lang-country
   const [langRaw] = (incoming || "").split("-");
-  const lang = supportedLocales.has(langRaw) ? langRaw : "bg";
+  const lang = (langRaw || "bg").toLowerCase();
   const baseDir = path.join(process.cwd(), "public", "i18n");
   let messages: Record<string, unknown> = {};
-  try {
-    const data = await fs.readFile(path.join(baseDir, `${lang}.json`), "utf8");
-    messages = JSON.parse(data);
-  } catch {
-    const legacy = legacyMap[lang];
-    if (legacy) {
-      try {
-        const data = await fs.readFile(path.join(baseDir, legacy), "utf8");
-        messages = JSON.parse(data);
-      } catch {}
-    }
+  const candidates = [
+    path.join(baseDir, `${lang}.i18n.json`),
+    path.join(baseDir, `${lang}.json`),
+    path.join(baseDir, `en.i18n.json`),
+  ];
+  for (const p of candidates) {
+    try {
+      const data = await fs.readFile(p, "utf8");
+      messages = JSON.parse(data);
+      break;
+    } catch {}
   }
 
   return (
     <NextIntlClientProvider key={lang} messages={messages} locale={lang}>
+      <LocaleTenantBootstrap />
       {/* Header (client) */}
       <Header />
       {/* Page content */}

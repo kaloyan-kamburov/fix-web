@@ -24,9 +24,7 @@ export default function OfferPage({
     let cancelled = false;
     (async () => {
       try {
-        const res = await api.get(`client/offers/${id}`, {
-          headers: { "app-locale": locale },
-        });
+        const res = await api.get(`client/offers/${id}`);
         if (!cancelled) setOffer(res?.data ?? null);
       } catch (_) {
         if (!cancelled) setOffer({ error: true });

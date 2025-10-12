@@ -17,56 +17,92 @@ api.interceptors.request.use(async (config) => {
     const urlStr = String(config.url || "");
     const isLogin = /(^|\/)client\/login(\b|$)/.test(urlStr);
     try {
-      const preferred = localStorage.getItem("preferred_locale") || "en";
-
-      // Also attach app-locale based on URL path if available (backend expects it)
-      if (!isLogin) {
+      // Bootstrap defaults if missing: tenant_id (BG) and preferred_locale ('bg')
+      const getCookie = (name: string): string | null => {
         try {
-          const parts = window.location.pathname.split("/").filter(Boolean);
-          const first = parts[0] || preferred || "en-bg";
-          const onlyLang = (
-            first.split("-")[0] ||
-            preferred ||
-            "en"
-          ).toLowerCase();
-          (config.headers as Record<string, string>)["app-locale"] = onlyLang;
-        } catch {}
-      }
-    } catch {}
+          const raw = document.cookie
+            .split(";")
+            .map((c) => c.trim())
+            .find((c) => c.startsWith(name + "="));
+          return raw ? decodeURIComponent(raw.split("=")[1] || "") : null;
+        } catch {
+          return null;
+        }
+      };
 
-    // Attach X-Tenant-ID header from cookie/localStorage/mapping
-    try {
+      let tenantId = getCookie("tenant_id");
+      let preferred = localStorage.getItem("preferred_locale") || "";
+
+      if (!tenantId || !preferred) {
+        try {
+          const upstream = (baseURL || "").replace(/\/$/, "");
+          if (upstream) {
+            const resp = await fetch(`${upstream}/countries`, {
+              method: "GET",
+            });
+            const data = await resp.json();
+            const arr: any[] = Array.isArray(data)
+              ? data
+              : Array.isArray(data?.data)
+              ? data.data
+              : [];
+            const bg = arr.find(
+              (it) => String(it?.code || "").toUpperCase() === "BG"
+            );
+            const bgId: number | undefined = bg?.id ? Number(bg.id) : undefined;
+            if (!tenantId && bgId) {
+              document.cookie = `tenant_id=${bgId}; Path=/; SameSite=Lax; Max-Age=${
+                60 * 60 * 24 * 365
+              }`;
+              tenantId = String(bgId);
+            }
+            if (!preferred) {
+              preferred = "bg";
+              try {
+                localStorage.setItem("preferred_locale", preferred);
+              } catch {}
+            }
+          }
+        } catch {
+          // Fallback without network
+          if (!preferred) preferred = "bg";
+        }
+      }
+
+      // Attach headers strictly from URL (preferred), then storage (NEXT_LOCALE / preferred_locale) and tenant_id
       if (!isLogin) {
-        // 1) Cookie set by selector/header bootstrap
-        const tenantCookie = document.cookie
+        const nextLocaleCookie = document.cookie
           .split(";")
           .map((c) => c.trim())
-          .find((c) => c.startsWith("tenant_id="));
-        let tenantId: string | null = tenantCookie
-          ? decodeURIComponent(tenantCookie.split("=")[1] || "")
-          : null;
-
-        // 2) LocalStorage direct id
-        if (!tenantId) tenantId = localStorage.getItem("preferred_country_id");
-
-        // 3) From URL country and cached mapping
-        if (!tenantId) {
-          try {
-            const parts = window.location.pathname.split("/").filter(Boolean);
-            const first = parts[0] || "bg-bg";
-            const [, countryRaw] = first.split("-");
-            const countryCode = (countryRaw || "bg").toUpperCase();
-            const mapRaw = localStorage.getItem("COUNTRY_CODE_TO_ID");
-            if (mapRaw) {
-              const map = JSON.parse(mapRaw) as Record<string, number>;
-              const found = map[countryCode];
-              if (found) tenantId = String(found);
-            }
-          } catch {}
-        }
-
+          .find((c) => c.startsWith("NEXT_LOCALE="));
+        const nextLocale = nextLocaleCookie
+          ? decodeURIComponent(nextLocaleCookie.split("=")[1] || "")
+          : "";
+        // Derive from URL first: /lang-country/... → prefer country, else lang
+        let urlLang = "";
+        let urlCountry = "";
+        try {
+          const m = window.location.pathname.match(/^\/(.+?)(?:\/|$)/);
+          const firstSeg = (m ? m[1] : "") || "";
+          const parts = firstSeg.split("-");
+          urlLang = (parts[0] || "").toLowerCase();
+          urlCountry = (parts[1] || "").toLowerCase();
+        } catch {}
+        const appLocale = (
+          urlCountry ||
+          urlLang ||
+          nextLocale ||
+          preferred ||
+          "bg"
+        ).toLowerCase();
+        config.headers = config.headers || {};
+        (config.headers as Record<string, string>)["app-locale"] = appLocale;
+        try {
+          if (!preferred && appLocale) {
+            localStorage.setItem("preferred_locale", appLocale);
+          }
+        } catch {}
         if (tenantId) {
-          config.headers = config.headers || {};
           (config.headers as Record<string, string>)["X-Tenant-ID"] =
             String(tenantId);
         }
@@ -108,8 +144,23 @@ api.interceptors.request.use(async (config) => {
           "Authorization"
         ] = `Bearer ${auth}`;
       }
-      const preferred = cookieStore?.get?.("preferred_locale")?.value || "en";
+      // Derive lang from URL when cookies are empty (e.g., first SSR on /it-it/...)
       const headersList = await nh.headers?.();
+      let urlLang = "";
+      try {
+        const referer = headersList?.get?.("referer") || "";
+        if (referer) {
+          const u = new URL(referer);
+          const m = u.pathname.match(/^\/(.+?)(?:\/|$)/);
+          const firstSeg = (m ? m[1] : "") || "";
+          urlLang = (firstSeg.split("-")[0] || "").toLowerCase();
+        }
+      } catch {}
+      const preferred =
+        cookieStore?.get?.("NEXT_LOCALE")?.value ||
+        cookieStore?.get?.("preferred_locale")?.value ||
+        urlLang ||
+        "bg";
       const acceptLang = headersList?.get?.("accept-language") || "en-US";
       config.headers = config.headers || {};
       (config.headers as Record<string, string>)["app-locale"] = preferred;
@@ -126,6 +177,8 @@ api.interceptors.request.use(async (config) => {
         "XMLHttpRequest";
     } catch {}
   }
+  console.log(config);
+  // console.debug('api request', config);
   return config;
 });
 

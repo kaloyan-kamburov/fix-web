@@ -78,10 +78,29 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-col items-center w-full px-4 sm:px-8 bg-gray-10">
       <div className="flex flex-col items-center w-full max-w-[1440px] px-4">
-        <div className="w-full max-w-[1440px]">
-          <Link href={`/${locale}/profile`} className="flex items-center gap-2">
-            <ArrowLeftIcon className="w-6 h-6 text-gray-100 cursor-pointer" />
-            {t("back")}
+        <div className="mx-auto w-full">
+          <Link
+            href={`/${locale}/profile/`}
+            className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
+            aria-label={t("back")}
+          >
+            <svg
+              width="16"
+              height="17"
+              viewBox="0 0 16 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 7.5H3.83L9.42 1.91L8 0.5L0 8.5L8 16.5L9.41 15.09L3.83 9.5H16V7.5Z"
+                fill="#1C1C1D"
+              />
+            </svg>
+            <div className="relative text-lg font-bold text-center text-zinc-900 max-md:text-base max-sm:text-sm">
+              <div className="text-lg font-bold text-zinc-900 max-md:text-base max-sm:text-sm">
+                {t("back")}
+              </div>
+            </div>
           </Link>
         </div>
         <div className="w-full max-w-[720px]">

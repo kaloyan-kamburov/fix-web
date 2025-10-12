@@ -14,9 +14,7 @@ export default async function ServicePage({
   let service: unknown = null;
 
   try {
-    const res = await api.get(`services/${serviceId}`, {
-      headers: { "app-locale": lang },
-    });
+    const res = await api.get(`services/${serviceId}`);
     service = res.data;
   } catch (_) {
     service = { error: true };

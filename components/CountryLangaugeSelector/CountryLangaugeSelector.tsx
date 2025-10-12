@@ -201,6 +201,28 @@ export const CountryLanguageSelector: React.FC<
         sameSite: "lax",
         expires: 365,
       });
+      // Ensure tenant switches with language based on the currently selected country
+      if (selectedCountry) {
+        try {
+          Cookies.set("tenant_id", String(selectedCountry.id), {
+            path: "/",
+            sameSite: "lax",
+            expires: 365,
+          });
+        } catch {}
+        try {
+          if (typeof window !== "undefined") {
+            localStorage.setItem(
+              "preferred_country_id",
+              String(selectedCountry.id)
+            );
+            localStorage.setItem(
+              "preferred_country",
+              (selectedCountry.code || "").toUpperCase()
+            );
+          }
+        } catch {}
+      }
     } catch {}
     // Replace the first URL segment with the new lang-country; remove any `lang` query param
     const href =

@@ -6,13 +6,6 @@ import path from "node:path";
 import Header from "@/components/Header/Header.component";
 import { SiteFooterSection } from "@/components/sections/SiteFooterSection";
 
-const legacyMap: Record<string, string> = {
-  bg: "bg.i18n.json",
-  en: "en.i18n.json",
-};
-
-const supportedLocales = new Set<string>(Object.keys(legacyMap));
-
 export default async function LocaleLayout({
   children,
   params,
@@ -21,27 +14,24 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale: incomingLocale } = await params;
-  const locale = supportedLocales.has(incomingLocale) ? incomingLocale : "bg";
+  const lang = (incomingLocale || "bg").split("-")[0].toLowerCase();
   const baseDir = path.join(process.cwd(), "public", "i18n");
   let messages: Record<string, unknown> = {};
-  try {
-    const data = await fs.readFile(
-      path.join(baseDir, `${locale}.json`),
-      "utf8"
-    );
-    messages = JSON.parse(data);
-  } catch {
-    const legacy = legacyMap[locale];
-    if (legacy) {
-      try {
-        const data = await fs.readFile(path.join(baseDir, legacy), "utf8");
-        messages = JSON.parse(data);
-      } catch {}
-    }
+  const candidates = [
+    path.join(baseDir, `${lang}.i18n.json`),
+    path.join(baseDir, `${lang}.json`),
+    path.join(baseDir, `en.i18n.json`),
+  ];
+  for (const p of candidates) {
+    try {
+      const data = await fs.readFile(p, "utf8");
+      messages = JSON.parse(data);
+      break;
+    } catch {}
   }
 
   return (
-    <NextIntlClientProvider key={locale} messages={messages} locale={locale}>
+    <NextIntlClientProvider key={lang} messages={messages} locale={lang}>
       {/* Header (client) */}
       <Header />
       {/* Page content */}

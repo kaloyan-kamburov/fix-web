@@ -13,9 +13,7 @@ const RequestPage = async ({
   const t = await getTranslations({ locale: lang });
   let service: unknown = null;
   try {
-    const res = await api.get(`services/${serviceSlug}`, {
-      headers: { "app-locale": lang },
-    });
+    const res = await api.get(`services/${serviceSlug}`);
     service = res.data;
   } catch (_) {
     service = { error: true };
@@ -62,9 +60,7 @@ const RequestPage = async ({
   // Fetch cities for select
   let cities: string[] = [];
   try {
-    const resCities = await api.get("cities", {
-      headers: { "app-locale": lang },
-    });
+    const resCities = await api.get("cities");
     const payload = resCities?.data;
     if (Array.isArray(payload))
       cities = payload.filter((x: any) => typeof x === "string");
@@ -72,7 +68,7 @@ const RequestPage = async ({
       cities = payload.data.filter((x: any) => typeof x === "string");
   } catch {}
   return (
-    <section className="flex flex-col pt-[88px] max-md:pt-[44px] w-full px-[16px]">
+    <section className="flex flex-col pt-[58px] max-md:pt-[44px] w-full px-[16px]">
       <div className="mx-auto flex justify-start w-full max-w-[1440px]">
         <Link
           href={backHref}

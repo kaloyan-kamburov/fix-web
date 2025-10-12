@@ -43,6 +43,7 @@ export default async function CategoriesPage({
       const secondCurrency = String(
         c?.second_currency?.symbol || c?.second_currency?.code || ""
       );
+      const slug = String(c?.slug ?? "");
       return {
         id,
         name,
@@ -51,6 +52,7 @@ export default async function CategoriesPage({
         currency,
         secondPrice,
         secondCurrency,
+        slug,
       };
     });
   } catch (_) {

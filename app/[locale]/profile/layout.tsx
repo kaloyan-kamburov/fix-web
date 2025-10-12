@@ -15,7 +15,7 @@ export default function Layout({
   return (
     <div className="flex flex-col bg-gray-10 text-gray-100 pt-[90px] min-h-screen">
       <Header />
-      <main className="flex-1 flex items-center justify-start px-[16px] md:px-4 py-8">
+      <main className="flex-1 flex items-center justify-start px-[16px] md:px-4 pb-8">
         {children}
       </main>
     </div>

@@ -51,7 +51,7 @@ export const HeroBannerSection = () => {
 
           <div className="inline-flex items-center gap-4 md:gap-4 gap-4 px-0 py-4 relative flex-[0_0_auto] mx-auto md:mx-0">
             <Link
-              href="https://apps.apple.com"
+              href="https://apps.apple.com/bg/app/fix/id6502918136"
               target="_blank"
               rel="noopener noreferrer"
               className="w-36 h-12 flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -66,7 +66,7 @@ export const HeroBannerSection = () => {
             </Link>
 
             <Link
-              href="https://play.google.com"
+              href="https://play.google.com/store/apps/details?id=eu.fixapp"
               target="_blank"
               rel="noopener noreferrer"
               className="w-[162px] h-12 flex items-center justify-center hover:opacity-80 transition-opacity"

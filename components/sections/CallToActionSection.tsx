@@ -31,7 +31,7 @@ export const CallToActionSection = () => {
 
                 <div className="flex w-[330px] items-center gap-3 relative flex-[0_0_auto] hidden lg:flex">
                   <Link
-                    href="https://apps.apple.com"
+                    href="https://apps.apple.com/app/fix/id6502918136"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-36 h-12 flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -46,7 +46,7 @@ export const CallToActionSection = () => {
                   </Link>
 
                   <Link
-                    href="https://play.google.com"
+                    href="https://play.google.com/store/apps/details?id=eu.fixapp"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-[162px] h-12 flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -103,7 +103,7 @@ export const CallToActionSection = () => {
         <div className="flex flex-col items-center flex py-[16px] gap-[16px] mx-auto lg:hidden">
           <div className="flex items-center gap-[16px]">
             <Link
-              href="https://apps.apple.com"
+              href="https://apps.apple.com/app/fix/id6502918136"
               target="_blank"
               rel="noopener noreferrer"
               className="w-36 h-12 flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -118,7 +118,7 @@ export const CallToActionSection = () => {
             </Link>
 
             <Link
-              href="https://play.google.com"
+              href="https://play.google.com/store/apps/details?id=eu.fixapp"
               target="_blank"
               rel="noopener noreferrer"
               className="w-[162px] h-12 flex items-center justify-center hover:opacity-80 transition-opacity"
