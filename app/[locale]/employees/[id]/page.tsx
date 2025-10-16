@@ -51,7 +51,7 @@ const EmployeePage = async ({
     : [];
 
   return (
-    <div className="flex relative flex-col gap-6 items-start w-full flex-1 pt-[58px] px-[16px] ">
+    <div className="flex relative flex-col gap-6 items-start w-full flex-1 pt-[58px] max-md:pt-[45px] px-[16px] ">
       <div className="mx-auto w-full">
         <Link
           href={`/${locale}`}
@@ -78,12 +78,12 @@ const EmployeePage = async ({
         </Link>
       </div>
 
-      <div className="flex relative flex-col p-10 rounded-[16px] bg-white mx-auto w-full max-w-[960px]">
+      <div className="flex relative flex-col md:p-10 p-4 rounded-[16px] bg-white mx-auto w-full max-w-[960px]">
         <h1 className="text-2xl font-bold text-zinc-900">
           {t("employeeProfile")}
         </h1>
         <div className="flex flex-col items-start gap-4 mt-6">
-          <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-30">
+          <div className="relative w-30 h-30 rounded-full overflow-hidden border border-gray-30 mx-auto md:mx-0">
             {avatarSrc ? (
               <Image
                 src={avatarSrc}
@@ -98,9 +98,9 @@ const EmployeePage = async ({
               </div>
             )}
           </div>
-          <div className="flex flex-col">
-            <h1 className="text-lg font-bold text-zinc-900">{name || "N/A"}</h1>
-          </div>
+          <h1 className="text-lg font-bold text-zinc-900 mx-auto md:mx-0">
+            {name || "N/A"}
+          </h1>
           <OpenReviewsButton reviews={reviewsList} />
           {/* {reviewsError && process.env.NODE_ENV !== "production" && (
             <pre className="text-xs text-red-600 whitespace-pre-wrap break-all bg-red-50 p-2 rounded">

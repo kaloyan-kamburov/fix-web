@@ -70,7 +70,7 @@ export function RequestItem({
             {isUrgent && <RequestBadge text={t("urgent")} variant="urgent" />}
           </div>
         </header>
-        <footer className="flex gap-4 items-center self-start mt-7">
+        <footer className="flex md:flex-row flex-col gap-4 items-center self-start mt-7">
           <div className="flex gap-0.5 items-center self-stretch my-auto text-base font-semibold tracking-wide text-center text-zinc-900">
             <span className="self-stretch my-auto text-zinc-900">{price}</span>
           </div>

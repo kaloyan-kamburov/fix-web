@@ -40,7 +40,7 @@ export default function OfferPage({
 
   return (
     <div className="bg-gray-10 w-full flex w-full max-w-[1440px] flex-1 mx-auto">
-      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[76px] mx-auto gap-4">
+      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[45px] mx-auto gap-4 px-4">
         <div className="mx-auto w-full">
           <Link
             href={`/${locale}/requests/${offer?.order_id}`}
@@ -79,7 +79,7 @@ export default function OfferPage({
         ) : (
           <div className="flex flex-col gap-6 items-start p-10 mx-auto max-w-none rounded-2xl bg-stone-50 w-[640px] max-md:p-8 max-md:w-full max-md:max-w-[600px] max-sm:gap-5 max-sm:p-5 max-sm:w-full max-sm:max-w-full">
             <header className="flex flex-col gap-6 items-start self-stretch">
-              <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl">
+              <h1 className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl mx-auto md:mx-0">
                 {t("receivedOffer")}
               </h1>
               <h2 className="text-lg font-bold text-zinc-900 max-md:text-base max-sm:text-base">
@@ -99,15 +99,6 @@ export default function OfferPage({
               </div>
 
               <div className="flex flex-col gap-4 items-start self-stretch max-sm:gap-3">
-                <div className="flex flex-col gap-2 justify-center items-start self-stretch">
-                  <label className="text-base text-zinc-60 font-normal">
-                    {t("rating")}
-                  </label>
-                  <StarRating
-                    rating={offer?.review_avg_rating}
-                    reviewCount={offer?.reviews_count}
-                  />
-                </div>
                 <InfoField
                   label={t("address")}
                   value={`${offer?.order?.city}, ${offer?.order?.neighbourhood}, ${offer?.order?.address}`}
@@ -144,14 +135,26 @@ export default function OfferPage({
                       : "N/A"
                   }
                 />
-                <Link href={`/${locale}/employees/${offer?.employee_id}`}>
+                <Link
+                  href={`/${locale}/employees/${offer?.employee_id}`}
+                  className="mx-auto md:mx-0 flex justify-center items-center"
+                >
                   <CraftsmanInfo
                     name={offer?.employee_name}
-                    imageUrl={offer?.employee_picture}
+                    imageUrl={offer?.employee_profile_picture}
                     imageAlt={offer?.employee_name}
                     locale={locale}
                   />
                 </Link>
+                <div className="flex flex-col gap-2 justify-center items-start self-stretch">
+                  <label className="text-base text-zinc-60 font-normal">
+                    {t("rating")}
+                  </label>
+                  <StarRating
+                    rating={offer?.review_avg_rating}
+                    reviewCount={offer?.reviews_count}
+                  />
+                </div>
                 <div className="flex flex-col gap-2 justify-center items-start self-stretch">
                   <label className="text-base text-zinc-600">
                     {t("comment")}

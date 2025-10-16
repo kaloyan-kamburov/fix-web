@@ -18,7 +18,7 @@ export const CraftsmanInfo: React.FC<CraftsmanInfoProps> = ({
 }) => {
   const t = useTranslations();
   return (
-    <div className="flex flex-col gap-2 justify-center items-start self-stretch">
+    <div className="flex flex-col gap-2 justify-center items-start self-stretch max-md:justify-center max-md:items-center">
       <label className="font-normal text-zinc-600">{t("craftsman")}</label>
       {imageUrl ? (
         <Image

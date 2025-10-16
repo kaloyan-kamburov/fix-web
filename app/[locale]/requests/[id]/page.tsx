@@ -193,7 +193,8 @@ export default function RequestPage({
           <h1 className="relative text-2xl font-bold text-zinc-900 max-sm:text-xl">
             {order?.status === "new_order" && t("request")}
             {["approved_offer", "request_completed"].includes(order?.status) &&
-              t("activeRequest")}
+              t("activeRequest")}{" "}
+            #{order?.id}
             {["request_finished", "paid"].includes(order?.status) &&
               t("completedRequest")}
           </h1>

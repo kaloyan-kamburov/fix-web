@@ -18,10 +18,10 @@ export default function OpenReviewsButton({
 
   return (
     <>
-      <div className="flex gap-1 items-center">
+      <div className="flex md:flex-row flex-col gap-1 items-start md:items-center mx-auto md:mx-0">
         <StarRating rating={rating} reviewCount={rating} />
         <span
-          className="text-sm font-bold text-center text-neutral-700 cursor-pointer hover:underline"
+          className="text-sm font-bold text-center text-neutral-700 cursor-pointer hover:underline mx-auto md:mx-0"
           onClick={() => setOpen(true)}
         >
           {t("viewAll")}

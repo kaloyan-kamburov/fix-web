@@ -97,9 +97,9 @@ export default async function ServicePage({
           />
         )}
         <div className="flex gap-4 justify-center items-start self-start mt-6 justify-start">
-          <p className="text-base text-zinc-500 text-left font-normal leading-[28px]">
+          <p className="text-base text-zinc-500 text-left font-normal leading-[28px] flex flex-col md:flex-row">
             <span>{t("servicePrice")}</span>
-            <span className="text-lg font-bold text-center text-zinc-900 pl-4">
+            <span className="text-lg font-bold text-center text-zinc-900 pl-0 md:pl-4">
               {primary ? (
                 <>
                   {primary} {currency}

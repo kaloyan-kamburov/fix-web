@@ -47,7 +47,7 @@ export default async function CategoryPage({
 
   return (
     <div className="bg-gray-10 w-full">
-      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[76px] mx-auto gap-4">
+      <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[43px] mx-auto gap-4">
         <div className="mx-auto w-full">
           <Link
             href={`/${locale}/categories/`}
