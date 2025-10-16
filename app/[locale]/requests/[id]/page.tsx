@@ -322,7 +322,13 @@ export default function RequestPage({
                           id={String(offer?.id || "")}
                           title={String(offer?.employee_name || "")}
                           price={String(
-                            offer?.price != null ? offer.price : ""
+                            `${offer?.total != null ? offer.total : ""} ${
+                              offer?.currency?.symbol
+                            } / ${
+                              offer?.total_second != null
+                                ? offer.total_second
+                                : ""
+                            } ${offer?.second_currency?.symbol}`
                           )}
                           rating={Number(offer?.review_avg_rating || 0)}
                           reviewCount={Number(offer?.reviews_count || 0)}

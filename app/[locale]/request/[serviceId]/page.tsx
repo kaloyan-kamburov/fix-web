@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import RequestForm from "@/components/Request/RequestForm";
 import { api } from "@/lib/api";
+import type { Metadata } from "next";
 
 const RequestPage = async ({
   params,
@@ -112,3 +113,16 @@ const RequestPage = async ({
 };
 
 export default RequestPage;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; serviceId: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
+  return {
+    title: `FIX | ${t("request")}`,
+  };
+}

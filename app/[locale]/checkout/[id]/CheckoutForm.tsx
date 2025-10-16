@@ -27,7 +27,7 @@ export default function CheckoutForm({
   const locale = useLocale();
 
   const acceptOffer = async (paymentMethodId: string) => {
-    const res = await api.post(`client/offers/${id}/accept`);
+    await api.post(`client/offers/${id}/accept`);
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export default function CheckoutForm({
   ) : (
     <>
       <h1 className="text-2xl font-bold text-zinc-900">
-        {t("payNow")} {orderData?.amount}{" "}
+        {t("payNow")} {orderData?.amount ? orderData?.amount / 100 : ""}{" "}
         {`${orderData?.currency}`.toUpperCase()}
       </h1>
       <form

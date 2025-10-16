@@ -55,9 +55,11 @@ export default async function LocaleLayout({
       {/* Header (client) */}
       <Header />
       {/* Page content */}
-      <main className="flex-1 flex flex-col items-start justify-center px-[16px] md:px-4 py-8 bg-gray-10 w-full max-w-[1440px] mx-auto">
-        {children}
-      </main>
+      <div className="flex-1 flex flex-col items-start justify-center px-[16px] md:px-4 py-8 bg-gray-10 w-full  mx-auto justify-center">
+        <div className="flex justify-center w-full max-w-[1440px] mx-auto">
+          {children}
+        </div>
+      </div>
       {/* Footer (client) */}
       <SiteFooterSection />
       <Toaster position="bottom-right" />

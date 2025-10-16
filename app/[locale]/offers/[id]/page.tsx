@@ -5,6 +5,7 @@ import { use, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Loader from "@/components/Loader/Loader";
 import { StarRating } from "../../../../components/StarRating/StarRating";
+import Image from "next/image";
 import { InfoField } from "./InfoField";
 import { CraftsmanInfo } from "./CraftsmanInfo";
 import { SecurityNotice } from "./SecurityNotice";
@@ -39,7 +40,7 @@ export default function OfferPage({
 
   return (
     <div className="bg-gray-10 w-full flex w-full max-w-[1440px] flex-1 mx-auto">
-      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4">
+      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[76px] mx-auto gap-4">
         <div className="mx-auto w-full">
           <Link
             href={`/${locale}/requests/${offer?.order_id}`}
@@ -92,8 +93,8 @@ export default function OfferPage({
                   {t("price")}
                 </label>
                 <p className="text-2xl font-bold text-zinc-900 max-md:text-2xl max-sm:text-xl">
-                  {offer?.price} {offer?.currency?.symbol} /{" "}
-                  {offer?.price_second} {offer?.second_currency?.symbol}
+                  {offer?.total} {offer?.currency?.symbol} /{" "}
+                  {offer?.total_second} {offer?.second_currency?.symbol}
                 </p>
               </div>
 
@@ -107,12 +108,10 @@ export default function OfferPage({
                     reviewCount={offer?.reviews_count}
                   />
                 </div>
-
                 <InfoField
                   label={t("address")}
                   value={`${offer?.order?.city}, ${offer?.order?.neighbourhood}, ${offer?.order?.address}`}
                 />
-
                 <InfoField
                   label={t("date")}
                   value={formatDate(offer?.order?.created_at, locale)}
@@ -131,7 +130,6 @@ export default function OfferPage({
                       : "N/A"
                   }
                 />
-
                 <InfoField
                   label={t("exactTime")}
                   value={
@@ -146,14 +144,14 @@ export default function OfferPage({
                       : "N/A"
                   }
                 />
-
-                <CraftsmanInfo
-                  name={offer?.employee_name}
-                  imageUrl={offer?.employee_picture}
-                  imageAlt={offer?.employee_name}
-                  locale={locale}
-                />
-
+                <Link href={`/${locale}/employees/${offer?.employee_id}`}>
+                  <CraftsmanInfo
+                    name={offer?.employee_name}
+                    imageUrl={offer?.employee_picture}
+                    imageAlt={offer?.employee_name}
+                    locale={locale}
+                  />
+                </Link>
                 <div className="flex flex-col gap-2 justify-center items-start self-stretch">
                   <label className="text-base text-zinc-600">
                     {t("comment")}
@@ -189,109 +187,3 @@ export default function OfferPage({
     </div>
   );
 }
-
-// response obj:
-const asd = {
-  id: 374,
-  currency: {
-    id: 1,
-    name: "BGN",
-    code: "BGN",
-    symbol: "BGN",
-    active: 1,
-  },
-  rate: "1.955830",
-  second_currency: {
-    id: 2,
-    name: "EUR",
-    code: "EUR",
-    symbol: "€",
-    active: 1,
-  },
-  price: 1,
-  price_second: "0.51",
-  total: 1,
-  total_second: "0.51",
-  status: "pending",
-  intervals: [],
-  order: {
-    id: 173,
-    currency: {
-      id: 1,
-      name: "BGN",
-      code: "BGN",
-      symbol: "BGN",
-      active: 1,
-    },
-    rate: "1.955830",
-    second_currency: {
-      id: 2,
-      name: "EUR",
-      code: "EUR",
-      symbol: "€",
-      active: 1,
-    },
-    price: 1,
-    price_second: "0.51",
-    price_from: 1,
-    price_from_second: "0.51",
-    price_to: 1,
-    price_to_second: "0.51",
-    use_fixed_price: true,
-    kmp_commission_percentage: null,
-    organization_commission_percentage: null,
-    service_picture: "",
-    client_intervals: [],
-    employee_intervals: [],
-    client_comment: null,
-    employee_comment: null,
-    client_paid: false,
-    employee_paid: 0,
-    total: null,
-    phone: "0888751534",
-    city: "Sofia",
-    address: "Neofit Bozveli 7",
-    neighbourhood: "123",
-    payment_date: null,
-    organization_id: null,
-    client_id: 100,
-    employee_id: 90,
-    service_id: 3841,
-    category_id: 17,
-    status: "new_order",
-    latitude: null,
-    longitude: null,
-    created_at: "2025-09-22 19:59:11",
-    updated_at: "2025-09-22 19:59:11",
-    service_name: "Инспекция и Оферта ФИКС",
-    service_description:
-      "Предлагаме преференциална инспекция на обекта за детайлизиране на строително-монтажните работи (СМР), включително професионална консултация на място и изготвяне на структурирана оферта по позиции и количествено-стойностна сметка (КСС).",
-    service_metrics_type: "linear",
-    services: [],
-    offers_count: 1,
-    employee_phone: "0896824040",
-    employee_name: "Ivo Test Maistor",
-    employee_picture:
-      "https://kmp-admin.perspectiveunity.com/storage/315/conversions/profile_image-compressed.jpg",
-    client_name: "Kaloyan Kamburov",
-    client_review: null,
-    request_completed_at: null,
-    request_finished_at: null,
-    urgent: false,
-    quantity: 1,
-    highlight: true,
-    has_claim: false,
-    country_region: {
-      id: 26,
-      name: "Ямбол",
-      country_id: 26,
-    },
-  },
-  order_id: 173,
-  employee_id: 90,
-  employee_name: "Ivo Test Maistor",
-  employee_profile_picture:
-    "https://kmp-admin.perspectiveunity.com/storage/315/conversions/profile_image-compressed.jpg",
-  reviews_count: 1,
-  review_avg_rating: 5,
-};

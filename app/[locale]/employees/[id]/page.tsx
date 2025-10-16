@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { api } from "@/lib/api";
 import Image from "next/image";
+import { Logo } from "@/components/Logo/Logo.component";
 import EmployeeGallery from "@/components/EmployeeCard/EmployeeGallery";
 import OpenReviewsButton from "./OpenReviewsButton";
 // import ReviewForm from "./ReviewForm"; // moved to requests modal after order completion
@@ -18,20 +19,31 @@ const EmployeePage = async ({
   const res = await api.get(`client/portfolio/${id}`);
   const profile = res?.data ?? {};
   // Fetch reviews for this employee
-  const reviewsRes = await api.get("client/reviews", {
-    params: { "filter[employee_id]": id },
-  });
-  const reviewsPayload = reviewsRes?.data;
-  const reviewsList: any[] = Array.isArray(reviewsPayload)
-    ? reviewsPayload
-    : Array.isArray(reviewsPayload?.data)
-    ? reviewsPayload.data
-    : [];
+  let reviewsList: any[] = [];
+  let reviewsError: any = null;
+  try {
+    const reviewsRes = await api.get("client/reviews", {
+      params: { "filter[employee_id]": id },
+    });
+    const reviewsPayload = reviewsRes?.data;
+    reviewsList = Array.isArray(reviewsPayload)
+      ? reviewsPayload
+      : Array.isArray(reviewsPayload?.data)
+      ? reviewsPayload.data
+      : [];
+  } catch (err: any) {
+    reviewsError = {
+      status: err?.response?.status ?? null,
+      data: err?.response?.data ?? null,
+      message: err?.message ?? String(err),
+    };
+    console.error("client/reviews failed", reviewsError);
+  }
 
   const name = `${profile?.first_name ?? ""} ${
     profile?.last_name ?? ""
   }`.trim();
-  const avatarSrc = String(profile?.profile_picture || "/phones.webp");
+  const avatarSrc = String(profile?.profile_picture || "");
   const description: string = String(profile?.description || "");
   const images: string[] = Array.isArray(profile?.images) ? profile.images : [];
   const services: any[] = Array.isArray(profile?.services)
@@ -39,7 +51,7 @@ const EmployeePage = async ({
     : [];
 
   return (
-    <div className="flex relative flex-col gap-6 items-start w-full flex-1 pt-[76px] max-md:pt-[76px]">
+    <div className="flex relative flex-col gap-6 items-start w-full flex-1 pt-[58px] px-[16px] ">
       <div className="mx-auto w-full">
         <Link
           href={`/${locale}`}
@@ -72,18 +84,29 @@ const EmployeePage = async ({
         </h1>
         <div className="flex flex-col items-start gap-4 mt-6">
           <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-30">
-            <Image
-              src={avatarSrc}
-              alt={`${name} profile picture`}
-              fill
-              sizes="80px"
-              className="object-cover"
-            />
+            {avatarSrc ? (
+              <Image
+                src={avatarSrc}
+                alt={`${name} profile picture`}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-white">
+                <Logo color="#000000" style={{ width: 50, height: 50 }} />
+              </div>
+            )}
           </div>
           <div className="flex flex-col">
             <h1 className="text-lg font-bold text-zinc-900">{name || "N/A"}</h1>
           </div>
           <OpenReviewsButton reviews={reviewsList} />
+          {/* {reviewsError && process.env.NODE_ENV !== "production" && (
+            <pre className="text-xs text-red-600 whitespace-pre-wrap break-all bg-red-50 p-2 rounded">
+              {JSON.stringify(reviewsError, null, 2)}
+            </pre>
+          )} */}
         </div>
 
         <section className="mt-6">
