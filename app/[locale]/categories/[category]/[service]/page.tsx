@@ -144,15 +144,22 @@ export async function generateMetadata({
     const s: any = res?.data || {};
     const name = String(s?.name || "");
     const description = String(s?.description || "");
+    const picture = String(s?.picture || "");
     return {
-      // If empty, layout default ("FIX") will be used; otherwise template adds prefix
       title: name || undefined,
       description: description || undefined,
+      openGraph: {
+        title: `FIX | ${name}`,
+        description: description || undefined,
+        type: "website",
+        locale: lang,
+        images: picture ? [{ url: picture }] : undefined,
+      },
     };
-  } catch {
+  } catch (e) {
     return {
-      title: undefined,
-      description: undefined,
+      title: "FIX",
+      description: "FIX",
     };
   }
 }

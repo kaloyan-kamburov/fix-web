@@ -77,6 +77,12 @@ export async function generateMetadata({
       // Layout template will prefix with "FIX |"; if this is empty, layout default "FIX" will be used
       title: t("categories"),
       description: t("serviceCategoriesTitle"),
+      openGraph: {
+        title: `FIX | ${t("categories")}`,
+        description: t("serviceCategoriesTitle"),
+        type: "website",
+        locale: lang,
+      },
     };
   } catch {
     return {

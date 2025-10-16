@@ -126,16 +126,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const lang = (locale || "bg").split("-")[0];
-  try {
-    const t = await getTranslations({ locale: lang });
-    return {
-      title: t("emergencyServices"),
+  const t = await getTranslations({ locale: lang });
+
+  return {
+    title: t("emergencyServices"),
+    description: t("forEmegencySituations"),
+    openGraph: {
+      title: `FIX | ${t("emergencyServices")}`,
       description: t("forEmegencySituations"),
-    };
-  } catch {
-    return {
-      title: undefined,
-      description: undefined,
-    };
-  }
+      type: "website",
+      locale: lang,
+    },
+  };
 }

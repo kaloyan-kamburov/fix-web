@@ -124,5 +124,10 @@ export async function generateMetadata({
   const t = await getTranslations({ locale: lang });
   return {
     title: `FIX | ${t("request")}`,
+    openGraph: {
+      title: `FIX | ${t("request")}`,
+      type: "article",
+      locale: lang,
+    },
   };
 }

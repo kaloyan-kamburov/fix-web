@@ -3,6 +3,7 @@ import Image from "next/image";
 import ServicesSearch from "@/components/Services/ServicesSearch";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
 
 export default async function EmergenciesPage({
   params,
@@ -130,4 +131,33 @@ export default async function EmergenciesPage({
       </section>
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string; locale: string }>;
+}): Promise<Metadata> {
+  const { category, locale } = await params;
+  const lang = (locale || "bg").split("-")[0];
+  const t = await getTranslations({ locale: lang });
+  const resCat = await api.get(`categories/${category}`, {
+    headers: {
+      "app-locale": lang,
+    },
+  });
+  const cat: any = resCat.data;
+  const categoryName = cat?.name || "";
+  const picture = cat?.picture || "";
+  return {
+    title: `FIX | ${categoryName}`,
+    description: t("forEmegencySituations"),
+    openGraph: {
+      title: `FIX | ${categoryName}`,
+      description: t("forEmegencySituations"),
+      type: "website",
+      locale: lang,
+      images: picture ? [{ url: picture }] : undefined,
+    },
+  };
 }

@@ -19,5 +19,10 @@ export async function generateMetadata({
   const t = await getTranslations({ locale: lang });
   return {
     title: `FIX | ${t("receivedOffer")}`,
+    openGraph: {
+      title: `FIX | ${t("receivedOffer")}`,
+      type: "article",
+      locale: lang,
+    },
   };
 }

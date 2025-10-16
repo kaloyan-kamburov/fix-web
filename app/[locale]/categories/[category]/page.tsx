@@ -38,6 +38,13 @@ export default async function CategoryPage({
       : ""
     : "";
 
+  // Inject JSON-LD extras for category page
+  if (typeof window !== "undefined") {
+    (window as any).__FIX_SCHEMA_EXTRA = {
+      category: categoryName || slug,
+    };
+  }
+
   return (
     <div className="bg-gray-10 w-full">
       <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[76px] mx-auto gap-4">
