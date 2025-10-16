@@ -177,8 +177,6 @@ api.interceptors.request.use(async (config) => {
         "XMLHttpRequest";
     } catch {}
   }
-  console.log(config);
-  // console.debug('api request', config);
   return config;
 });
 
