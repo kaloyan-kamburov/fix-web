@@ -22,8 +22,8 @@ export default async function ServicePage({
   }
 
   const s: any = service || {};
+  console.log(s);
   const name = String(s?.name || "");
-  const description = String(s?.description || "");
   const picture = String(s?.picture || "");
   const currency = String(s?.currency?.symbol || s?.currency?.code || "");
   const currency2 = String(
@@ -50,6 +50,7 @@ export default async function ServicePage({
     : priceFrom2 && priceTo2
     ? `${priceFrom2} - ${priceTo2}`
     : priceFrom2 || priceTo2 || null;
+  const description_html = String(s?.description_html || "");
 
   return (
     <section className="flex flex-col justify-start w-full pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[44px] mx-auto gap-4">
@@ -83,7 +84,7 @@ export default async function ServicePage({
         </Link>
       </div>
       <div className="max-w-[720px] mx-auto mt-[20px] max-md:mt-0">
-        <h1 className="text-2xl font-bold text-neutral-700 text-left">
+        <h1 className="text-2xl font-bold text-neutral-700 text-center">
           {name}
         </h1>
         {picture && (
@@ -115,9 +116,10 @@ export default async function ServicePage({
           </p>
         </div>
 
-        <p className="mt-6 text-lg text-zinc-600 max-md:max-w-full text-left font-normal">
-          {description}
-        </p>
+        <div
+          className="mt-6 text-lg text-zinc-600 max-md:max-w-full text-left font-normal"
+          dangerouslySetInnerHTML={{ __html: description_html }}
+        ></div>
 
         <Link
           href={`/${locale}/request/${serviceId}`}
