@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Logo } from "../Logo/Logo.component";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+import { LegalModal } from "../LegalModal/LegalModal";
 
 const socialIcons = [
   {
@@ -31,6 +32,11 @@ const socialIcons = [
 export const SiteFooterSection = () => {
   const t = useTranslations();
   const { locale } = useParams();
+  const [legalModalOpen, setLegalModalOpen] = React.useState(false);
+  const [legalModalType, setLegalModalType] = React.useState<
+    "terms" | "gdpr" | "rules"
+  >("terms");
+
   const navigationLinks = [
     { text: t("start"), href: "/" },
     { text: t("serviceSearch"), href: "/services" },
@@ -38,10 +44,15 @@ export const SiteFooterSection = () => {
   ];
 
   const legalLinks = [
-    { text: t("privacyPolicy"), href: "/privacy" },
-    { text: t("termsOfService"), href: "/terms" },
-    // { text: t("cookiesSettings"), href: "/cookies" },
+    { text: t("privacyPolicy"), type: "gdpr" as const },
+    { text: t("termsOfService"), type: "terms" as const },
+    { text: t("rules"), type: "rules" as const },
   ];
+
+  const handleLegalClick = (type: "terms" | "gdpr" | "rules") => {
+    setLegalModalType(type);
+    setLegalModalOpen(true);
+  };
   return (
     <footer className="flex flex-col w-full items-center gap-20 py-20 relative bg-gray-100 px-[16px] overflow-hidden">
       <div
@@ -139,18 +150,24 @@ export const SiteFooterSection = () => {
 
             <div className="inline-flex flex-col lg:flex-row justify-center lg:justify-start mx-auto lg:mx-0 items-start gap-6 relative">
               {legalLinks.map((link, index) => (
-                <Link
+                <button
                   key={index}
-                  href={link.href}
-                  className="text-center lg:text-start mx-auto lg:mx-0 relative w-fit mt-[-1.00px] font-body-s font-[number:var(--body-s-font-weight)] text-gray-00 text-[length:var(--body-s-font-size)] tracking-[var(--body-s-letter-spacing)] leading-[var(--body-s-line-height)] [font-style:var(--body-s-font-style)] hover:text-accentaccent transition-colors"
+                  onClick={() => handleLegalClick(link.type)}
+                  className="text-center lg:text-start mx-auto lg:mx-0 relative w-fit mt-[-1.00px] font-body-s font-[number:var(--body-s-font-weight)] text-gray-00 text-[length:var(--body-s-font-size)] tracking-[var(--body-s-letter-spacing)] leading-[var(--body-s-line-height)] [font-style:var(--body-s-font-style)] hover:text-accentaccent transition-colors cursor-pointer"
                 >
                   {link.text}
-                </Link>
+                </button>
               ))}
             </div>
           </div>
         </div>
       </div>
+
+      <LegalModal
+        open={legalModalOpen}
+        onClose={() => setLegalModalOpen(false)}
+        type={legalModalType}
+      />
     </footer>
   );
 };

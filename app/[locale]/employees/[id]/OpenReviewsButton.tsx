@@ -29,7 +29,7 @@ export default function OpenReviewsButton({
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/75 px-4">
           <div className="w-full max-w-[720px] bg-white rounded-lg shadow-lg relative max-h-[85vh] overflow-y-auto">
             <div className="sticky top-0 z-10 flex items-center justify-between gap-2  bg-white/95 backdrop-blur p-4 rounded-t-lg">
               <div className="text-lg font-bold text-zinc-900">

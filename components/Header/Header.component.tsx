@@ -39,6 +39,11 @@ export default function Header() {
     [pathname, locale]
   );
 
+  const isBlogActive = React.useMemo(
+    () => pathname.includes("blog"),
+    [pathname, locale]
+  );
+
   React.useEffect(() => {
     // Initialize from client storage to avoid SSR/client mismatch
     setIsLoggedIn(!!getAuth());
@@ -198,6 +203,20 @@ export default function Header() {
                 {t("emergencySituations")}
               </div>
             </Link>
+            <Link
+              href={`/${locale}/blog`}
+              className="flex justify-center items-center gap-1 relative"
+            >
+              <div
+                className={`text-center relative text-lg font-normal cursor-pointer transition-colors ${
+                  isBlogActive
+                    ? "text-accentaccent"
+                    : "text-gray-00 hover:text-accentaccent"
+                }`}
+              >
+                {t("blog")}
+              </div>
+            </Link>
 
             {!isLoggedIn && (
               <div className="flex items-center gap-3">
@@ -320,6 +339,13 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 {t("emergencySituations")}
+              </Link>
+              <Link
+                href={`/${locale}/blog`}
+                className="text-gray-00 text-lg font-normal cursor-pointer hover:text-[#F1E180] transition-colors py-2"
+                onClick={closeMobileMenu}
+              >
+                {t("blog")}
               </Link>
               <div className="flex items-center gap-3"></div>
               <div className="pt-4 space-y-3">

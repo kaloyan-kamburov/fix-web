@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import NextTopLoader from "nextjs-toploader";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -36,6 +37,11 @@ export default function RootLayout({
         />
       </head>
       <body className={openSans.variable}>
+        <NextTopLoader
+          color="var(--button-primary-bg)"
+          showSpinner={false}
+          height={2}
+        />
         {children}
         <Toaster position="bottom-right" />
       </body>

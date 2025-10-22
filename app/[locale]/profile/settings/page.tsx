@@ -150,7 +150,7 @@ export default function ProfilePage() {
         </div>
       </div>
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/25 px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
           <div className="w-full max-w-[520px] bg-white rounded-lg p-6 shadow-lg">
             <h2 className="text-xl font-bold text-gray-100 mb-2">
               {t("areYouSureYouWantToDeleteAccount")}

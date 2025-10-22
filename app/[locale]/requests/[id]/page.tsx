@@ -393,7 +393,7 @@ export default function RequestPage({
       ) : null}
       {showMarkAsCompletedModal &&
         createPortal(
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/75 px-4">
             <div className="w-full max-w-[520px] bg-white rounded-lg p-6 shadow-lg">
               <h2 className="text-xl font-bold text-gray-100 mb-4 text-center">
                 {t("markAsCompletedQuestion")}
@@ -424,7 +424,7 @@ export default function RequestPage({
         )}
       {openReviewsModal &&
         createPortal(
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/25 px-4">
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/75 px-4">
             <div className="w-full max-w-[520px] bg-white rounded-lg p-6 shadow-lg">
               <h2 className="text-xl font-bold text-gray-100 mb-4 text-center">
                 {t("addReview")}

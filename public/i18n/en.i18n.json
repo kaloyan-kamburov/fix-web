@@ -167,5 +167,11 @@
   "urgent": "Urgent",
   "country": "Country",
   "changePassword": "Change password",
-  "timeSlot": "Day and time to visit"
+  "timeSlot": "Day and time to visit",
+  "blog": "Blog",
+  "author": "Author",
+  "words": "words",
+  "minRead": "min read",
+  "close": "Close",
+  "rules": "Rules"
 }
