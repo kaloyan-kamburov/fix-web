@@ -57,7 +57,7 @@ export default async function CategoriesPage({
   }
 
   return (
-    <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[130px] max-md:pt-[76px]">
+    <section className="flex flex-col justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[130px] max-md:pt-[76px] mx-auto w-full max-w-[1440px]">
       <CategoriesList items={items} />
       {/* <CategoriesCTA /> */}
     </section>

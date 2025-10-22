@@ -38,7 +38,7 @@ export default function CategoriesList({
   return (
     <>
       {/* Search bar */}
-      <section className="box-border flex relative flex-col gap-2 items-center justify-center py-8 w-full bg-gray-10 max-w-[1440px] mx-auto px-4">
+      <section className="box-border flex relative flex-col gap-2 items-center justify-center py-8 w-full bg-gray-10 mx-auto px-4 max-w-[960px]">
         <div className="w-full max-w-[960px] ">
           <div className="box-border flex relative items-center px-3 py-3 rounded-xl border border-solid bg-stone-50 border-zinc-200">
             <Search className="w-5 h-5 text-zinc-500 mr-2 shrink-0" />
@@ -58,7 +58,7 @@ export default function CategoriesList({
       </section>
 
       {/* Grid: 2 per row on mobile, 4 per row on large screens */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-stretch px-40 mt-2 w-full tracking-wide max-md:px-5 max-md:max-w-full">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-stretch px-40 mt-2 w-full tracking-wide max-md:px-5 max-md:max-w-full max-w-[1440px]">
         {filtered.length === 0 && (
           <div className="col-span-2 lg:col-span-4 justify-self-center flex items-center justify-center  text-zinc-500 text-center">
             {t("noResults")}
