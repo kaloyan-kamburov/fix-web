@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
+import { ScrollToTop } from "@/components/ScrollToTop/ScrollToTop";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
           height={2}
         />
         {children}
+        <ScrollToTop />
         <Toaster position="bottom-right" />
       </body>
     </html>

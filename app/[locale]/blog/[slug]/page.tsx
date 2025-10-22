@@ -42,8 +42,8 @@ export default async function BlogPostPage({
     "";
 
   return (
-    <section className="flex flex-col justify-start w-full pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[44px] mx-auto gap-4 px-[16px]">
-      <div className="mx-auto w-full">
+    <section className="flex flex-col justify-start w-full pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[88px] max-md:pt-[76px] mx-auto gap-4 px-[16px]">
+      <div className="mx-auto w-full max-w-[1440px]">
         <Link
           href={`/${locale}/blog/`}
           className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
