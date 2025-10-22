@@ -88,19 +88,23 @@ export const CountryLanguageSelector: React.FC<
 
         setLoading(true);
         // 2) Fetch via axios api
-        const res = await api.get("countries");
+        const res = await api.get("countries?include=tenant");
         const root = res.data;
         const arr: ApiCountry[] = Array.isArray(root)
           ? (root as ApiCountry[])
           : Array.isArray(root?.data)
           ? (root.data as ApiCountry[])
           : [];
-        const normalized: CountryItem[] = arr.map((it) => ({
-          id: toNumberSafe(it?.id),
-          name: toStringSafe(it?.name),
-          code: toStringSafe(it?.code).toUpperCase(),
-          flag: toStringSafe(it?.flag),
-        }));
+        const normalized: CountryItem[] = arr.map(
+          (it) =>
+            ({
+              id: toNumberSafe(it?.id),
+              name: toStringSafe(it?.name),
+              code: toStringSafe(it?.code).toUpperCase(),
+              flag: toStringSafe(it?.flag),
+              tenant: it?.tenant,
+            } as CountryItem)
+        );
 
         const map: Record<string, LanguageItem[]> = {};
         for (const it of arr) {
@@ -127,7 +131,7 @@ export const CountryLanguageSelector: React.FC<
         // Build code -> id map and persist for interceptors
         try {
           const codeToId: Record<string, number> = {};
-          for (const c of normalized) codeToId[c.code] = c.id;
+          for (const c of normalized) codeToId[c.code] = c.tenant?.id;
           if (typeof window !== "undefined") {
             localStorage.setItem(
               "COUNTRY_CODE_TO_ID",
@@ -164,11 +168,13 @@ export const CountryLanguageSelector: React.FC<
       }
     } catch {}
     try {
-      Cookies.set("tenant_id", String(country.id), {
-        path: "/",
-        sameSite: "lax",
-        expires: 365,
-      });
+      if (country.tenant?.id) {
+        Cookies.set("tenant_id", String(country.tenant.id), {
+          path: "/",
+          sameSite: "lax",
+          expires: 365,
+        });
+      }
     } catch {}
     // Extract languages for the selected country if available
     const langs: LanguageItem[] = [];
@@ -204,11 +210,13 @@ export const CountryLanguageSelector: React.FC<
       // Ensure tenant switches with language based on the currently selected country
       if (selectedCountry) {
         try {
-          Cookies.set("tenant_id", String(selectedCountry.id), {
-            path: "/",
-            sameSite: "lax",
-            expires: 365,
-          });
+          if (selectedCountry.tenant?.id) {
+            Cookies.set("tenant_id", String(selectedCountry.tenant.id), {
+              path: "/",
+              sameSite: "lax",
+              expires: 365,
+            });
+          }
         } catch {}
         try {
           if (typeof window !== "undefined") {
@@ -224,12 +232,7 @@ export const CountryLanguageSelector: React.FC<
         } catch {}
       }
     } catch {}
-    // Replace the first URL segment with the new lang-country; remove any `lang` query param
-    const href =
-      typeof window !== "undefined"
-        ? window.location.href
-        : "http://localhost/";
-    const url = new URL(href);
+    // Navigate based on current location: if not on home, go to categories
     const parts = pathname.split("/").filter(Boolean);
     const first = parts[0] || "bg-bg";
     const [, currentCountryRaw] = first.split("-");
@@ -240,10 +243,15 @@ export const CountryLanguageSelector: React.FC<
     ).toLowerCase();
     const countryFromSelection = (selectedCountry?.code || "").toLowerCase();
     const nextCountry = countryFromSelection || currentCountry;
-    parts[0] = `${nextLocale}-${nextCountry}`;
-    url.pathname = "/" + parts.join("/");
-    url.searchParams.delete("lang");
-    router.push(url.pathname + url.search + url.hash);
+    const nextFirst = `${nextLocale}-${nextCountry}`;
+    if (parts.length > 1) {
+      router.push(`/${nextFirst}/categories`);
+    } else {
+      router.push(`/${nextFirst}`);
+    }
+    try {
+      onClose();
+    } catch {}
   };
 
   // Close on ESC / click outside

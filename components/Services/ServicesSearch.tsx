@@ -150,7 +150,7 @@ export default function ServicesSearch({
             className="flex flex-wrap gap-3 items-center self-stretch p-3 text-base rounded-lg bg-stone-50 hover:bg-stone-100 transition-colors"
           >
             <Image
-              src={it.picture || "/phones.png"}
+              src={it.picture}
               alt={it.name}
               width={112}
               height={112}

@@ -37,7 +37,7 @@ api.interceptors.request.use(async (config) => {
         try {
           const upstream = (baseURL || "").replace(/\/$/, "");
           if (upstream) {
-            const resp = await fetch(`${upstream}/countries`, {
+            const resp = await fetch(`${upstream}/countries?include=tenant`, {
               method: "GET",
             });
             const data = await resp.json();
@@ -49,12 +49,14 @@ api.interceptors.request.use(async (config) => {
             const bg = arr.find(
               (it) => String(it?.code || "").toUpperCase() === "BG"
             );
-            const bgId: number | undefined = bg?.id ? Number(bg.id) : undefined;
-            if (!tenantId && bgId) {
-              document.cookie = `tenant_id=${bgId}; Path=/; SameSite=Lax; Max-Age=${
+            const bgTenantId: number | undefined = bg?.tenant?.id
+              ? Number(bg.tenant.id)
+              : undefined;
+            if (!tenantId && bgTenantId) {
+              document.cookie = `tenant_id=${bgTenantId}; Path=/; SameSite=Lax; Max-Age=${
                 60 * 60 * 24 * 365
               }`;
-              tenantId = String(bgId);
+              tenantId = String(bgTenantId);
             }
             if (!preferred) {
               preferred = "bg";

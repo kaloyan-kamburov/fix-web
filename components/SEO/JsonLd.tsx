@@ -58,20 +58,23 @@ export default function JsonLd({ excludePrefixes = [] }: JsonLdProps) {
           categorySlug &&
           !maybeServiceSlug
         ) {
-          try {
-            const res = await api.get(`categories/${categorySlug}`);
-            const cat: any = res?.data;
-            const categoryName = cat
-              ? typeof cat === "object" &&
-                cat !== null &&
-                typeof cat.name === "string"
-                ? cat.name
-                : Array.isArray(cat?.data) && cat.data.length
-                ? String(cat.data[0]?.name || "")
-                : ""
-              : "";
-            if (categoryName) data.category = categoryName;
-          } catch {}
+          // Avoid 404 for pseudo-category path like /categories/emergencies
+          if (!(section === "categories" && categorySlug === "emergencies")) {
+            try {
+              const res = await api.get(`categories/${categorySlug}`);
+              const cat: any = res?.data;
+              const categoryName = cat
+                ? typeof cat === "object" &&
+                  cat !== null &&
+                  typeof cat.name === "string"
+                  ? cat.name
+                  : Array.isArray(cat?.data) && cat.data.length
+                  ? String(cat.data[0]?.name || "")
+                  : ""
+                : "";
+              if (categoryName) data.category = categoryName;
+            } catch {}
+          }
         }
 
         // Service page: /{locale}/(categories|emergencies)/{category}/{service}
@@ -80,21 +83,23 @@ export default function JsonLd({ excludePrefixes = [] }: JsonLdProps) {
           categorySlug &&
           maybeServiceSlug
         ) {
-          // Fetch category name
-          try {
-            const resCat = await api.get(`categories/${categorySlug}`);
-            const cat: any = resCat?.data;
-            const categoryName = cat
-              ? typeof cat === "object" &&
-                cat !== null &&
-                typeof cat.name === "string"
-                ? cat.name
-                : Array.isArray(cat?.data) && cat.data.length
-                ? String(cat.data[0]?.name || "")
-                : ""
-              : "";
-            if (categoryName) data.category = categoryName;
-          } catch {}
+          // Fetch category name; skip pseudo-category 'emergencies' under categories to avoid 404
+          if (!(section === "categories" && categorySlug === "emergencies")) {
+            try {
+              const resCat = await api.get(`categories/${categorySlug}`);
+              const cat: any = resCat?.data;
+              const categoryName = cat
+                ? typeof cat === "object" &&
+                  cat !== null &&
+                  typeof cat.name === "string"
+                  ? cat.name
+                  : Array.isArray(cat?.data) && cat.data.length
+                  ? String(cat.data[0]?.name || "")
+                  : ""
+                : "";
+              if (categoryName) data.category = categoryName;
+            } catch {}
+          }
 
           // Fetch service details
           try {

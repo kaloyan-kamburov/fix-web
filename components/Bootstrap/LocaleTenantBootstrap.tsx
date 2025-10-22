@@ -44,7 +44,9 @@ export default function LocaleTenantBootstrap() {
           return;
         }
 
-        const resp = await fetch(`${upstream}/countries`, { method: "GET" });
+        const resp = await fetch(`${upstream}/countries?include=tenant`, {
+          method: "GET",
+        });
         if (!resp.ok) {
           return;
         }
@@ -58,9 +60,11 @@ export default function LocaleTenantBootstrap() {
         const bg = arr.find(
           (it) => String(it?.code || "").toUpperCase() === "BG"
         );
-        const bgId: number | undefined = bg?.id ? Number(bg.id) : undefined;
-        if (!hasTenant && bgId) {
-          document.cookie = `tenant_id=${bgId}; Path=/; SameSite=Lax; Max-Age=${
+        const bgTenantId: number | undefined = bg?.tenant?.id
+          ? Number(bg.tenant.id)
+          : undefined;
+        if (!hasTenant && bgTenantId) {
+          document.cookie = `tenant_id=${bgTenantId}; Path=/; SameSite=Lax; Max-Age=${
             60 * 60 * 24 * 365
           }`;
         }

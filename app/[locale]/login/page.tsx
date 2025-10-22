@@ -46,7 +46,7 @@ export default function Login() {
       const country = (parts[0] || "bg").toLowerCase();
       return `/${country}`;
     } catch {
-      return "/bg";
+      return "/bg-bg";
     }
   }, [pathname, searchParams]);
   const {

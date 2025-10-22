@@ -21,7 +21,7 @@ export default function LanguagesPage() {
     const run = async () => {
       try {
         setLoading(true);
-        const res = await api.get("countries");
+        const res = await api.get("countries?include=tenant");
         const raw = res.data;
         if (!active) return;
         const arr: any[] = Array.isArray(raw)

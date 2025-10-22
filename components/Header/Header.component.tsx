@@ -125,7 +125,7 @@ export default function Header() {
         } else {
           // Lazy fetch mapping if not cached
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/countries`,
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/countries?include=tenant`,
             { cache: "no-store" }
           );
           const data = await res.json();
@@ -137,7 +137,7 @@ export default function Header() {
           const map: Record<string, number> = {};
           for (const it of arr) {
             const code = String(it?.code || "").toUpperCase();
-            const id = Number(it?.id || 0);
+            const id = Number(it?.tenant?.id || 0);
             if (code && id) map[code] = id;
           }
           if (!active) return;

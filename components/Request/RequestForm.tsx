@@ -46,7 +46,7 @@ export default function RequestForm({
     city: z.string().optional(),
     neighbourhood: z.string().min(1, t("requiredField")),
     address: z.string().min(1, t("requiredField")),
-    client_comment: z.string().optional(),
+    client_comment: z.string().min(1, t("requiredField")),
   });
 
   type FormValues = z.infer<typeof schema>;
@@ -311,7 +311,7 @@ export default function RequestForm({
                 htmlFor="district"
                 className="text-xs font-semibold text-zinc-900"
               >
-                {t("district")}
+                {t("district")}*
               </Label>
             </div>
             <Input
@@ -367,7 +367,7 @@ export default function RequestForm({
           <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
             <div className="flex gap-2 items-center self-stretch">
               <label className="text-xs font-semibold text-zinc-900">
-                {t("comment")}
+                {t("comment")}*
               </label>
             </div>
             <div className="self-stretch w-full bg-gray-20 rounded-lg border border-solid border-[#dadade]">
@@ -380,6 +380,11 @@ export default function RequestForm({
                 />
               </div>
             </div>
+            {showFieldErrors && errors.client_comment && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.client_comment.message as string}
+              </span>
+            )}
           </div>
 
           <div className="mt-[16px]">

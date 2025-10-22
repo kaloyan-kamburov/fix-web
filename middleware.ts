@@ -26,7 +26,14 @@ const languages = [
   "slovenian",
 ];
 
-const protectedRoutes = ["orders", "profile"];
+const protectedRoutes = [
+  "orders",
+  "profile",
+  "request",
+  "requests",
+  "offers",
+  "checkout",
+];
 
 export function middleware(req: NextRequest) {
   const url = req.nextUrl;

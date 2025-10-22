@@ -56,7 +56,7 @@ async function handle(
         if (upstream) {
           try {
             const langForFetch = (first.split("-")[0] || "en").toLowerCase();
-            const resp = await fetch(`${upstream}/countries`, {
+            const resp = await fetch(`${upstream}/countries?include=tenant`, {
               method: "GET",
               headers: {
                 Accept: "application/json",

@@ -4,6 +4,7 @@ import ServicesSearch from "@/components/Services/ServicesSearch";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 
 export default async function EmergenciesPage({
   params,
@@ -13,12 +14,15 @@ export default async function EmergenciesPage({
   const { category: id, locale } = await params;
   const lang = (locale || "bg").split("-")[0];
   const t = await getTranslations({ locale: lang });
+  const cookieStore = await cookies();
+  const tenantId = cookieStore.get("tenant_id")?.value;
   let services: unknown = null;
   let categoryData: unknown = null;
   try {
     const res = await api.get(`categories/${id}/services`, {
       headers: {
         "app-locale": lang,
+        ...(tenantId ? { "X-Tenant-ID": String(tenantId) } : {}),
       },
     });
     services = res.data;
@@ -30,6 +34,7 @@ export default async function EmergenciesPage({
     const resCat = await api.get(`categories/${id}`, {
       headers: {
         "app-locale": lang,
+        ...(tenantId ? { "X-Tenant-ID": String(tenantId) } : {}),
       },
     });
     categoryData = resCat.data;
@@ -141,9 +146,12 @@ export async function generateMetadata({
   const { category, locale } = await params;
   const lang = (locale || "bg").split("-")[0];
   const t = await getTranslations({ locale: lang });
+  const cookieStore = await cookies();
+  const tenantId = cookieStore.get("tenant_id")?.value;
   const resCat = await api.get(`categories/${category}`, {
     headers: {
       "app-locale": lang,
+      ...(tenantId ? { "X-Tenant-ID": String(tenantId) } : {}),
     },
   });
   const cat: any = resCat.data;
