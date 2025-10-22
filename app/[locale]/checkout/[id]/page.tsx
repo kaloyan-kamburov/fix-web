@@ -54,7 +54,7 @@ export default function CheckoutPage({
 
   return (
     <div className="bg-gray-10 w-full flex flex-1 flex-col">
-      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[45px] mx-auto gap-4 px-4">
+      <section className="flex flex-col flex-1 justify-center pb-10 text-base font-semibold text-center bg-gray-10 text-zinc-900 pt-[58px] max-md:pt-[45px] mx-auto gap-4 px-4 w-full">
         <div className="mx-auto w-full">
           <Link
             href={`/${locale}/offers/${id}`}

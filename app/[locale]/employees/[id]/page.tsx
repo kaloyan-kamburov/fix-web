@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Logo } from "@/components/Logo/Logo.component";
 import EmployeeGallery from "@/components/EmployeeCard/EmployeeGallery";
 import OpenReviewsButton from "./OpenReviewsButton";
+import { BackButton } from "@/components/BackButton/BackButton";
 // import ReviewForm from "./ReviewForm"; // moved to requests modal after order completion
 
 const EmployeePage = async ({
@@ -53,10 +54,9 @@ const EmployeePage = async ({
   return (
     <div className="flex relative flex-col gap-6 items-start w-full flex-1 pt-[58px] max-md:pt-[45px] px-[16px] ">
       <div className="mx-auto w-full">
-        <Link
-          href={`/${locale}`}
+        <BackButton
           className="flex relative gap-2 items-center self-stretch cursor-pointer max-sm:gap-1.5 w-fit mt-4"
-          aria-label={t("back")}
+          ariaLabel={t("back")}
         >
           <svg
             width="16"
@@ -75,7 +75,7 @@ const EmployeePage = async ({
               {t("back")}
             </div>
           </div>
-        </Link>
+        </BackButton>
       </div>
 
       <div className="flex relative flex-col md:p-10 p-4 rounded-[16px] bg-white mx-auto w-full max-w-[960px]">
