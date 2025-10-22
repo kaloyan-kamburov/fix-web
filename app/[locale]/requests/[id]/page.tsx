@@ -318,6 +318,7 @@ export default function RequestPage({
                         : [];
                       return (
                         <OfferCard
+                          image={offer.employee_profile_picture}
                           key={index}
                           requestId={String(order?.id || "")}
                           id={String(offer?.id || "")}

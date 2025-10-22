@@ -32,20 +32,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
         const url = URL.createObjectURL(file);
         next.push({ id, url, file });
       });
-      setPreviews((prev) => {
-        const combined = [...prev, ...next];
-        if (onChange) {
-          try {
-            const dataTransfer = new DataTransfer();
-            combined.forEach((p) => dataTransfer.items.add(p.file));
-            const synthetic = {
-              target: { files: dataTransfer.files },
-            } as unknown as React.ChangeEvent<HTMLInputElement>;
-            onChange(synthetic);
-          } catch {}
-        }
-        return combined;
-      });
+      setPreviews((prev) => [...prev, ...next]);
     };
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,19 +54,36 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             URL.revokeObjectURL(removed.url);
           } catch {}
         }
-        if (onChange) {
-          try {
-            const dataTransfer = new DataTransfer();
-            next.forEach((p) => dataTransfer.items.add(p.file));
-            const synthetic = {
-              target: { files: dataTransfer.files },
-            } as unknown as React.ChangeEvent<HTMLInputElement>;
-            onChange(synthetic);
-          } catch {}
-        }
         return next;
       });
     };
+
+    // Handle onChange callback when previews change
+    const prevPreviewsRef = React.useRef<
+      Array<{ id: string; url: string; file: File }>
+    >([]);
+    const onChangeRef = React.useRef(onChange);
+
+    React.useEffect(() => {
+      onChangeRef.current = onChange;
+    }, [onChange]);
+
+    React.useEffect(() => {
+      if (
+        onChangeRef.current &&
+        previews.length !== prevPreviewsRef.current.length
+      ) {
+        try {
+          const dataTransfer = new DataTransfer();
+          previews.forEach((p) => dataTransfer.items.add(p.file));
+          const synthetic = {
+            target: { files: dataTransfer.files },
+          } as unknown as React.ChangeEvent<HTMLInputElement>;
+          onChangeRef.current(synthetic);
+          prevPreviewsRef.current = previews;
+        } catch {}
+      }
+    }, [previews]);
 
     // Revoke object URLs when component unmounts to avoid leaks
     React.useEffect(() => {

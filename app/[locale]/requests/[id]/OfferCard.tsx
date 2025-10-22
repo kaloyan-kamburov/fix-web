@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface OfferCardProps {
+  image: string;
   title: string;
   date?: string;
   timeSlot?: string;
@@ -19,6 +20,7 @@ interface OfferCardProps {
 }
 
 function OfferCard({
+  image,
   title,
   date,
   timeSlot,
@@ -73,9 +75,9 @@ function OfferCard({
       className="flex relative gap-3 items-center self-stretch p-3 rounded-lg bg-stone-50 max-md:flex-col max-md:gap-2 max-md:items-start max-sm:gap-2 max-sm:p-2 cursor-pointer hover:bg-stone-100 transition-colors"
     >
       <div className="relative w-20 h-20 rounded-lg overflow-hidden max-sm:h-[60px] max-sm:w-[60px]">
-        {imageUrl && (
+        {image && (
           <Image
-            src={imageUrl}
+            src={image}
             alt=""
             fill
             sizes="(max-width: 640px) 60px, 80px"
