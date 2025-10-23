@@ -39,7 +39,7 @@ export const SiteFooterSection = () => {
 
   const navigationLinks = [
     { text: t("start"), href: "/" },
-    { text: t("serviceSearch"), href: "/services" },
+    { text: t("serviceSearch"), href: "/categories" },
     { text: t("emergencySituations"), href: "/emergencies" },
   ];
 
