@@ -3,6 +3,7 @@ import { CountryOption } from "./CountryOption";
 import { useTranslations } from "next-intl";
 
 export type CountryItem = {
+  tenant: any;
   id: number;
   name: string;
   code: string; // ISO-2 uppercase

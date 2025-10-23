@@ -136,8 +136,7 @@ export default function RequestForm({
         fd.append("service_id", serviceId);
         if (values.city) fd.append("city", values.city);
         if (values.address) fd.append("address", values.address);
-        if (values.neighbourhood)
-          fd.append("neighbourhood", values.neighbourhood);
+        if (values.neighbourhood) fd.append("neighbourhood", " ");
         fd.append("country_region_id", "26");
         fd.append("quantity", String(quantity));
         if (coords?.lat != null) fd.append("latitude", String(coords.lat));
@@ -285,47 +284,25 @@ export default function RequestForm({
           <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
             {Array.isArray(cities) && cities.length > 0 ? (
               <Select
-                label={t("city")}
+                label={t("region") + "*"}
                 value={watch("city") || ""}
                 options={cities}
                 onChange={(val) =>
                   setValue("city", val, { shouldValidate: true })
                 }
-                placeholder={t("cityPlaceholder")}
+                placeholder={t("region")}
               />
             ) : (
               <Input
                 id="city"
                 type="text"
+                label={t("region") + "*"}
                 {...register("city")}
-                placeholder={t("cityPlaceholder")}
+                placeholder={t("region")}
                 className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
               />
             )}
             {/* City is optional */}
-          </div>
-
-          <div className="flex flex-col gap-0.5 items-start self-stretch mt-[16px]">
-            <div className="flex gap-2 items-center self-stretch">
-              <Label
-                htmlFor="district"
-                className="text-xs font-semibold text-zinc-900"
-              >
-                {t("district")}*
-              </Label>
-            </div>
-            <Input
-              id="neighbourhood"
-              type="text"
-              {...register("neighbourhood")}
-              placeholder={t("districtPlaceholder")}
-              className="w-full bg-gray-20 rounded-lg border border-solid border-[#dadade] p-2 h-auto"
-            />
-            {showFieldErrors && errors.neighbourhood && (
-              <span className="text-red-500 text-xs mt-1">
-                {errors.neighbourhood.message as string}
-              </span>
-            )}
           </div>
 
           <div className="flex gap-3 items-start self-stretch max-sm:flex-col max-sm:gap-3 mt-[16px]">
