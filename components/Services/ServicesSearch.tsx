@@ -45,17 +45,23 @@ function normalizeServices(raw: unknown): ServiceItem[] {
       s?.price_to_second != null ? String(s.price_to_second) : null;
     const fixed2 =
       s?.fixed_price_second != null ? String(s.fixed_price_second) : null;
+    const roundStr = (v: string | null): string | null => {
+      if (v == null || v === "") return null;
+      const n = Number(v);
+      if (!Number.isFinite(n)) return v;
+      return String(Math.round(n));
+    };
     const slug = String(s?.slug ?? "");
     const primary = useFixed
-      ? fixedPrice
+      ? roundStr(fixedPrice)
       : priceFrom && priceTo
-      ? `${priceFrom} - ${priceTo}`
-      : priceFrom || priceTo || null;
+      ? `${roundStr(priceFrom)} - ${roundStr(priceTo)}`
+      : roundStr(priceFrom || priceTo || null);
     const secondary = useFixed
-      ? fixed2
+      ? roundStr(fixed2)
       : priceFrom2 && priceTo2
-      ? `${priceFrom2} - ${priceTo2}`
-      : priceFrom2 || priceTo2 || null;
+      ? `${roundStr(priceFrom2)} - ${roundStr(priceTo2)}`
+      : roundStr(priceFrom2 || priceTo2 || null);
 
     const pricePrimary = primary ? `${primary} ${currency}` : null;
     const priceSecondary = secondary ? `${secondary} ${currency2}` : null;

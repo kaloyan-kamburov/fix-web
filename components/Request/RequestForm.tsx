@@ -43,7 +43,7 @@ export default function RequestForm({
   const [files, setFiles] = React.useState<File[]>([]);
   const schema = z.object({
     phone: z.string().min(1, t("requiredField")),
-    city: z.string().optional(),
+    city: z.string().min(1, t("requiredField")),
     neighbourhood: z.string().optional(),
     address: z.string().min(1, t("requiredField")),
     client_comment: z.string().min(1, t("requiredField")),

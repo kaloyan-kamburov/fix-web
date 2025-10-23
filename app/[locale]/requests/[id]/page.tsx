@@ -39,6 +39,12 @@ export default function RequestPage({
   const t = useTranslations();
   const locale = useLocale();
   const { id, locale: routeLocale } = use(params);
+  const roundStr = (v: any): string => {
+    if (v == null || v === "") return "";
+    const n = Number(v);
+    if (!Number.isFinite(n)) return String(v);
+    return String(Math.round(n));
+  };
   const [order, setOrder] = useState<any>(null);
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,10 +108,10 @@ export default function RequestPage({
       order?.currency?.symbol || order?.currency?.code || ""
     );
     const val = useFixed
-      ? fixedPrice
+      ? roundStr(fixedPrice)
       : priceFrom && priceTo
-      ? `${priceFrom} - ${priceTo}`
-      : priceFrom || priceTo || null;
+      ? `${roundStr(priceFrom)} - ${roundStr(priceTo)}`
+      : roundStr(priceFrom || priceTo || null);
     return val ? `${val} ${currency}` : "";
   }, [order]);
 
@@ -323,15 +329,21 @@ export default function RequestPage({
                           requestId={String(order?.id || "")}
                           id={String(offer?.id || "")}
                           title={String(offer?.employee_name || "")}
-                          price={String(
-                            `${offer?.total != null ? offer.total : ""} ${
-                              offer?.currency?.symbol
-                            } / ${
+                          price={(() => {
+                            const totalStr =
+                              offer?.total != null ? roundStr(offer.total) : "";
+                            const total2Str =
                               offer?.total_second != null
-                                ? offer.total_second
-                                : ""
-                            } ${offer?.second_currency?.symbol}`
-                          )}
+                                ? roundStr(offer.total_second)
+                                : "";
+                            const cur = String(offer?.currency?.symbol || "");
+                            const cur2 = String(
+                              offer?.second_currency?.symbol || ""
+                            );
+                            return `${totalStr} ${cur}$${
+                              total2Str ? ` / ${total2Str} ${cur2}` : ""
+                            }`.replace("$", "");
+                          })()}
                           rating={Number(offer?.review_avg_rating || 0)}
                           reviewCount={Number(offer?.reviews_count || 0)}
                           imageUrl={String(offer?.employee_picture || "")}

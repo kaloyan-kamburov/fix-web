@@ -32,6 +32,17 @@ export function RequestItem({
 }: RequestItemProps) {
   const locale = useLocale();
   const t = useTranslations();
+  const roundNumbersInText = React.useCallback((text: string): string => {
+    try {
+      return text.replace(/\d+\.\d+/g, (m) => String(Math.round(Number(m))));
+    } catch {
+      return text;
+    }
+  }, []);
+  const displayPrice = React.useMemo(
+    () => roundNumbersInText(price),
+    [price, roundNumbersInText]
+  );
   return (
     <Link
       href={`/${locale}/requests/${id}`}
@@ -72,7 +83,9 @@ export function RequestItem({
         </header>
         <footer className="flex md:flex-row flex-col gap-4 items-center self-start mt-7">
           <div className="flex gap-0.5 items-center self-stretch my-auto text-base font-semibold tracking-wide text-center text-zinc-900">
-            <span className="self-stretch my-auto text-zinc-900">{price}</span>
+            <span className="self-stretch my-auto text-zinc-900">
+              {displayPrice}
+            </span>
           </div>
           <span className="self-stretch my-auto text-sm text-neutral-700">
             {quantity}
