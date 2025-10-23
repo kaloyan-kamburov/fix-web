@@ -44,7 +44,7 @@ export default function RequestForm({
   const schema = z.object({
     phone: z.string().min(1, t("requiredField")),
     city: z.string().optional(),
-    neighbourhood: z.string().min(1, t("requiredField")),
+    neighbourhood: z.string().optional(),
     address: z.string().min(1, t("requiredField")),
     client_comment: z.string().min(1, t("requiredField")),
   });
@@ -136,7 +136,7 @@ export default function RequestForm({
         fd.append("service_id", serviceId);
         if (values.city) fd.append("city", values.city);
         if (values.address) fd.append("address", values.address);
-        if (values.neighbourhood) fd.append("neighbourhood", " ");
+        fd.append("neighbourhood", " ");
         fd.append("country_region_id", "26");
         fd.append("quantity", String(quantity));
         if (coords?.lat != null) fd.append("latitude", String(coords.lat));
@@ -203,7 +203,7 @@ export default function RequestForm({
         className="flex flex-col gap-4 items-start self-stretch max-sm:gap-3 bg-gray-00 mt-[24px] text-gray-70"
         onSubmit={rhfHandleSubmit(onSubmit, () => {
           setShowFieldErrors(true);
-          setShowIntervalError(!timeframe);
+          setShowIntervalError(clientIntervals.length === 0);
         })}
       >
         <ImageUpload onChange={onChange} />

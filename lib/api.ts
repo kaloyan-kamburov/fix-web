@@ -187,6 +187,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     try {
+      const cfg: any = error?.config || {};
+      const isSilent = Boolean(
+        cfg?.suppressToast || cfg?.headers?.["X-Silent"] || cfg?.silent
+      );
+      if (isSilent) {
+        return Promise.reject(error);
+      }
+    } catch {}
+    try {
       const status = error?.response?.status;
       const data = error?.response?.data;
 

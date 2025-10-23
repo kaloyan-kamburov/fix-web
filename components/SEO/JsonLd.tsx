@@ -61,7 +61,10 @@ export default function JsonLd({ excludePrefixes = [] }: JsonLdProps) {
           // Avoid 404 for pseudo-category path like /categories/emergencies
           if (!(section === "categories" && categorySlug === "emergencies")) {
             try {
-              const res = await api.get(`categories/${categorySlug}`);
+              const res = await api.get(`categories/${categorySlug}`, {
+                headers: { "X-Silent": "1" },
+                suppressToast: true as any,
+              } as any);
               const cat: any = res?.data;
               const categoryName = cat
                 ? typeof cat === "object" &&
@@ -86,7 +89,10 @@ export default function JsonLd({ excludePrefixes = [] }: JsonLdProps) {
           // Fetch category name; skip pseudo-category 'emergencies' under categories to avoid 404
           if (!(section === "categories" && categorySlug === "emergencies")) {
             try {
-              const resCat = await api.get(`categories/${categorySlug}`);
+              const resCat = await api.get(`categories/${categorySlug}`, {
+                headers: { "X-Silent": "1" },
+                suppressToast: true as any,
+              } as any);
               const cat: any = resCat?.data;
               const categoryName = cat
                 ? typeof cat === "object" &&
@@ -103,7 +109,10 @@ export default function JsonLd({ excludePrefixes = [] }: JsonLdProps) {
 
           // Fetch service details
           try {
-            const resSvc = await api.get(`services/${maybeServiceSlug}`);
+            const resSvc = await api.get(`services/${maybeServiceSlug}`, {
+              headers: { "X-Silent": "1" },
+              suppressToast: true as any,
+            } as any);
             const s: any = resSvc?.data || {};
             const serviceName = String(s?.name || "");
             const priceFrom =

@@ -253,20 +253,22 @@ export default function Header() {
 
           {/* Mobile actions: notifications + hamburger */}
           <div className="flex items-center gap-3 lg:hidden">
-            <div className="flex items-center gap-2">
-              <button
-                className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-gray-00"
-                onClick={() => setIsLocaleSelectorOpen(true)}
-                aria-label={t("chooseLanguage")}
-              >
-                <Image
-                  src={countryFlagUrl}
-                  alt={currentCountry || "country"}
-                  width={24}
-                  height={18}
-                />
-              </button>
-            </div>
+            {!isLoggedIn && (
+              <div className="flex items-center gap-2">
+                <button
+                  className="flex items-center justify-center w-11 h-11 rounded border border-solid border-neutral-400 text-gray-00"
+                  onClick={() => setIsLocaleSelectorOpen(true)}
+                  aria-label={t("chooseLanguage")}
+                >
+                  <Image
+                    src={countryFlagUrl}
+                    alt={currentCountry || "country"}
+                    width={24}
+                    height={18}
+                  />
+                </button>
+              </div>
+            )}
             {isLoggedIn ? (
               <HeaderActions
                 onlyNotifications
